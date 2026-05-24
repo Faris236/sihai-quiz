@@ -6,287 +6,509 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="刷题册">
-<meta name="theme-color" content="#b5341f">
+<meta name="theme-color" content="#1f3a4d">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-<title>四海刷题册</title>
+<title>公考刷题册</title>
 <style>
 :root{
-  --ink:#1c1815;--paper:#f5f0e8;--paper2:#ebe3d4;--line:#d8ccb4;
-  --accent:#b5341f;--accent-soft:#ecc9c1;--green:#2c7a4f;--green-soft:#cbe5d6;
-  --gold:#a8823f;--muted:#8a7f6d;--shadow:rgba(40,28,12,.13);
+  --bg:#f4f5f7;
+  --surface:#ffffff;
+  --surface-2:#f8f9fb;
+  --border:#e4e7eb;
+  --border-strong:#c9cfd6;
+  --ink:#1a2330;
+  --ink-soft:#3b4654;
+  --muted:#8a93a3;
+  --muted-2:#a8b0bd;
+  --primary:#1f3a4d;
+  --primary-soft:#cfd9e2;
+  --primary-hover:#2a4a61;
+  --accent:#4a6b85;
+  --green:#3d8b5e;
+  --green-soft:#dbeede;
+  --red:#a04545;
+  --red-soft:#f4dada;
+  --gold:#b88742;
+  --shadow:0 1px 2px rgba(20,30,45,.04), 0 1px 3px rgba(20,30,45,.06);
+  --shadow-lg:0 4px 14px rgba(20,30,45,.10);
+  --r-sm:6px;
+  --r-md:10px;
+  --r-lg:14px;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-html,body{background:var(--paper);color:var(--ink);}
-body{font-family:-apple-system,"Noto Serif SC","PingFang SC",serif;line-height:1.7;min-height:100vh;
-  padding:env(safe-area-inset-top) env(safe-area-inset-right) calc(env(safe-area-inset-bottom) + 10px) env(safe-area-inset-left);
-  background-image:radial-gradient(circle at 10% 6%,rgba(181,52,31,.04),transparent 38%),radial-gradient(circle at 92% 94%,rgba(168,130,63,.05),transparent 42%);}
-.wrap{max-width:780px;margin:0 auto;padding:18px 16px 90px;}
-header.mast{border-bottom:3px double var(--ink);padding-bottom:13px;margin-bottom:6px;}
-.mast .kick{font-family:"SF Mono",ui-monospace,monospace;font-size:10.5px;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);display:flex;justify-content:space-between;}
-.mast h1{font-weight:900;font-size:clamp(24px,7vw,36px);letter-spacing:.03em;margin:5px 0 2px;line-height:1.06;}
-.mast h1 .seal{color:var(--paper);background:var(--accent);font-size:.4em;vertical-align:middle;padding:3px 8px;border-radius:3px;margin-left:9px;letter-spacing:.1em;}
-.mast .sub{font-size:12.5px;color:var(--muted);}
-nav.tabs{display:flex;gap:6px;margin:14px 0 4px;border-bottom:1px solid var(--line);}
-nav.tabs button{font-family:inherit;font-weight:600;font-size:13.5px;border:none;background:transparent;color:var(--muted);padding:9px 14px;cursor:pointer;border-bottom:2.5px solid transparent;margin-bottom:-1px;transition:.15s;}
-nav.tabs button.on{color:var(--accent);border-bottom-color:var(--accent);}
-button.btn{font-family:inherit;font-weight:600;font-size:13.5px;border:1.5px solid var(--ink);background:var(--paper);color:var(--ink);padding:8px 15px;border-radius:2px;cursor:pointer;transition:.15s;box-shadow:2px 2px 0 var(--shadow);}
-button.btn:active{transform:translate(1px,1px);box-shadow:1px 1px 0 var(--shadow);}
-button.btn.primary{background:var(--accent);color:#fff;border-color:var(--accent);}
-button.btn.ghost{border-style:dashed;}
-button.btn.sm{font-size:12px;padding:5px 10px;box-shadow:1px 1px 0 var(--shadow);}
-.opt-row{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted);margin:12px 2px 6px;}
-.opt-row input{accent-color:var(--accent);}
-.paper-meta{display:flex;justify-content:space-between;align-items:baseline;font-family:"SF Mono",ui-monospace,monospace;font-size:11.5px;color:var(--muted);border-bottom:1px solid var(--line);padding:10px 2px;letter-spacing:.04em;}
-.progress-track{height:5px;background:var(--paper2);border-radius:99px;overflow:hidden;margin:5px 0 18px;}
-.progress-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--accent));width:0;transition:width .3s;}
-.sec-head{font-weight:900;font-size:16px;letter-spacing:.05em;margin:22px 0 10px;padding-left:11px;border-left:5px solid var(--accent);display:flex;align-items:baseline;gap:10px;}
-.sec-head .sub{font-size:11.5px;font-weight:400;color:var(--muted);font-family:"SF Mono",ui-monospace,monospace;}
+html,body{background:var(--bg);color:var(--ink);height:100%;}
+body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei","Noto Sans SC",sans-serif;
+  line-height:1.55;font-size:15px;font-weight:400;
+  padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom);
+  -webkit-font-smoothing:antialiased;}
+button{font-family:inherit;color:inherit;}
+input,select,textarea{font-family:inherit;}
 
-/* Paper card */
-.paper-grid{display:flex;flex-direction:column;gap:10px;margin-bottom:6px;}
-.paper-card{border:1px solid var(--line);background:rgba(255,255,255,.55);border-radius:4px;padding:13px 14px;cursor:pointer;transition:.13s;}
-.paper-card:hover{border-color:var(--ink);transform:translate(-1px,-1px);box-shadow:3px 3px 0 var(--shadow);}
-.paper-card .row1{display:flex;align-items:baseline;justify-content:space-between;gap:8px;}
-.paper-card .title{font-weight:700;font-size:15.5px;}
-.paper-card .pill{font-size:10.5px;font-family:"SF Mono",ui-monospace,monospace;color:var(--accent);border:1px solid var(--accent-soft);padding:1px 7px;border-radius:99px;letter-spacing:.04em;white-space:nowrap;}
-.paper-card .row2{display:flex;justify-content:space-between;font-family:"SF Mono",ui-monospace,monospace;font-size:11.5px;color:var(--muted);margin-top:6px;letter-spacing:.03em;}
-.paper-card .row2 .stat{display:flex;gap:5px;align-items:baseline;}
-.paper-card .row2 .stat b{color:var(--ink);font-weight:700;font-size:13px;}
-.cat-card{border:1px solid var(--line);background:rgba(255,255,255,.55);border-radius:4px;padding:14px 15px;cursor:pointer;transition:.13s;display:flex;align-items:center;gap:12px;}
-.cat-card:hover{border-color:var(--ink);transform:translate(-1px,-1px);box-shadow:3px 3px 0 var(--shadow);}
-.cat-card .glyph{font-weight:900;font-size:20px;width:42px;height:42px;flex:none;background:var(--ink);color:var(--paper);border-radius:4px;display:flex;align-items:center;justify-content:center;letter-spacing:0;}
+/* ===== App shell ===== */
+.app{display:flex;min-height:100vh;}
+.sidebar{display:none;flex-direction:column;width:220px;flex:none;background:var(--primary);color:#dbe3eb;
+  padding:18px 0;transition:width .22s ease;position:sticky;top:0;height:100vh;overflow-y:auto;}
+.sidebar.collapsed{width:60px;}
+.sidebar .brand{display:flex;align-items:center;gap:10px;padding:0 18px 18px;border-bottom:1px solid rgba(255,255,255,.08);margin-bottom:10px;}
+.sidebar .brand .logo{width:30px;height:30px;background:#e9d5a3;color:var(--primary);border-radius:6px;font-weight:900;display:flex;align-items:center;justify-content:center;font-size:16px;flex:none;}
+.sidebar .brand .name{font-size:15px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;}
+.sidebar.collapsed .brand .name{display:none;}
+.sidebar nav{display:flex;flex-direction:column;gap:2px;padding:0 8px;flex:1;}
+.sidebar nav button{background:transparent;border:none;color:#bcc8d3;text-align:left;padding:10px 14px;border-radius:6px;cursor:pointer;font-size:14px;display:flex;align-items:center;gap:10px;transition:.15s;white-space:nowrap;}
+.sidebar nav button:hover{background:rgba(255,255,255,.06);color:#fff;}
+.sidebar nav button.on{background:rgba(255,255,255,.12);color:#fff;font-weight:600;}
+.sidebar nav button .ico{width:18px;text-align:center;font-size:15px;flex:none;}
+.sidebar.collapsed nav button .lbl{display:none;}
+.sidebar .foot{padding:10px 14px;color:rgba(255,255,255,.4);font-size:11px;letter-spacing:.06em;}
+.sidebar.collapsed .foot{display:none;}
+.sidebar-toggle{background:transparent;border:none;color:#bcc8d3;padding:8px 14px;cursor:pointer;font-size:18px;text-align:left;}
+.sidebar-toggle:hover{color:#fff;}
+
+.main{flex:1;min-width:0;display:flex;flex-direction:column;min-height:100vh;}
+.wrap{max-width:760px;width:100%;margin:0 auto;padding:14px 16px 90px;flex:1;}
+
+/* ===== Mobile top nav ===== */
+.topnav{display:flex;gap:2px;background:var(--surface);border-bottom:1px solid var(--border);padding:6px 8px;overflow-x:auto;position:sticky;top:0;z-index:10;}
+.topnav button{background:transparent;border:none;color:var(--muted);padding:8px 14px;border-radius:6px;font-size:13.5px;cursor:pointer;font-weight:500;white-space:nowrap;transition:.15s;}
+.topnav button.on{background:var(--primary);color:#fff;font-weight:600;}
+
+/* ===== Mast / page heading ===== */
+.mast{padding:16px 0 8px;}
+.mast h1{font-size:22px;font-weight:700;letter-spacing:.02em;}
+.mast .sub{color:var(--muted);font-size:13px;margin-top:2px;}
+
+.sec-head{font-weight:700;font-size:15.5px;margin:18px 0 10px;display:flex;align-items:baseline;gap:10px;color:var(--ink);}
+.sec-head .sub{color:var(--muted);font-size:12.5px;font-weight:400;}
+.empty{color:var(--muted);font-size:13.5px;text-align:center;padding:36px 12px;font-style:normal;background:var(--surface);border:1px dashed var(--border);border-radius:var(--r-md);}
+
+/* ===== Cards ===== */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:14px 16px;box-shadow:var(--shadow);}
+.cards{display:flex;flex-direction:column;gap:10px;}
+.cat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:14px 14px;display:flex;align-items:center;gap:12px;cursor:pointer;box-shadow:var(--shadow);transition:.15s;}
+.cat-card:active{transform:scale(.99);}
+.cat-card .glyph{width:42px;height:42px;flex:none;background:var(--primary);color:#fff;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px;}
 .cat-card .body{flex:1;min-width:0;}
-.cat-card .ttl{font-weight:700;font-size:16px;display:flex;align-items:baseline;gap:8px;}
-.cat-card .ttl .pill{font-size:10.5px;font-family:"SF Mono",ui-monospace,monospace;color:var(--accent);border:1px solid var(--accent-soft);padding:1px 7px;border-radius:99px;letter-spacing:.04em;font-weight:400;}
-.cat-card .row2{display:flex;gap:14px;font-family:"SF Mono",ui-monospace,monospace;font-size:11.5px;color:var(--muted);margin-top:5px;letter-spacing:.03em;}
-.cat-card .row2 b{color:var(--ink);font-weight:700;font-size:12.5px;}
-.cat-card .arrow{font-size:18px;color:var(--muted);flex:none;}
-.crumb{display:flex;align-items:center;gap:8px;margin:10px 0 6px;font-size:13px;color:var(--muted);}
-.crumb button{font-family:inherit;background:none;border:none;color:var(--muted);cursor:pointer;font-size:13px;padding:0;}
-.crumb button:hover{color:var(--ink);}
-.crumb .sep{color:var(--line);}
-.history-row .del{background:transparent;border:1px solid var(--line);color:var(--muted);width:24px;height:24px;border-radius:50%;cursor:pointer;font-size:13px;line-height:1;display:flex;align-items:center;justify-content:center;flex:none;transition:.13s;font-family:inherit;}
-.history-row .del:hover{border-color:var(--accent);color:var(--accent);}
+.cat-card .ttl{font-weight:600;font-size:15.5px;color:var(--ink);display:flex;align-items:baseline;gap:8px;}
+.cat-card .pill{font-size:11.5px;color:var(--muted);font-weight:400;background:var(--surface-2);border:1px solid var(--border);padding:1px 8px;border-radius:99px;}
+.cat-card .stats{display:flex;gap:14px;font-size:12px;color:var(--muted);margin-top:5px;}
+.cat-card .stats b{color:var(--ink);font-weight:600;}
+.cat-card .arrow{color:var(--muted-2);font-size:20px;flex:none;font-weight:300;}
 
-.q{border:1px solid var(--line);background:rgba(255,255,255,.5);border-radius:4px;padding:16px 16px 5px;margin-bottom:16px;}
-.q-head{display:flex;gap:9px;align-items:flex-start;margin-bottom:11px;}
-.q-num{font-family:"SF Mono",ui-monospace,monospace;font-weight:700;font-size:12.5px;background:var(--ink);color:var(--paper);min-width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:3px;flex:none;}
-.q-type{font-size:10.5px;font-family:"SF Mono",ui-monospace,monospace;color:var(--accent);border:1px solid var(--accent-soft);padding:1px 7px;border-radius:99px;margin-left:auto;flex:none;letter-spacing:.04em;white-space:nowrap;}
-.q-stem{font-size:15.5px;font-weight:600;flex:1;white-space:pre-wrap;}
-.opts{display:flex;flex-direction:column;gap:8px;}
-.opt{display:flex;gap:10px;align-items:flex-start;border:1.5px solid var(--line);border-radius:3px;padding:10px 12px;cursor:pointer;transition:.13s;background:var(--paper);}
-.opt:hover{border-color:var(--ink);}
-.opt .tag{font-family:"SF Mono",ui-monospace,monospace;font-weight:700;width:23px;height:23px;flex:none;border:1.5px solid var(--ink);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12.5px;transition:.13s;}
-.opt.sel{border-color:var(--accent);background:var(--accent-soft);}
-.opt.sel .tag{background:var(--accent);color:#fff;border-color:var(--accent);}
-.opt .txt{font-size:14.5px;padding-top:1px;flex:1;}
+.paper-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:14px 15px;cursor:pointer;box-shadow:var(--shadow);transition:.15s;}
+.paper-card:active{transform:scale(.99);}
+.paper-card .row1{display:flex;justify-content:space-between;align-items:baseline;gap:8px;}
+.paper-card .title{font-weight:600;font-size:15.5px;color:var(--ink);}
+.paper-card .pill{font-size:11.5px;color:var(--muted);background:var(--surface-2);border:1px solid var(--border);padding:1px 8px;border-radius:99px;}
+.paper-card .row2{display:flex;gap:14px;font-size:12px;color:var(--muted);margin-top:6px;}
+.paper-card .row2 b{color:var(--ink);font-weight:600;}
+
+.crumb{display:flex;align-items:center;gap:8px;margin:4px 0 4px;font-size:13.5px;color:var(--muted);}
+.crumb button{background:none;border:none;color:var(--muted);cursor:pointer;font-size:13.5px;padding:0;}
+.crumb button:hover{color:var(--ink);}
+.crumb .cur{color:var(--ink);font-weight:600;}
+.crumb .sep{color:var(--muted-2);}
+
+/* ===== Quiz layout ===== */
+.quiz-shell{display:flex;flex-direction:column;flex:1;min-height:0;}
+.q-header{background:var(--surface);border-bottom:1px solid var(--border);padding:10px 14px;display:flex;align-items:center;gap:8px;position:sticky;top:0;z-index:9;}
+.q-header .back{background:transparent;border:none;color:var(--ink);font-size:20px;width:32px;height:32px;border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.q-header .back:hover{background:var(--surface-2);}
+.q-header .title{flex:1;min-width:0;}
+.q-header .title .t{font-weight:700;font-size:15px;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.q-header .title .meta{font-size:11.5px;color:var(--muted);margin-top:1px;}
+.q-header .timer{font-variant-numeric:tabular-nums;background:var(--surface-2);border:1px solid var(--border);color:var(--ink-soft);font-size:12.5px;padding:5px 10px;border-radius:99px;font-weight:600;}
+
+.qprog-track{height:3px;background:var(--border);overflow:hidden;}
+.qprog-fill{height:100%;background:var(--primary);transition:width .3s;width:0;}
+
+.q-tabs{display:flex;gap:4px;padding:10px 14px 6px;background:var(--surface);border-bottom:1px solid var(--border);}
+.q-tabs button{background:transparent;border:none;font-size:13.5px;color:var(--muted);padding:5px 12px;border-radius:99px;cursor:pointer;font-weight:500;}
+.q-tabs button.on{background:var(--ink);color:#fff;}
+.q-tabs button:disabled{opacity:.4;cursor:not-allowed;}
+
+.q-meta{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);padding:10px 16px 4px;}
+
+.q-body{flex:1;padding:6px 16px 16px;}
+.q-stem-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:16px 16px;box-shadow:var(--shadow);margin-bottom:12px;}
+.q-stem-card .stem{font-size:15.5px;line-height:1.75;color:var(--ink);white-space:pre-wrap;}
+
+.opts{display:flex;flex-direction:column;gap:9px;}
+.opt{display:flex;gap:12px;align-items:flex-start;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r-md);padding:12px 14px;cursor:pointer;transition:.15s;box-shadow:var(--shadow);}
+.opt:hover{border-color:var(--border-strong);}
+.opt .tag{font-weight:700;font-size:13.5px;width:24px;height:24px;flex:none;border:1.5px solid var(--border-strong);color:var(--ink-soft);border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--surface);transition:.15s;}
+.opt .txt{flex:1;font-size:14.5px;line-height:1.65;color:var(--ink);padding-top:1px;}
+.opt.sel{border-color:var(--primary);background:#eef3f8;}
+.opt.sel .tag{background:var(--primary);color:#fff;border-color:var(--primary);}
 .opt.correct{border-color:var(--green);background:var(--green-soft);}
 .opt.correct .tag{background:var(--green);color:#fff;border-color:var(--green);}
-.opt.wrong{border-color:var(--accent);background:var(--accent-soft);}
-.opt.wrong .tag{background:var(--accent);color:#fff;border-color:var(--accent);}
-.graded .opt{cursor:default;pointer-events:none;}
-.verdict{margin:12px -16px 0;padding:10px 16px;border-top:1px dashed var(--line);font-size:13.5px;display:none;}
+.opt.wrong{border-color:var(--red);background:var(--red-soft);}
+.opt.wrong .tag{background:var(--red);color:#fff;border-color:var(--red);}
+.graded .opt{cursor:default;}
+.verdict{margin-top:12px;padding:10px 14px;background:var(--surface-2);border-radius:var(--r-sm);font-size:13px;color:var(--muted);display:none;}
 .graded .verdict{display:block;}
-.verdict .badge{font-family:"SF Mono",ui-monospace,monospace;font-weight:700;font-size:11.5px;padding:2px 9px;border-radius:99px;letter-spacing:.04em;margin-right:8px;}
-.verdict.ok .badge{background:var(--green);color:#fff;}
-.verdict.no .badge{background:var(--accent);color:#fff;}
-.verdict .ans{color:var(--muted);font-size:13px;}
-.submit-bar{position:sticky;bottom:12px;margin-top:8px;display:flex;justify-content:center;gap:8px;z-index:5;}
-.submit-bar button{font-size:15.5px;padding:12px 30px;}
-.scorecard{display:none;border:3px double var(--ink);background:rgba(255,255,255,.65);padding:22px 20px;margin:8px 0 22px;border-radius:4px;text-align:center;position:relative;animation:pop .4s cubic-bezier(.2,1.3,.5,1);}
-@keyframes pop{from{transform:scale(.94);opacity:0;}to{transform:scale(1);opacity:1;}}
-.scorecard.show{display:block;}
-.scorecard .stamp{position:absolute;top:13px;right:13px;transform:rotate(-12deg);border:3px solid var(--accent);color:var(--accent);font-weight:900;font-size:17px;padding:4px 11px;border-radius:4px;opacity:.85;font-family:"SF Mono",ui-monospace,monospace;letter-spacing:.04em;}
-.scorecard .pct{font-size:54px;font-weight:900;line-height:1;color:var(--accent);}
-.scorecard .pct small{font-size:20px;color:var(--muted);}
-.scorecard .detail{font-family:"SF Mono",ui-monospace,monospace;font-size:12.5px;color:var(--muted);margin-top:7px;letter-spacing:.04em;}
-.scorecard .actions{margin-top:16px;display:flex;gap:7px;justify-content:center;flex-wrap:wrap;}
+.graded .verdict.ok{background:var(--green-soft);color:#1f5e3a;}
+.graded .verdict.no{background:var(--red-soft);color:#7a2f2f;}
 
-/* Stats */
-.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0 18px;}
-.stat-cell{border:1px solid var(--line);background:rgba(255,255,255,.5);border-radius:4px;padding:11px 10px;text-align:center;}
-.stat-cell .v{font-weight:900;font-size:22px;color:var(--accent);line-height:1.1;}
-.stat-cell .l{font-size:10.5px;color:var(--muted);font-family:"SF Mono",ui-monospace,monospace;letter-spacing:.04em;margin-top:3px;}
-.filter-row{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0 12px;}
-.filter-row select,.filter-row input{font-family:inherit;font-size:13px;border:1.5px solid var(--line);background:var(--paper);color:var(--ink);padding:6px 10px;border-radius:2px;}
-.history-list{display:flex;flex-direction:column;gap:7px;}
-.history-row{border:1px solid var(--line);background:rgba(255,255,255,.45);border-radius:3px;padding:10px 12px;font-size:13px;}
+/* ===== Bottom bar (quiz) ===== */
+.qbar{position:sticky;bottom:0;background:var(--surface);border-top:1px solid var(--border);padding:10px 12px calc(10px + env(safe-area-inset-bottom));display:flex;gap:8px;align-items:center;z-index:8;}
+.qbar .icon-btn{background:var(--surface-2);border:1px solid var(--border);color:var(--ink-soft);width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;flex:none;transition:.15s;}
+.qbar .icon-btn:hover{border-color:var(--border-strong);}
+.qbar .icon-btn.on{color:var(--gold);background:#fdf3e0;border-color:#e8d3a3;}
+.qbar .icon-btn.disabled{opacity:.4;pointer-events:none;}
+.qbar .primary{flex:1;height:42px;background:var(--primary);color:#fff;border:none;border-radius:99px;font-size:15px;font-weight:600;cursor:pointer;transition:.15s;}
+.qbar .primary:hover{background:var(--primary-hover);}
+.qbar .primary.submit{background:var(--green);}
+
+/* ===== Answer card sheet ===== */
+.sheet-backdrop{position:fixed;inset:0;background:rgba(20,30,45,.45);z-index:50;display:none;}
+.sheet-backdrop.show{display:block;}
+.sheet{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-radius:18px 18px 0 0;padding:14px 16px calc(20px + env(safe-area-inset-bottom));z-index:51;transform:translateY(100%);transition:transform .25s ease;max-height:70vh;overflow-y:auto;}
+.sheet.show{transform:translateY(0);}
+.sheet .grab{width:38px;height:4px;background:var(--border-strong);border-radius:99px;margin:0 auto 12px;}
+.sheet .ttl{font-weight:700;font-size:15px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:baseline;}
+.sheet .legend{font-size:11.5px;color:var(--muted);display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;}
+.sheet .legend span{display:inline-flex;align-items:center;gap:5px;}
+.sheet .legend i{width:11px;height:11px;border-radius:3px;display:inline-block;border:1px solid var(--border);}
+.sheet .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(40px,1fr));gap:7px;}
+.acell{aspect-ratio:1;border:1.5px solid var(--border);background:var(--surface);color:var(--ink-soft);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;cursor:pointer;transition:.13s;}
+.acell:hover{border-color:var(--border-strong);}
+.acell.answered{border-color:var(--primary);color:var(--primary);}
+.acell.correct{background:var(--green);border-color:var(--green);color:#fff;}
+.acell.wrong{background:var(--red);border-color:var(--red);color:#fff;}
+.acell.cur{box-shadow:0 0 0 2.5px var(--primary);}
+.sheet .acts{display:flex;gap:8px;margin-top:16px;}
+.sheet .acts button{flex:1;}
+
+/* ===== Buttons ===== */
+.btn{font-size:13.5px;border:1px solid var(--border);background:var(--surface);color:var(--ink);padding:9px 16px;border-radius:6px;cursor:pointer;font-weight:500;transition:.13s;}
+.btn:hover{border-color:var(--border-strong);}
+.btn.primary{background:var(--primary);color:#fff;border-color:var(--primary);}
+.btn.primary:hover{background:var(--primary-hover);}
+.btn.danger{color:var(--red);border-color:var(--red-soft);}
+.btn.danger:hover{background:var(--red-soft);}
+.btn.sm{font-size:12.5px;padding:6px 11px;}
+
+/* ===== Scorecard ===== */
+.scorecard{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:24px 18px;text-align:center;box-shadow:var(--shadow-lg);margin-bottom:14px;}
+.scorecard .pct{font-size:46px;font-weight:800;color:var(--primary);line-height:1;}
+.scorecard .pct small{font-size:18px;color:var(--muted);font-weight:600;margin-left:2px;}
+.scorecard .label{font-size:13px;color:var(--muted);margin-top:8px;}
+.scorecard .acts{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:18px;}
+
+/* ===== Stats / Favs / Wrong ===== */
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:6px 0 16px;}
+.stat-cell{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:12px 10px;text-align:center;box-shadow:var(--shadow);}
+.stat-cell .v{font-weight:700;font-size:20px;color:var(--primary);line-height:1.1;}
+.stat-cell .l{font-size:11.5px;color:var(--muted);margin-top:3px;}
+.filter-row{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 12px;}
+.filter-row select{font-size:12.5px;border:1px solid var(--border);background:var(--surface);color:var(--ink);padding:6px 28px 6px 10px;border-radius:6px;appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);background-position:calc(100% - 14px) center,calc(100% - 10px) center;background-size:4px 4px,4px 4px;background-repeat:no-repeat;}
+
+.history-row{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:11px 13px;font-size:13px;box-shadow:var(--shadow);}
 .history-row .top{display:flex;justify-content:space-between;gap:8px;align-items:baseline;}
-.history-row .ttl{font-weight:700;font-size:14px;}
-.history-row .ts{font-family:"SF Mono",ui-monospace,monospace;font-size:10.5px;color:var(--muted);letter-spacing:.04em;}
-.history-row .bot{display:flex;gap:14px;margin-top:4px;font-family:"SF Mono",ui-monospace,monospace;font-size:11.5px;color:var(--muted);letter-spacing:.03em;}
-.history-row .bot b{color:var(--ink);font-size:12.5px;}
-.history-row .acc-hi{color:var(--green);}
-.history-row .acc-mid{color:var(--gold);}
-.history-row .acc-lo{color:var(--accent);}
-.empty{color:var(--muted);font-size:13px;text-align:center;padding:24px 0;font-style:italic;}
+.history-row .ttl{font-weight:600;font-size:14px;color:var(--ink);}
+.history-row .ts{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums;}
+.history-row .bot{display:flex;gap:14px;margin-top:4px;font-size:12px;color:var(--muted);}
+.history-row .bot b{color:var(--ink);font-weight:600;}
+.history-row .del{background:transparent;border:1px solid var(--border);color:var(--muted);width:24px;height:24px;border-radius:50%;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;flex:none;transition:.13s;line-height:1;}
+.history-row .del:hover{border-color:var(--red);color:var(--red);}
+.acc-hi{color:var(--green);} .acc-mid{color:var(--gold);} .acc-lo{color:var(--red);}
 
-footer{text-align:center;font-family:"SF Mono",ui-monospace,monospace;font-size:10.5px;color:var(--muted);letter-spacing:.06em;margin-top:28px;border-top:1px solid var(--line);padding-top:14px;line-height:1.8;}
-.hidden{display:none!important;}
-.toast{position:fixed;left:50%;bottom:30px;transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:10px 20px;border-radius:99px;font-size:13px;z-index:99;opacity:0;transition:opacity .25s;pointer-events:none;}
+.qitem{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:12px 14px;box-shadow:var(--shadow);cursor:pointer;transition:.13s;}
+.qitem:active{transform:scale(.99);}
+.qitem .top{display:flex;justify-content:space-between;align-items:baseline;gap:8px;}
+.qitem .src{font-size:11.5px;color:var(--muted);}
+.qitem .stem{font-size:14px;color:var(--ink);margin-top:4px;line-height:1.55;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.qitem .bot{display:flex;gap:14px;margin-top:6px;font-size:11.5px;color:var(--muted);}
+.qitem .bot .your{color:var(--red);} .qitem .bot .ans{color:var(--green);}
+.qitem .actions{display:flex;gap:8px;margin-top:8px;}
+
+/* ===== Right answer card (iPad) ===== */
+.right-pane{display:none;flex:none;width:260px;border-left:1px solid var(--border);background:var(--surface);padding:14px;height:100vh;position:sticky;top:0;overflow-y:auto;}
+.right-pane .ttl{font-weight:700;font-size:14px;margin-bottom:10px;}
+.right-pane .legend{font-size:11px;color:var(--muted);display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
+.right-pane .legend i{width:10px;height:10px;border-radius:3px;border:1px solid var(--border);display:inline-block;margin-right:3px;vertical-align:middle;}
+.right-pane .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;}
+.right-pane .acts{display:flex;flex-direction:column;gap:8px;margin-top:14px;}
+
+/* ===== Data tab ===== */
+.data-section p{color:var(--muted);font-size:13.5px;line-height:1.7;margin-bottom:14px;}
+
+/* ===== Toast ===== */
+.toast{position:fixed;left:50%;bottom:80px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 18px;border-radius:99px;font-size:13px;z-index:99;opacity:0;transition:opacity .25s;pointer-events:none;max-width:80vw;text-align:center;}
 .toast.show{opacity:.95;}
+
+.hidden{display:none!important;}
+
+/* ===== iPad / wide screen ===== */
+@media (min-width: 880px){
+  .sidebar{display:flex;}
+  .topnav{display:none;}
+  .wrap{max-width:none;padding:18px 28px 90px;}
+  body.quiz-mode .right-pane{display:block;}
+  body.quiz-mode .wrap{max-width:760px;}
+  .qbar{border-radius:0;}
+}
+
+@media (max-width: 879px){
+  .right-pane{display:none!important;}
+  .sidebar{display:none!important;}
+}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header class="mast">
-    <div class="kick"><span>四海公考 · 刷题中心</span><span id="td"></span></div>
-    <h1>刷题册<span class="seal">离线</span></h1>
-    <div class="sub" id="subTitle">选择题册 · 自动判分 · 跨卷统计 · 数据存本机</div>
-  </header>
-
-  <nav class="tabs">
-    <button id="tab-home" class="on" onclick="go('home')">题册</button>
-    <button id="tab-stats" onclick="go('stats')">统计</button>
-    <button id="tab-data" onclick="go('data')">数据</button>
-  </nav>
-
-  <!-- ============ HOME (paper list) ============ -->
-  <section id="page-home">
-    <div id="paperGroups"></div>
-  </section>
-
-  <!-- ============ QUIZ ============ -->
-  <section id="page-quiz" class="hidden">
-    <div style="display:flex;gap:6px;align-items:center;margin:10px 0 4px;">
-      <button class="btn sm ghost" onclick="quitQuiz()">← 返回</button>
-      <span id="quizTitle" style="font-weight:700;font-size:15px;"></span>
+<div class="app">
+  <!-- ===== Sidebar (iPad only) ===== -->
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="logo">政</div>
+      <div class="name">公考刷题册</div>
     </div>
-    <label class="opt-row"><input type="checkbox" id="autoNext" checked> 单选答完自动滚到下一题</label>
-    <div class="paper-meta"><span id="pTitle"></span><span id="pCount"></span></div>
-    <div class="progress-track"><div class="progress-fill" id="pFill"></div></div>
-    <div class="scorecard" id="scard">
-      <div class="stamp" id="stamp">阅</div>
-      <div class="pct" id="sPct">0<small>分</small></div>
-      <div class="detail" id="sDetail"></div>
-      <div class="actions">
-        <button class="btn" onclick="firstWrong()">看错题</button>
-        <button class="btn ghost" onclick="restartQuiz()">再做一遍</button>
-        <button class="btn ghost" onclick="quitQuiz()">回到题册</button>
-      </div>
-    </div>
-    <div id="quiz"></div>
-    <div class="submit-bar" id="sbar"><button class="btn primary" onclick="grade()">提交并判分</button></div>
-  </section>
+    <nav>
+      <button data-tab="home" onclick="go('home')"><span class="ico">📚</span><span class="lbl">题库</span></button>
+      <button data-tab="favs" onclick="go('favs')"><span class="ico">★</span><span class="lbl">收藏题目</span></button>
+      <button data-tab="wrong" onclick="go('wrong')"><span class="ico">✕</span><span class="lbl">错题本</span></button>
+      <button data-tab="stats" onclick="go('stats')"><span class="ico">📊</span><span class="lbl">统计</span></button>
+      <button data-tab="data" onclick="go('data')"><span class="ico">⚙</span><span class="lbl">数据</span></button>
+    </nav>
+    <button class="sidebar-toggle" onclick="toggleSidebar()" title="折叠/展开">⇤</button>
+    <div class="foot">OFFLINE · LOCAL</div>
+  </aside>
 
-  <!-- ============ STATS ============ -->
-  <section id="page-stats" class="hidden">
-    <div class="sec-head">总览 <span class="sub" id="statsRange"></span></div>
-    <div class="filter-row">
-      <select id="fCat"><option value="">全部分类</option></select>
-      <select id="fPaper"><option value="">全部题册</option></select>
-      <select id="fRange">
-        <option value="all">不限时间</option>
-        <option value="7">近 7 天</option>
-        <option value="30">近 30 天</option>
-        <option value="90">近 90 天</option>
-      </select>
+  <!-- ===== Main ===== -->
+  <div class="main">
+    <!-- ===== Mobile top nav ===== -->
+    <div class="topnav" id="topnav">
+      <button data-tab="home" onclick="go('home')">题库</button>
+      <button data-tab="favs" onclick="go('favs')">收藏</button>
+      <button data-tab="wrong" onclick="go('wrong')">错题</button>
+      <button data-tab="stats" onclick="go('stats')">统计</button>
+      <button data-tab="data" onclick="go('data')">数据</button>
     </div>
-    <div class="stat-grid">
-      <div class="stat-cell"><div class="v" id="sAttempts">0</div><div class="l">完成次数</div></div>
-      <div class="stat-cell"><div class="v" id="sAvgAcc">—</div><div class="l">平均正确率</div></div>
-      <div class="stat-cell"><div class="v" id="sBestAcc">—</div><div class="l">最高正确率</div></div>
-      <div class="stat-cell"><div class="v" id="sTotalQ">0</div><div class="l">累计答题</div></div>
-      <div class="stat-cell"><div class="v" id="sCorrect">0</div><div class="l">累计答对</div></div>
-      <div class="stat-cell"><div class="v" id="sTime">0m</div><div class="l">累计用时</div></div>
-    </div>
-    <div class="sec-head">历史记录</div>
-    <div id="historyList" class="history-list"></div>
-  </section>
 
-  <!-- ============ DATA (export/import) ============ -->
-  <section id="page-data" class="hidden">
-    <div class="sec-head">数据备份</div>
-    <p style="font-size:13.5px;color:var(--muted);margin-bottom:14px;">
-      做题记录都存在你手机的浏览器本地存储里。建议偶尔点一下"导出"，把 JSON 文件存到 iCloud / 邮箱 / 网盘里，换设备或清缓存后可"导入"恢复。
-    </p>
-    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;">
-      <button class="btn primary" onclick="exportData()">导出历史 JSON</button>
-      <button class="btn" onclick="document.getElementById('importFile').click()">导入历史 JSON</button>
-      <input type="file" id="importFile" accept="application/json,.json" style="display:none" onchange="importData(event)">
-      <button class="btn ghost" onclick="clearAllData()" style="margin-left:auto;color:var(--accent);border-color:var(--accent);">清空所有记录</button>
-    </div>
-    <div class="sec-head">关于</div>
-    <p style="font-size:13px;color:var(--muted);line-height:1.85;">
-      四海公考判断推理 / 课程试卷离线刷题工具。<br>
-      纯静态网页 · 添加到主屏幕后可完全离线使用 · 题库随项目更新自动同步 · 做题数据不离开本机。
-    </p>
-  </section>
+    <div class="wrap" id="wrap">
+      <!-- HOME -->
+      <section id="page-home">
+        <div class="mast"><h1>题库</h1><div class="sub">选择题库 → 进入对应试卷开始练习</div></div>
+        <div id="homeContent"></div>
+      </section>
 
-  <footer>
-    OFFLINE PWA · 数据存本机 LocalStorage · 可导出 JSON 备份<br>
-    Build <span id="bn">def-1 · 30q</span>
-  </footer>
+      <!-- FAVORITES -->
+      <section id="page-favs" class="hidden">
+        <div class="mast"><h1>收藏题目</h1><div class="sub">在做题页点击 ☆ 即可收藏，便于后续重看</div></div>
+        <div id="favsContent"></div>
+      </section>
+
+      <!-- WRONG -->
+      <section id="page-wrong" class="hidden">
+        <div class="mast"><h1>错题本</h1><div class="sub">汇总你做错过的题目，按"做错次数"或最近一次时间排序</div></div>
+        <div id="wrongContent"></div>
+      </section>
+
+      <!-- STATS -->
+      <section id="page-stats" class="hidden">
+        <div class="mast"><h1>统计</h1><div class="sub" id="statsRange">所有历史记录</div></div>
+        <div class="filter-row">
+          <select id="fCat"><option value="">全部分类</option></select>
+          <select id="fPaper"><option value="">全部题册</option></select>
+          <select id="fRange">
+            <option value="all">不限时间</option>
+            <option value="7">近 7 天</option>
+            <option value="30">近 30 天</option>
+            <option value="90">近 90 天</option>
+          </select>
+        </div>
+        <div class="stat-grid">
+          <div class="stat-cell"><div class="v" id="sAttempts">0</div><div class="l">完成次数</div></div>
+          <div class="stat-cell"><div class="v" id="sAvgAcc">—</div><div class="l">平均正确率</div></div>
+          <div class="stat-cell"><div class="v" id="sBestAcc">—</div><div class="l">最高正确率</div></div>
+          <div class="stat-cell"><div class="v" id="sTotalQ">0</div><div class="l">累计答题</div></div>
+          <div class="stat-cell"><div class="v" id="sCorrect">0</div><div class="l">累计答对</div></div>
+          <div class="stat-cell"><div class="v" id="sTime">0m</div><div class="l">累计用时</div></div>
+        </div>
+        <div class="sec-head">历史记录</div>
+        <div id="historyList" class="cards"></div>
+      </section>
+
+      <!-- DATA -->
+      <section id="page-data" class="hidden data-section">
+        <div class="mast"><h1>数据备份</h1></div>
+        <p>做题记录、收藏、错题本都存在你手机的浏览器本地存储里。建议偶尔点一下"导出"，把 JSON 文件存到 iCloud / 邮箱 / 网盘里，换设备或清缓存后可"导入"恢复。</p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;">
+          <button class="btn primary" onclick="exportData()">导出全部数据</button>
+          <button class="btn" onclick="document.getElementById('importFile').click()">导入数据 JSON</button>
+          <input type="file" id="importFile" accept="application/json,.json" style="display:none" onchange="importData(event)">
+          <button class="btn danger" onclick="clearAllData()" style="margin-left:auto;">清空所有记录</button>
+        </div>
+        <div class="sec-head">关于</div>
+        <p>公考判断推理 / 课程试卷 离线刷题工具 · PWA · 纯静态网页 · 添加到主屏幕后可完全离线使用 · 题库随项目更新自动同步 · 做题数据不离开本机。</p>
+      </section>
+
+      <!-- QUIZ -->
+      <section id="page-quiz" class="hidden">
+        <div class="quiz-shell">
+          <div class="q-header">
+            <button class="back" onclick="quitQuiz()" title="返回">‹</button>
+            <div class="title">
+              <div class="t" id="quizTitle"></div>
+              <div class="meta" id="quizMeta"></div>
+            </div>
+            <div class="timer" id="quizTimer">00:00</div>
+          </div>
+          <div class="qprog-track"><div class="qprog-fill" id="qprogFill"></div></div>
+          <div class="q-tabs">
+            <button class="on">题目</button>
+            <button disabled title="尚未提供">解析</button>
+            <button disabled title="尚未提供">笔记</button>
+          </div>
+          <div class="q-meta">
+            <span id="qMetaLeft">—</span>
+            <span id="qMetaRight">—</span>
+          </div>
+          <div class="q-body" id="qBody"></div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Quiz bottom bar -->
+    <div class="qbar hidden" id="qbar">
+      <button class="icon-btn" id="favBtn" onclick="toggleFav()" title="收藏">☆</button>
+      <button class="icon-btn" onclick="openSheet()" title="答题卡">卡</button>
+      <button class="icon-btn" onclick="prevQ()" id="prevBtn" title="上一题">‹</button>
+      <button class="primary" id="nextBtn" onclick="nextOrSubmit()">下一题</button>
+    </div>
+  </div>
+
+  <!-- ===== Right answer pane (iPad) ===== -->
+  <aside class="right-pane" id="rightPane">
+    <div class="ttl">答题卡</div>
+    <div class="legend">
+      <span><i style="background:#fff;border-color:var(--border);"></i>未答</span>
+      <span><i style="background:#fff;border-color:var(--primary);"></i>已选</span>
+      <span><i style="background:var(--green);border-color:var(--green);"></i>正确</span>
+      <span><i style="background:var(--red);border-color:var(--red);"></i>错误</span>
+    </div>
+    <div class="grid" id="rightGrid"></div>
+    <div class="acts">
+      <button class="btn primary" id="rightSubmit" onclick="submitGrade()">提交并判分</button>
+      <button class="btn" onclick="quitQuiz()">返回题库</button>
+    </div>
+  </aside>
 </div>
+
+<!-- ===== Bottom sheet (mobile answer card) ===== -->
+<div class="sheet-backdrop" id="sheetBd" onclick="closeSheet()"></div>
+<div class="sheet" id="sheet">
+  <div class="grab"></div>
+  <div class="ttl"><span>答题卡</span><span style="font-weight:400;font-size:12.5px;color:var(--muted);" id="sheetSub"></span></div>
+  <div class="legend">
+    <span><i style="background:#fff;border-color:var(--border);"></i>未答</span>
+    <span><i style="background:#fff;border-color:var(--primary);"></i>已选</span>
+    <span><i style="background:var(--green);border-color:var(--green);"></i>正确</span>
+    <span><i style="background:var(--red);border-color:var(--red);"></i>错误</span>
+  </div>
+  <div class="grid" id="sheetGrid"></div>
+  <div class="acts">
+    <button class="btn primary" id="sheetSubmit" onclick="submitGrade()">提交并判分</button>
+    <button class="btn" onclick="closeSheet()">关闭</button>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
 'use strict';
 
-// =========== State ===========
-const STORE_KEY = 'sihai_quiz_history_v1';
+// =========== Constants & State ===========
+const STORE_HISTORY  = 'sihai_quiz_history_v1';
+const STORE_FAVS     = 'sihai_quiz_favs_v1';
+const STORE_SIDEBAR  = 'sihai_quiz_sidebar_collapsed_v1';
+
 const state = {
-  papers: [],          // from data/index.json
-  paperData: {},       // loaded paper data by id
-  current: null,       // current paper while quizzing
-  selected: {},        // qnum -> letter
+  papers: [],
+  paperData: {},
+  // home drill
+  homeView: 'categories',
+  activeCategory: null,
+  // quiz
+  current: null,
+  currentQ: 0,
+  selected: {},
   graded: false,
   startedAt: 0,
-  homeView: 'categories', // 'categories' | 'papers'
-  activeCategory: null,    // category name when drilled in
+  timerId: 0,
 };
 
 // =========== Helpers ===========
-function $(id){return document.getElementById(id);}
+const $ = (id)=>document.getElementById(id);
 function toast(msg, dur=1600){
   const t = $('toast'); t.textContent = msg; t.classList.add('show');
   clearTimeout(toast._t); toast._t = setTimeout(()=>t.classList.remove('show'), dur);
 }
 function uuid(){return 'h-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,8);}
+function escapeHtml(s){return (s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function fmtDate(ts){
-  const d = new Date(ts);
-  const pad=(n)=>String(n).padStart(2,'0');
-  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  const d=new Date(ts), p=(n)=>String(n).padStart(2,'0');
+  return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`;
 }
 function fmtDuration(sec){
-  if (sec < 60) return sec + 's';
-  const m = Math.floor(sec/60), s = sec%60;
-  if (m < 60) return `${m}m${s?` ${s}s`:''}`;
-  const h = Math.floor(m/60);
-  return `${h}h ${m%60}m`;
+  if (sec<60) return sec+'s';
+  const m=Math.floor(sec/60), s=sec%60;
+  if (m<60) return `${m}m${s?` ${s}s`:''}`;
+  return `${Math.floor(m/60)}h ${m%60}m`;
 }
-function loadHistory(){
-  try{ return JSON.parse(localStorage.getItem(STORE_KEY)||'[]'); }catch{return [];}
+function mmss(sec){
+  const m=Math.floor(sec/60), s=sec%60;
+  return String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
 }
-function saveHistory(arr){ localStorage.setItem(STORE_KEY, JSON.stringify(arr)); }
+function loadHistory(){try{return JSON.parse(localStorage.getItem(STORE_HISTORY)||'[]');}catch{return[];}}
+function saveHistory(a){localStorage.setItem(STORE_HISTORY, JSON.stringify(a));}
+function loadFavs(){try{return JSON.parse(localStorage.getItem(STORE_FAVS)||'{}');}catch{return{};}}
+function saveFavs(o){localStorage.setItem(STORE_FAVS, JSON.stringify(o));}
 
 // =========== Routing ===========
 function go(tab){
-  ['home','quiz','stats','data'].forEach(t=>{
+  // hide quiz mode first
+  document.body.classList.remove('quiz-mode');
+  ['home','favs','wrong','stats','data','quiz'].forEach(t=>{
     const sec = $('page-'+t); if (sec) sec.classList.add('hidden');
-    const tb = $('tab-'+t); if (tb) tb.classList.remove('on');
+  });
+  $('qbar').classList.add('hidden');
+  // mark active on both navs
+  document.querySelectorAll('.topnav button, .sidebar nav button').forEach(b=>{
+    b.classList.toggle('on', b.dataset.tab === tab);
   });
   $('page-'+tab).classList.remove('hidden');
-  if ($('tab-'+tab)) $('tab-'+tab).classList.add('on');
-  if (tab === 'home') renderHome();
+  if (tab === 'home')  renderHome();
+  if (tab === 'favs')  renderFavs();
+  if (tab === 'wrong') renderWrong();
   if (tab === 'stats') renderStats();
   window.scrollTo({top:0,behavior:'instant'});
 }
 
+// =========== Sidebar ===========
+function toggleSidebar(){
+  const sb = $('sidebar');
+  sb.classList.toggle('collapsed');
+  localStorage.setItem(STORE_SIDEBAR, sb.classList.contains('collapsed') ? '1' : '0');
+}
+function initSidebar(){
+  if (localStorage.getItem(STORE_SIDEBAR) === '1'){
+    $('sidebar').classList.add('collapsed');
+  }
+}
+
 // =========== Init ===========
 async function init(){
-  $('td').textContent = new Date().toISOString().slice(0,10);
+  initSidebar();
   try{
     const res = await fetch('data/index.json', {cache:'no-cache'});
     const idx = await res.json();
     state.papers = idx.papers || [];
   }catch(e){
-    state.papers = [];
-    toast('题库索引加载失败');
+    state.papers = []; toast('题库索引加载失败');
   }
-  renderHome();
-  // register SW
+  go('home');
   if ('serviceWorker' in navigator){
     navigator.serviceWorker.register('sw.js').catch(()=>{});
   }
@@ -294,7 +516,7 @@ async function init(){
 
 // =========== Home ===========
 function renderHome(){
-  const root = $('paperGroups'); root.innerHTML = '';
+  const root = $('homeContent'); root.innerHTML = '';
   if (!state.papers.length){
     root.innerHTML = '<div class="empty">还没有题册。请向项目仓库追加题册数据。</div>';
     return;
@@ -305,9 +527,7 @@ function renderHome(){
     renderPaperList(root, state.activeCategory);
   }
 }
-
 function renderCategoryList(root){
-  // group by category
   const groups = {};
   for (const p of state.papers){
     (groups[p.category] = groups[p.category] || []).push(p);
@@ -319,56 +539,53 @@ function renderCategoryList(root){
   }
   const head = document.createElement('div');
   head.className = 'sec-head';
-  head.innerHTML = `题库 <span class="sub">${Object.keys(groups).length} 个分类</span>`;
+  head.innerHTML = `所有题库 <span class="sub">${Object.keys(groups).length} 个分类</span>`;
   root.appendChild(head);
-  const grid = document.createElement('div'); grid.className = 'paper-grid';
+  const cards = document.createElement('div'); cards.className = 'cards';
   for (const cat of Object.keys(groups)){
-    const papers = groups[cat];
-    const totalQ = papers.reduce((s,p)=>s+p.count,0);
+    const ps = groups[cat];
+    const totalQ = ps.reduce((s,p)=>s+p.count,0);
     const recs = histByCat[cat] || [];
-    const attempts = recs.length;
-    const avgAcc = attempts
+    const att = recs.length;
+    const avgAcc = att
       ? recs.reduce((s,r)=>s+r.correctCount,0) / recs.reduce((s,r)=>s+r.total,0)
       : null;
-    const glyph = cat.charAt(0);
     const card = document.createElement('div'); card.className = 'cat-card';
     card.innerHTML = `
-      <div class="glyph">${escapeHtml(glyph)}</div>
+      <div class="glyph">${escapeHtml(cat.charAt(0))}</div>
       <div class="body">
-        <div class="ttl">${escapeHtml(cat)} <span class="pill">${papers.length} 套 · ${totalQ} 题</span></div>
-        <div class="row2">
-          <span>完成 <b>${attempts}</b> 次</span>
+        <div class="ttl">${escapeHtml(cat)} <span class="pill">${ps.length} 套 · ${totalQ} 题</span></div>
+        <div class="stats">
+          <span>完成 <b>${att}</b> 次</span>
           <span>平均 <b>${avgAcc===null?'—':Math.round(avgAcc*100)+'%'}</b></span>
         </div>
       </div>
       <div class="arrow">›</div>`;
     card.onclick = ()=>enterCategory(cat);
-    grid.appendChild(card);
+    cards.appendChild(card);
   }
-  root.appendChild(grid);
+  root.appendChild(cards);
 }
-
 function renderPaperList(root, cat){
   const crumb = document.createElement('div'); crumb.className = 'crumb';
-  crumb.innerHTML = `<button onclick="backToCategories()">← 题库</button><span class="sep">/</span><span style="color:var(--ink);font-weight:600;">${escapeHtml(cat)}</span>`;
+  crumb.innerHTML = `<button onclick="backToCategories()">‹ 题库</button><span class="sep">/</span><span class="cur">${escapeHtml(cat)}</span>`;
   root.appendChild(crumb);
 
-  const papers = state.papers.filter(p=>p.category===cat);
+  const ps = state.papers.filter(p=>p.category===cat);
   const hist = loadHistory();
   const byPaper = {};
   for (const h of hist){
     (byPaper[h.paperId] = byPaper[h.paperId] || []).push(h);
   }
-  const head = document.createElement('div');
-  head.className = 'sec-head';
-  head.innerHTML = `${escapeHtml(cat)} <span class="sub">${papers.length} 套 · 点击试卷开始</span>`;
+  const head = document.createElement('div'); head.className = 'sec-head';
+  head.innerHTML = `${escapeHtml(cat)} <span class="sub">${ps.length} 套试卷 · 点击开始</span>`;
   root.appendChild(head);
-  const grid = document.createElement('div'); grid.className = 'paper-grid';
-  for (const p of papers){
+  const cards = document.createElement('div'); cards.className = 'cards';
+  for (const p of ps){
     const recs = byPaper[p.id] || [];
-    const attempts = recs.length;
-    const best = attempts ? Math.max(...recs.map(r=>r.accuracy)) : null;
-    const last = attempts ? recs[recs.length-1] : null;
+    const att = recs.length;
+    const best = att ? Math.max(...recs.map(r=>r.accuracy)) : null;
+    const last = att ? recs[recs.length-1] : null;
     const card = document.createElement('div'); card.className = 'paper-card';
     card.innerHTML = `
       <div class="row1">
@@ -376,143 +593,174 @@ function renderPaperList(root, cat){
         <div class="pill">${p.count} 题</div>
       </div>
       <div class="row2">
-        <span class="stat">完成 <b>${attempts}</b> 次</span>
-        <span class="stat">最高 <b>${best===null?'—':Math.round(best*100)+'%'}</b></span>
-        <span class="stat">${last?'上次 '+Math.round(last.accuracy*100)+'%':'未做过'}</span>
+        <span>完成 <b>${att}</b> 次</span>
+        <span>最高 <b>${best===null?'—':Math.round(best*100)+'%'}</b></span>
+        <span>${last?'上次 '+Math.round(last.accuracy*100)+'%':'未做过'}</span>
       </div>`;
     card.onclick = ()=>startQuiz(p.id);
-    grid.appendChild(card);
+    cards.appendChild(card);
   }
-  root.appendChild(grid);
+  root.appendChild(cards);
 }
-
-function enterCategory(cat){
-  state.homeView = 'papers';
-  state.activeCategory = cat;
-  renderHome();
-  window.scrollTo({top:0,behavior:'instant'});
-}
-
-function backToCategories(){
-  state.homeView = 'categories';
-  state.activeCategory = null;
-  renderHome();
-  window.scrollTo({top:0,behavior:'instant'});
-}
+function enterCategory(cat){ state.homeView='papers'; state.activeCategory=cat; renderHome(); window.scrollTo({top:0,behavior:'instant'}); }
+function backToCategories(){ state.homeView='categories'; state.activeCategory=null; renderHome(); window.scrollTo({top:0,behavior:'instant'}); }
 
 // =========== Quiz ===========
 async function loadPaper(id){
   if (state.paperData[id]) return state.paperData[id];
   const p = state.papers.find(x=>x.id===id);
+  if (!p) throw new Error('paper not found');
   const res = await fetch(p.file, {cache:'no-cache'});
   const data = await res.json();
   state.paperData[id] = data;
   return data;
 }
 
-async function startQuiz(id){
+async function startQuiz(id, jumpToQNum=null){
   const data = await loadPaper(id);
   state.current = data;
+  state.currentQ = 0;
   state.selected = {};
   state.graded = false;
   state.startedAt = Date.now();
+  // hide non-quiz sections
+  ['home','favs','wrong','stats','data'].forEach(t=>$('page-'+t).classList.add('hidden'));
+  $('page-quiz').classList.remove('hidden');
+  $('qbar').classList.remove('hidden');
+  document.body.classList.add('quiz-mode');
+  // header
   $('quizTitle').textContent = data.title;
-  $('pTitle').textContent = data.title + ' · ' + (data.category||'');
-  $('pCount').textContent = data.count + ' 题';
-  $('scard').classList.remove('show');
-  $('sbar').classList.remove('hidden');
-  renderQuiz();
-  go('quiz');
-}
-
-function renderQuiz(){
-  const q = $('quiz'); q.innerHTML = '';
-  const data = state.current;
-  for (const item of data.questions){
-    const card = document.createElement('div');
-    card.className = 'q'; card.id = 'q-'+item.num;
-    card.innerHTML = `
-      <div class="q-head">
-        <div class="q-num">${String(item.num).padStart(2,'0')}</div>
-        <div class="q-stem">${escapeHtml(item.stem)}</div>
-        <div class="q-type">${data.category||''}</div>
-      </div>
-      <div class="opts">
-        ${['A','B','C','D'].map(L=>`
-          <div class="opt" data-q="${item.num}" data-L="${L}">
-            <div class="tag">${L}</div>
-            <div class="txt">${escapeHtml(item.options[L]||'')}</div>
-          </div>`).join('')}
-      </div>
-      <div class="verdict"><span class="badge"></span><span class="ans"></span></div>
-    `;
-    q.appendChild(card);
+  $('quizMeta').textContent  = (data.category||'') + ' · 共 ' + data.questions.length + ' 题';
+  // timer
+  startTimer();
+  if (jumpToQNum != null){
+    const idx = data.questions.findIndex(q=>q.num===jumpToQNum);
+    if (idx>=0) state.currentQ = idx;
   }
-  q.querySelectorAll('.opt').forEach(o=>o.addEventListener('click', onOptClick));
-  updateProgress();
+  renderCurrentQ();
 }
 
-function escapeHtml(s){ return (s||'').replace(/[&<>"']/g,(c)=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function startTimer(){
+  clearInterval(state.timerId);
+  state.timerId = setInterval(()=>{
+    const sec = Math.floor((Date.now()-state.startedAt)/1000);
+    $('quizTimer').textContent = mmss(sec);
+  }, 500);
+  $('quizTimer').textContent = '00:00';
+}
+function stopTimer(){ clearInterval(state.timerId); state.timerId=0; }
+
+function renderCurrentQ(){
+  const data = state.current;
+  const i = state.currentQ;
+  const item = data.questions[i];
+  const total = data.questions.length;
+  // progress
+  const done = Object.keys(state.selected).length;
+  $('qprogFill').style.width = (state.graded ? 100 : (i+1)/total*100) + '%';
+  // meta
+  $('qMetaLeft').textContent = `第 ${item.num} 题 / 共 ${total} 题`;
+  $('qMetaRight').textContent = (data.category||'') + (state.graded ? ' · 已判分' : ` · 已答 ${done}/${total}`);
+  // body
+  const body = $('qBody');
+  const verdictTxt = state.graded
+    ? (state.selected[item.num] === item.answer
+        ? `<div class="verdict ok">回答正确 · 答案 ${item.answer}</div>`
+        : `<div class="verdict no">${state.selected[item.num] ? '回答错误' : '未作答'} · 你的答案 ${state.selected[item.num]||'—'} · 正确答案 ${item.answer}</div>`)
+    : '';
+  body.innerHTML = `
+    <div class="q-stem-card ${state.graded?'graded':''}" id="qCard">
+      <div class="stem">${escapeHtml(item.stem)}</div>
+    </div>
+    <div class="opts ${state.graded?'graded':''}" id="optsBox">
+      ${['A','B','C','D'].map(L=>{
+        let cls = '';
+        if (state.graded){
+          if (L === item.answer) cls = 'correct';
+          else if (L === state.selected[item.num]) cls = 'wrong';
+        } else if (state.selected[item.num] === L){ cls = 'sel'; }
+        return `<div class="opt ${cls}" data-L="${L}"><div class="tag">${L}</div><div class="txt">${escapeHtml(item.options[L]||'')}</div></div>`;
+      }).join('')}
+    </div>
+    ${verdictTxt}
+  `;
+  if (!state.graded){
+    body.querySelectorAll('.opt').forEach(o=>o.addEventListener('click', onOptClick));
+  }
+  // favorite state
+  updateFavBtn();
+  // next button label
+  const last = i === total-1;
+  $('nextBtn').textContent = state.graded
+    ? (last ? '查看成绩' : '下一题')
+    : (last ? '提交并判分' : '下一题');
+  $('nextBtn').classList.toggle('submit', !state.graded && last);
+  // prev disabled state
+  $('prevBtn').classList.toggle('disabled', i===0);
+  // right-pane grid (iPad) + sheet grid both refresh
+  renderAnswerGrids();
+}
 
 function onOptClick(e){
   if (state.graded) return;
   const el = e.currentTarget;
-  const qn = +el.dataset.q, L = el.dataset.L;
-  state.selected[qn] = L;
-  // toggle
-  const sibs = el.parentElement.querySelectorAll('.opt');
-  sibs.forEach(s=>s.classList.toggle('sel', s===el));
-  updateProgress();
-  if ($('autoNext').checked){
-    const next = $('q-'+(qn+1));
-    if (next) setTimeout(()=>next.scrollIntoView({behavior:'smooth',block:'start'}), 180);
-  }
-}
-
-function updateProgress(){
-  const total = state.current.questions.length;
+  const L = el.dataset.L;
+  const qNum = state.current.questions[state.currentQ].num;
+  state.selected[qNum] = L;
+  // visual
+  el.parentElement.querySelectorAll('.opt').forEach(o=>o.classList.toggle('sel', o===el));
+  // update meta count
   const done = Object.keys(state.selected).length;
-  $('pFill').style.width = (done/total*100)+'%';
-  $('pCount').textContent = `${done}/${total} 题`;
+  const total = state.current.questions.length;
+  $('qMetaRight').textContent = (state.current.category||'') + ` · 已答 ${done}/${total}`;
+  // auto advance after short delay (if not last)
+  if (state.currentQ < total - 1){
+    setTimeout(()=>{ if (state.currentQ < total - 1) nextOrSubmit(); }, 280);
+  }
+  renderAnswerGrids();
 }
 
-function grade(){
+function prevQ(){
+  if (state.currentQ === 0) return;
+  state.currentQ--;
+  renderCurrentQ();
+  window.scrollTo({top:0,behavior:'instant'});
+}
+function nextOrSubmit(){
+  const last = state.currentQ === state.current.questions.length - 1;
+  if (state.graded){
+    // post-grade nav: just move (loop if needed: no, stop at last)
+    if (!last){ state.currentQ++; renderCurrentQ(); window.scrollTo({top:0,behavior:'instant'}); }
+    else { showScorecard(); }
+    return;
+  }
+  if (last){ submitGrade(); return; }
+  state.currentQ++; renderCurrentQ();
+  window.scrollTo({top:0,behavior:'instant'});
+}
+function jumpQ(idx){
+  state.currentQ = idx;
+  renderCurrentQ();
+  closeSheet();
+  window.scrollTo({top:0,behavior:'instant'});
+}
+
+function submitGrade(){
   const data = state.current;
-  if (Object.keys(state.selected).length < data.questions.length){
-    if (!confirm('还有题未作答，确定提交？')) return;
+  const unanswered = data.questions.length - Object.keys(state.selected).length;
+  if (unanswered > 0 && !state.graded){
+    if (!confirm(`还有 ${unanswered} 题未作答，确定提交？`)){ closeSheet(); return; }
   }
   state.graded = true;
+  stopTimer();
+  // compute
   let correct = 0;
   for (const item of data.questions){
-    const card = $('q-'+item.num);
-    card.classList.add('graded');
-    const sel = state.selected[item.num];
-    const ans = item.answer;
-    const opts = card.querySelectorAll('.opt');
-    opts.forEach(o=>{
-      const L = o.dataset.L;
-      if (L === ans) o.classList.add('correct');
-      else if (L === sel) o.classList.add('wrong');
-    });
-    const v = card.querySelector('.verdict');
-    const badge = v.querySelector('.badge');
-    const ansEl = v.querySelector('.ans');
-    if (sel === ans){
-      v.classList.add('ok'); badge.textContent = '正确';
-      ansEl.textContent = `答案 ${ans}`; correct++;
-    } else {
-      v.classList.add('no'); badge.textContent = sel ? '错误' : '未答';
-      ansEl.textContent = `你的答案 ${sel||'—'} · 正确答案 ${ans}`;
-    }
+    if (state.selected[item.num] === item.answer) correct++;
   }
   const total = data.questions.length;
   const acc = correct/total;
-  $('sPct').innerHTML = Math.round(acc*100) + '<small>%</small>';
   const dur = Math.round((Date.now()-state.startedAt)/1000);
-  $('sDetail').textContent = `${correct} / ${total} 题正确 · 用时 ${fmtDuration(dur)}`;
-  $('scard').classList.add('show');
-  $('sbar').classList.add('hidden');
-  // persist
   const rec = {
     sessionId: uuid(),
     paperId: data.id,
@@ -523,51 +771,264 @@ function grade(){
     durationSec: dur,
     answers: {...state.selected},
     correctCount: correct,
-    total,
-    accuracy: acc,
+    total, accuracy: acc,
   };
   const hist = loadHistory(); hist.push(rec); saveHistory(hist);
-  toast('已记录到本机');
-  // scroll to scorecard
-  setTimeout(()=>$('scard').scrollIntoView({behavior:'smooth',block:'start'}), 80);
+  closeSheet();
+  toast(`已提交 · 正确率 ${Math.round(acc*100)}%`);
+  showScorecard(rec);
 }
 
-function firstWrong(){
-  for (const item of state.current.questions){
-    if (state.selected[item.num] !== item.answer){
-      $('q-'+item.num).scrollIntoView({behavior:'smooth',block:'start'});
-      return;
-    }
+function showScorecard(precomputed){
+  const data = state.current;
+  let correct = 0;
+  for (const item of data.questions){
+    if (state.selected[item.num] === item.answer) correct++;
   }
-  toast('全对，没有错题');
+  const total = data.questions.length;
+  const acc = correct/total;
+  const dur = Math.round(((precomputed && precomputed.durationSec) || (Date.now()-state.startedAt)/1000));
+  const body = $('qBody');
+  body.innerHTML = `
+    <div class="scorecard">
+      <div class="pct">${Math.round(acc*100)}<small>%</small></div>
+      <div class="label">${correct} / ${total} 题正确 · 用时 ${fmtDuration(dur)}</div>
+      <div class="acts">
+        <button class="btn" onclick="reviewWrong()">查看错题</button>
+        <button class="btn" onclick="restartQuiz()">再做一遍</button>
+        <button class="btn primary" onclick="quitQuiz()">返回题库</button>
+      </div>
+    </div>
+  `;
+  $('qprogFill').style.width = '100%';
+  $('qMetaRight').textContent = (data.category||'') + ' · 已判分';
+  // hide qbar in scorecard view (optional, keep visible to let them prev to questions)
+  // We'll keep qbar so user can prev/next to review each q.
+  $('nextBtn').textContent = '查看题目';
+  $('nextBtn').classList.remove('submit');
+  $('nextBtn').onclick = ()=>{ state.currentQ = 0; renderCurrentQ(); window.scrollTo({top:0,behavior:'instant'}); };
+}
+
+function reviewWrong(){
+  const data = state.current;
+  const firstWrong = data.questions.findIndex(q=>state.selected[q.num] !== q.answer);
+  if (firstWrong === -1){ toast('全对，没有错题'); return; }
+  state.currentQ = firstWrong;
+  renderCurrentQ();
+  // restore default next handler
+  $('nextBtn').onclick = nextOrSubmit;
+  window.scrollTo({top:0,behavior:'instant'});
 }
 
 function restartQuiz(){
-  startQuiz(state.current.id);
+  const id = state.current.id;
+  startQuiz(id);
+  // reset next handler
+  $('nextBtn').onclick = nextOrSubmit;
 }
 
 function quitQuiz(){
-  if (!state.graded && Object.keys(state.selected).length > 0){
-    if (!confirm('本次未提交，离开就丢失进度，确定？')) return;
+  if (!state.graded && Object.keys(state.selected).length>0){
+    if (!confirm('本次未提交，离开会丢失进度，确定？')) return;
   }
+  stopTimer();
   state.current = null;
+  $('nextBtn').onclick = nextOrSubmit;
   go('home');
+}
+
+// =========== Answer card grids ===========
+function renderAnswerGrids(){
+  if (!state.current) return;
+  const html = [];
+  state.current.questions.forEach((q, idx)=>{
+    let cls = 'acell';
+    if (state.graded){
+      if (state.selected[q.num] === q.answer) cls += ' correct';
+      else if (state.selected[q.num]) cls += ' wrong';
+      else cls += ' wrong'; // unanswered also marked wrong
+    } else if (state.selected[q.num]){ cls += ' answered'; }
+    if (idx === state.currentQ) cls += ' cur';
+    html.push(`<div class="${cls}" onclick="jumpQ(${idx})">${q.num}</div>`);
+  });
+  const joined = html.join('');
+  $('rightGrid').innerHTML = joined;
+  $('sheetGrid').innerHTML = joined;
+  // Submit btn states
+  const submitDisabled = state.graded;
+  $('rightSubmit').textContent = submitDisabled ? '已判分' : '提交并判分';
+  $('rightSubmit').disabled = submitDisabled;
+  $('sheetSubmit').textContent = submitDisabled ? '已判分' : '提交并判分';
+  $('sheetSubmit').disabled = submitDisabled;
+  $('sheetSub').textContent = `${state.currentQ+1} / ${state.current.questions.length}`;
+}
+function openSheet(){ $('sheet').classList.add('show'); $('sheetBd').classList.add('show'); }
+function closeSheet(){ $('sheet').classList.remove('show'); $('sheetBd').classList.remove('show'); }
+
+// =========== Favorites ===========
+function isFav(paperId, qNum){
+  const f = loadFavs();
+  return (f[paperId]||[]).includes(qNum);
+}
+function toggleFav(){
+  if (!state.current) return;
+  const qNum = state.current.questions[state.currentQ].num;
+  const f = loadFavs();
+  f[state.current.id] = f[state.current.id] || [];
+  const list = f[state.current.id];
+  const i = list.indexOf(qNum);
+  if (i>=0){ list.splice(i,1); toast('已取消收藏'); }
+  else { list.push(qNum); toast('已收藏'); }
+  saveFavs(f);
+  updateFavBtn();
+}
+function updateFavBtn(){
+  if (!state.current) return;
+  const qNum = state.current.questions[state.currentQ].num;
+  const on = isFav(state.current.id, qNum);
+  const b = $('favBtn');
+  b.textContent = on ? '★' : '☆';
+  b.classList.toggle('on', on);
+}
+
+async function renderFavs(){
+  const root = $('favsContent'); root.innerHTML = '';
+  const favs = loadFavs();
+  const pairs = [];
+  for (const pid of Object.keys(favs)){
+    for (const qn of favs[pid]) pairs.push([pid, qn]);
+  }
+  if (!pairs.length){
+    root.innerHTML = '<div class="empty">还没有收藏。在做题页点击右下角 ☆ 即可收藏当前题目。</div>';
+    return;
+  }
+  // ensure paper data
+  const needed = [...new Set(pairs.map(p=>p[0]))];
+  for (const pid of needed){
+    try{ await loadPaper(pid); }catch{}
+  }
+  // group by paper
+  const byPaper = {};
+  for (const [pid,qn] of pairs){
+    (byPaper[pid] = byPaper[pid] || []).push(qn);
+  }
+  for (const pid of Object.keys(byPaper)){
+    const data = state.paperData[pid];
+    if (!data) continue;
+    const head = document.createElement('div'); head.className='sec-head';
+    head.innerHTML = `${escapeHtml(data.title)} <span class="sub">${byPaper[pid].length} 题</span>`;
+    root.appendChild(head);
+    const wrap = document.createElement('div'); wrap.className='cards';
+    for (const qn of byPaper[pid]){
+      const q = data.questions.find(x=>x.num===qn);
+      if (!q) continue;
+      const item = document.createElement('div'); item.className='qitem';
+      item.innerHTML = `
+        <div class="top"><span style="font-weight:600;">第 ${q.num} 题</span><span class="src">${escapeHtml(data.category||'')}</span></div>
+        <div class="stem">${escapeHtml(q.stem)}</div>
+        <div class="actions">
+          <button class="btn sm" onclick="event.stopPropagation();startQuiz('${pid}',${qn})">去做</button>
+          <button class="btn sm danger" onclick="event.stopPropagation();unfav('${pid}',${qn})">移除</button>
+        </div>`;
+      item.onclick = ()=>startQuiz(pid, qn);
+      wrap.appendChild(item);
+    }
+    root.appendChild(wrap);
+  }
+}
+function unfav(pid, qn){
+  const f = loadFavs();
+  if (!f[pid]) return;
+  f[pid] = f[pid].filter(x=>x!==qn);
+  if (!f[pid].length) delete f[pid];
+  saveFavs(f);
+  renderFavs();
+}
+
+// =========== Wrong (错题本) ===========
+async function renderWrong(){
+  const root = $('wrongContent'); root.innerHTML = '';
+  const hist = loadHistory();
+  if (!hist.length){
+    root.innerHTML = '<div class="empty">还没有做题记录，做完一套题之后做错的题会出现在这里。</div>';
+    return;
+  }
+  // aggregate per (paper, qNum)
+  const agg = {}; // key = pid::qn
+  for (const h of hist){
+    for (const qnStr of Object.keys(h.answers||{})){
+      const qn = +qnStr;
+      // we don't know correct answer w/o paper data — defer; but we record attempts to recompute below
+    }
+  }
+  // Need paper data for all referenced papers
+  const pids = [...new Set(hist.map(h=>h.paperId))];
+  for (const pid of pids){ try{ await loadPaper(pid); }catch{} }
+  // walk history again with paper data
+  for (const h of hist){
+    const data = state.paperData[h.paperId]; if (!data) continue;
+    for (const q of data.questions){
+      const userAns = h.answers[q.num];
+      const wrong = userAns && userAns !== q.answer;
+      if (!wrong) continue;
+      const key = h.paperId + '::' + q.num;
+      if (!agg[key]) agg[key] = { pid:h.paperId, qn:q.num, count:0, lastTs:0, lastWrong:null };
+      agg[key].count++;
+      if (h.finishedAt > agg[key].lastTs){
+        agg[key].lastTs = h.finishedAt;
+        agg[key].lastWrong = userAns;
+      }
+    }
+  }
+  const items = Object.values(agg).sort((a,b)=>b.count-a.count || b.lastTs-a.lastTs);
+  if (!items.length){
+    root.innerHTML = '<div class="empty">全部做对！还没有错题。</div>';
+    return;
+  }
+  // group by paper
+  const byPaper = {};
+  for (const it of items){ (byPaper[it.pid] = byPaper[it.pid] || []).push(it); }
+  for (const pid of Object.keys(byPaper)){
+    const data = state.paperData[pid]; if (!data) continue;
+    const head = document.createElement('div'); head.className='sec-head';
+    head.innerHTML = `${escapeHtml(data.title)} <span class="sub">${byPaper[pid].length} 题错过</span>`;
+    root.appendChild(head);
+    const wrap = document.createElement('div'); wrap.className='cards';
+    for (const it of byPaper[pid]){
+      const q = data.questions.find(x=>x.num===it.qn); if (!q) continue;
+      const item = document.createElement('div'); item.className='qitem';
+      item.innerHTML = `
+        <div class="top">
+          <span style="font-weight:600;">第 ${q.num} 题</span>
+          <span class="src">错 ${it.count} 次 · ${new Date(it.lastTs).toISOString().slice(0,10)}</span>
+        </div>
+        <div class="stem">${escapeHtml(q.stem)}</div>
+        <div class="bot">
+          <span class="your">你的：${escapeHtml(it.lastWrong||'')}</span>
+          <span class="ans">答案：${escapeHtml(q.answer)}</span>
+        </div>
+        <div class="actions">
+          <button class="btn sm" onclick="event.stopPropagation();startQuiz('${pid}',${it.qn})">重做这题</button>
+        </div>`;
+      item.onclick = ()=>startQuiz(pid, it.qn);
+      wrap.appendChild(item);
+    }
+    root.appendChild(wrap);
+  }
 }
 
 // =========== Stats ===========
 function renderStats(){
   const hist = loadHistory();
-  // populate filters
   const cats = [...new Set(state.papers.map(p=>p.category))];
   const fCat = $('fCat'); const curCat = fCat.value;
-  fCat.innerHTML = '<option value="">全部分类</option>' + cats.map(c=>`<option value="${c}">${c}</option>`).join('');
+  fCat.innerHTML = '<option value="">全部分类</option>' + cats.map(c=>`<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');
   fCat.value = curCat;
   const fPaper = $('fPaper'); const curPaper = fPaper.value;
   fPaper.innerHTML = '<option value="">全部题册</option>' + state.papers
     .filter(p=>!curCat || p.category===curCat)
-    .map(p=>`<option value="${p.id}">${p.title}</option>`).join('');
+    .map(p=>`<option value="${p.id}">${escapeHtml(p.title)}</option>`).join('');
   fPaper.value = curPaper;
-  // filter
   const cat = fCat.value, pid = fPaper.value, range = $('fRange').value;
   let cutoff = 0;
   if (range !== 'all') cutoff = Date.now() - +range*86400000;
@@ -577,7 +1038,6 @@ function renderStats(){
     if (cutoff && h.finishedAt < cutoff) return false;
     return true;
   });
-  // summary
   const att = filtered.length;
   const totalQ = filtered.reduce((s,h)=>s+h.total,0);
   const totalC = filtered.reduce((s,h)=>s+h.correctCount,0);
@@ -589,13 +1049,10 @@ function renderStats(){
   $('sCorrect').textContent = totalC;
   $('sTime').textContent = fmtDuration(totalT);
   const rangeStr = range==='all' ? '不限时间' : `近 ${range} 天`;
-  $('statsRange').textContent = `· ${rangeStr}${cat?' · '+cat:''}${pid?' · '+(state.papers.find(p=>p.id===pid)||{}).title:''}`;
-  // history list (most recent first)
+  const tags = [rangeStr]; if (cat) tags.push(cat); if (pid){ const p=state.papers.find(x=>x.id===pid); if (p) tags.push(p.title); }
+  $('statsRange').textContent = tags.join(' · ');
   const list = $('historyList'); list.innerHTML = '';
-  if (!filtered.length){
-    list.innerHTML = '<div class="empty">没有匹配的做题记录。先去做几套题吧。</div>';
-    return;
-  }
+  if (!filtered.length){ list.innerHTML = '<div class="empty">没有匹配的做题记录。</div>'; return; }
   const sorted = filtered.slice().sort((a,b)=>b.finishedAt-a.finishedAt);
   for (const h of sorted){
     const accPct = Math.round(h.accuracy*100);
@@ -605,72 +1062,80 @@ function renderStats(){
       <div class="top">
         <span class="ttl">${escapeHtml(h.paperTitle)}</span>
         <span class="ts">${fmtDate(h.finishedAt)}</span>
-        <button class="del" title="删除这条记录" data-id="${h.sessionId}">×</button>
+        <button class="del" title="删除这条记录">×</button>
       </div>
       <div class="bot">
         <span>正确率 <b class="${cls}">${accPct}%</b></span>
         <span>${h.correctCount}/${h.total}</span>
         <span>用时 ${fmtDuration(h.durationSec)}</span>
-        <span style="margin-left:auto;color:var(--muted);">${escapeHtml(h.category||'')}</span>
+        <span style="margin-left:auto;">${escapeHtml(h.category||'')}</span>
       </div>`;
-    row.querySelector('.del').addEventListener('click', (e)=>{
-      e.stopPropagation();
-      deleteHistoryRecord(h.sessionId);
-    });
+    row.querySelector('.del').addEventListener('click', (e)=>{ e.stopPropagation(); deleteHistory(h.sessionId); });
     list.appendChild(row);
   }
 }
-
-['fCat','fPaper','fRange'].forEach(id=>{
-  document.addEventListener('change', (e)=>{ if (e.target.id===id) renderStats(); });
+function deleteHistory(id){
+  if (!confirm('删除这条做题记录？此操作不可撤销。')) return;
+  const next = loadHistory().filter(h=>h.sessionId !== id);
+  saveHistory(next);
+  toast('已删除');
+  renderStats();
+}
+document.addEventListener('change', (e)=>{
+  if (['fCat','fPaper','fRange'].includes(e.target.id)) renderStats();
 });
 
 // =========== Data ===========
 function exportData(){
-  const data = { exportedAt: new Date().toISOString(), history: loadHistory() };
+  const data = {
+    exportedAt: new Date().toISOString(),
+    history: loadHistory(),
+    favorites: loadFavs(),
+  };
   const blob = new Blob([JSON.stringify(data,null,2)], {type:'application/json'});
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  a.href = url; a.download = `sihai-quiz-history-${new Date().toISOString().slice(0,10)}.json`;
+  a.href = url; a.download = `sihai-quiz-backup-${new Date().toISOString().slice(0,10)}.json`;
   document.body.appendChild(a); a.click(); a.remove();
   setTimeout(()=>URL.revokeObjectURL(url), 800);
   toast('已导出');
 }
-
 function importData(ev){
   const f = ev.target.files[0]; if (!f) return;
   const r = new FileReader();
   r.onload = ()=>{
     try{
       const obj = JSON.parse(r.result);
-      const incoming = obj.history || obj;
-      if (!Array.isArray(incoming)) throw new Error('格式不对');
-      const cur = loadHistory();
-      const seen = new Set(cur.map(h=>h.sessionId));
-      const merged = cur.concat(incoming.filter(h=>!seen.has(h.sessionId)));
-      saveHistory(merged);
-      toast(`已合并 ${incoming.length} 条`);
-      renderStats();
+      // history merge
+      if (Array.isArray(obj.history) || Array.isArray(obj)){
+        const incoming = obj.history || obj;
+        const cur = loadHistory();
+        const seen = new Set(cur.map(h=>h.sessionId));
+        saveHistory(cur.concat(incoming.filter(h=>!seen.has(h.sessionId))));
+      }
+      // favorites merge
+      if (obj.favorites && typeof obj.favorites === 'object'){
+        const cur = loadFavs();
+        for (const pid of Object.keys(obj.favorites)){
+          const incoming = obj.favorites[pid] || [];
+          const merged = Array.from(new Set([...(cur[pid]||[]), ...incoming]));
+          cur[pid] = merged;
+        }
+        saveFavs(cur);
+      }
+      toast('已合并');
+      go('stats');
     }catch(e){ alert('导入失败：'+e.message); }
   };
   r.readAsText(f);
   ev.target.value = '';
 }
-
-function deleteHistoryRecord(id){
-  if (!confirm('删除这条做题记录？此操作不可撤销。')) return;
-  const cur = loadHistory();
-  const next = cur.filter(h=>h.sessionId !== id);
-  saveHistory(next);
-  toast('已删除');
-  renderStats();
-}
-
 function clearAllData(){
-  if (!confirm('确定清空所有做题记录？此操作不可恢复（除非有备份 JSON）')) return;
-  localStorage.removeItem(STORE_KEY);
+  if (!confirm('确定清空所有做题记录与收藏？此操作不可恢复。')) return;
+  localStorage.removeItem(STORE_HISTORY);
+  localStorage.removeItem(STORE_FAVS);
   toast('已清空');
-  renderStats();
+  go('stats');
 }
 
 init();
