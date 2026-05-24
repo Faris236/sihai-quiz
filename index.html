@@ -53,6 +53,21 @@ button.btn.sm{font-size:12px;padding:5px 10px;box-shadow:1px 1px 0 var(--shadow)
 .paper-card .row2{display:flex;justify-content:space-between;font-family:"SF Mono",ui-monospace,monospace;font-size:11.5px;color:var(--muted);margin-top:6px;letter-spacing:.03em;}
 .paper-card .row2 .stat{display:flex;gap:5px;align-items:baseline;}
 .paper-card .row2 .stat b{color:var(--ink);font-weight:700;font-size:13px;}
+.cat-card{border:1px solid var(--line);background:rgba(255,255,255,.55);border-radius:4px;padding:14px 15px;cursor:pointer;transition:.13s;display:flex;align-items:center;gap:12px;}
+.cat-card:hover{border-color:var(--ink);transform:translate(-1px,-1px);box-shadow:3px 3px 0 var(--shadow);}
+.cat-card .glyph{font-weight:900;font-size:20px;width:42px;height:42px;flex:none;background:var(--ink);color:var(--paper);border-radius:4px;display:flex;align-items:center;justify-content:center;letter-spacing:0;}
+.cat-card .body{flex:1;min-width:0;}
+.cat-card .ttl{font-weight:700;font-size:16px;display:flex;align-items:baseline;gap:8px;}
+.cat-card .ttl .pill{font-size:10.5px;font-family:"SF Mono",ui-monospace,monospace;color:var(--accent);border:1px solid var(--accent-soft);padding:1px 7px;border-radius:99px;letter-spacing:.04em;font-weight:400;}
+.cat-card .row2{display:flex;gap:14px;font-family:"SF Mono",ui-monospace,monospace;font-size:11.5px;color:var(--muted);margin-top:5px;letter-spacing:.03em;}
+.cat-card .row2 b{color:var(--ink);font-weight:700;font-size:12.5px;}
+.cat-card .arrow{font-size:18px;color:var(--muted);flex:none;}
+.crumb{display:flex;align-items:center;gap:8px;margin:10px 0 6px;font-size:13px;color:var(--muted);}
+.crumb button{font-family:inherit;background:none;border:none;color:var(--muted);cursor:pointer;font-size:13px;padding:0;}
+.crumb button:hover{color:var(--ink);}
+.crumb .sep{color:var(--line);}
+.history-row .del{background:transparent;border:1px solid var(--line);color:var(--muted);width:24px;height:24px;border-radius:50%;cursor:pointer;font-size:13px;line-height:1;display:flex;align-items:center;justify-content:center;flex:none;transition:.13s;font-family:inherit;}
+.history-row .del:hover{border-color:var(--accent);color:var(--accent);}
 
 .q{border:1px solid var(--line);background:rgba(255,255,255,.5);border-radius:4px;padding:16px 16px 5px;margin-bottom:16px;}
 .q-head{display:flex;gap:9px;align-items:flex-start;margin-bottom:11px;}
@@ -218,6 +233,8 @@ const state = {
   selected: {},        // qnum -> letter
   graded: false,
   startedAt: 0,
+  homeView: 'categories', // 'categories' | 'papers'
+  activeCategory: null,    // category name when drilled in
 };
 
 // =========== Helpers ===========
@@ -282,43 +299,105 @@ function renderHome(){
     root.innerHTML = '<div class="empty">还没有题册。请向项目仓库追加题册数据。</div>';
     return;
   }
+  if (state.homeView === 'categories'){
+    renderCategoryList(root);
+  } else {
+    renderPaperList(root, state.activeCategory);
+  }
+}
+
+function renderCategoryList(root){
   // group by category
   const groups = {};
   for (const p of state.papers){
     (groups[p.category] = groups[p.category] || []).push(p);
   }
   const hist = loadHistory();
+  const histByCat = {};
+  for (const h of hist){
+    (histByCat[h.category] = histByCat[h.category] || []).push(h);
+  }
+  const head = document.createElement('div');
+  head.className = 'sec-head';
+  head.innerHTML = `题库 <span class="sub">${Object.keys(groups).length} 个分类</span>`;
+  root.appendChild(head);
+  const grid = document.createElement('div'); grid.className = 'paper-grid';
+  for (const cat of Object.keys(groups)){
+    const papers = groups[cat];
+    const totalQ = papers.reduce((s,p)=>s+p.count,0);
+    const recs = histByCat[cat] || [];
+    const attempts = recs.length;
+    const avgAcc = attempts
+      ? recs.reduce((s,r)=>s+r.correctCount,0) / recs.reduce((s,r)=>s+r.total,0)
+      : null;
+    const glyph = cat.charAt(0);
+    const card = document.createElement('div'); card.className = 'cat-card';
+    card.innerHTML = `
+      <div class="glyph">${escapeHtml(glyph)}</div>
+      <div class="body">
+        <div class="ttl">${escapeHtml(cat)} <span class="pill">${papers.length} 套 · ${totalQ} 题</span></div>
+        <div class="row2">
+          <span>完成 <b>${attempts}</b> 次</span>
+          <span>平均 <b>${avgAcc===null?'—':Math.round(avgAcc*100)+'%'}</b></span>
+        </div>
+      </div>
+      <div class="arrow">›</div>`;
+    card.onclick = ()=>enterCategory(cat);
+    grid.appendChild(card);
+  }
+  root.appendChild(grid);
+}
+
+function renderPaperList(root, cat){
+  const crumb = document.createElement('div'); crumb.className = 'crumb';
+  crumb.innerHTML = `<button onclick="backToCategories()">← 题库</button><span class="sep">/</span><span style="color:var(--ink);font-weight:600;">${escapeHtml(cat)}</span>`;
+  root.appendChild(crumb);
+
+  const papers = state.papers.filter(p=>p.category===cat);
+  const hist = loadHistory();
   const byPaper = {};
   for (const h of hist){
     (byPaper[h.paperId] = byPaper[h.paperId] || []).push(h);
   }
-  for (const cat of Object.keys(groups)){
-    const head = document.createElement('div');
-    head.className = 'sec-head';
-    head.innerHTML = `${cat} <span class="sub">${groups[cat].length} 套</span>`;
-    root.appendChild(head);
-    const grid = document.createElement('div'); grid.className = 'paper-grid';
-    for (const p of groups[cat]){
-      const recs = byPaper[p.id] || [];
-      const attempts = recs.length;
-      const best = attempts ? Math.max(...recs.map(r=>r.accuracy)) : null;
-      const last = attempts ? recs[recs.length-1] : null;
-      const card = document.createElement('div'); card.className = 'paper-card';
-      card.innerHTML = `
-        <div class="row1">
-          <div class="title">${p.title}</div>
-          <div class="pill">${p.count} 题</div>
-        </div>
-        <div class="row2">
-          <span class="stat">完成 <b>${attempts}</b> 次</span>
-          <span class="stat">最高 <b>${best===null?'—':Math.round(best*100)+'%'}</b></span>
-          <span class="stat">${last?'上次 '+Math.round(last.accuracy*100)+'%':'未做过'}</span>
-        </div>`;
-      card.onclick = ()=>startQuiz(p.id);
-      grid.appendChild(card);
-    }
-    root.appendChild(grid);
+  const head = document.createElement('div');
+  head.className = 'sec-head';
+  head.innerHTML = `${escapeHtml(cat)} <span class="sub">${papers.length} 套 · 点击试卷开始</span>`;
+  root.appendChild(head);
+  const grid = document.createElement('div'); grid.className = 'paper-grid';
+  for (const p of papers){
+    const recs = byPaper[p.id] || [];
+    const attempts = recs.length;
+    const best = attempts ? Math.max(...recs.map(r=>r.accuracy)) : null;
+    const last = attempts ? recs[recs.length-1] : null;
+    const card = document.createElement('div'); card.className = 'paper-card';
+    card.innerHTML = `
+      <div class="row1">
+        <div class="title">${escapeHtml(p.title)}</div>
+        <div class="pill">${p.count} 题</div>
+      </div>
+      <div class="row2">
+        <span class="stat">完成 <b>${attempts}</b> 次</span>
+        <span class="stat">最高 <b>${best===null?'—':Math.round(best*100)+'%'}</b></span>
+        <span class="stat">${last?'上次 '+Math.round(last.accuracy*100)+'%':'未做过'}</span>
+      </div>`;
+    card.onclick = ()=>startQuiz(p.id);
+    grid.appendChild(card);
   }
+  root.appendChild(grid);
+}
+
+function enterCategory(cat){
+  state.homeView = 'papers';
+  state.activeCategory = cat;
+  renderHome();
+  window.scrollTo({top:0,behavior:'instant'});
+}
+
+function backToCategories(){
+  state.homeView = 'categories';
+  state.activeCategory = null;
+  renderHome();
+  window.scrollTo({top:0,behavior:'instant'});
 }
 
 // =========== Quiz ===========
@@ -526,6 +605,7 @@ function renderStats(){
       <div class="top">
         <span class="ttl">${escapeHtml(h.paperTitle)}</span>
         <span class="ts">${fmtDate(h.finishedAt)}</span>
+        <button class="del" title="删除这条记录" data-id="${h.sessionId}">×</button>
       </div>
       <div class="bot">
         <span>正确率 <b class="${cls}">${accPct}%</b></span>
@@ -533,6 +613,10 @@ function renderStats(){
         <span>用时 ${fmtDuration(h.durationSec)}</span>
         <span style="margin-left:auto;color:var(--muted);">${escapeHtml(h.category||'')}</span>
       </div>`;
+    row.querySelector('.del').addEventListener('click', (e)=>{
+      e.stopPropagation();
+      deleteHistoryRecord(h.sessionId);
+    });
     list.appendChild(row);
   }
 }
@@ -571,6 +655,15 @@ function importData(ev){
   };
   r.readAsText(f);
   ev.target.value = '';
+}
+
+function deleteHistoryRecord(id){
+  if (!confirm('删除这条做题记录？此操作不可撤销。')) return;
+  const cur = loadHistory();
+  const next = cur.filter(h=>h.sessionId !== id);
+  saveHistory(next);
+  toast('已删除');
+  renderStats();
 }
 
 function clearAllData(){
