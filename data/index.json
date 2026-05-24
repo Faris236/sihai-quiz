@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "updatedAt": "2026-05-24",
+  "papers": [
+    {
+      "id": "def-1",
+      "title": "定义刷题1",
+      "category": "定义判断",
+      "source": "四海判断推理题本",
+      "count": 30,
+      "file": "data/def-1.json"
+    }
+  ]
+}
