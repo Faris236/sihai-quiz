@@ -999,28 +999,37 @@ function renderCurrentQ(){
 
 function onOptClick(e){
   if (state.graded) return;
-  const item = state.current.questions[state.currentQ];
-  if (state.selected[item.num]) return; // already answered
+  // Snapshot current question at the moment of click
+  const qIdx = state.currentQ;
+  const item = state.current.questions[qIdx];
+  if (!item || state.selected[item.num] != null) return; // already answered
 
   const el = e.currentTarget;
   const L = el.dataset.L;
   state.selected[item.num] = L;
 
-  const isCorrect = L === item.answer;
+  // ── Immediately remove ALL click handlers so no option can be re-clicked ──
+  const optsBox = document.getElementById('optsBox');
+  if (optsBox) {
+    optsBox.querySelectorAll('.opt').forEach(o => {
+      o.removeEventListener('click', onOptClick);
+      o.style.cursor = 'default';
+    });
+    optsBox.classList.add('graded');
+  }
 
-  // Color only the selected option — green if correct, red if wrong
+  // Color only the selected option: green = correct, red = wrong
+  const correctAnswer = String(item.answer || '').trim();
+  const isCorrect = L === correctAnswer;
   el.classList.add(isCorrect ? 'correct' : 'wrong');
-  // Disable all options to prevent re-selection
-  el.parentElement.querySelectorAll('.opt').forEach(o => { o.style.cursor = 'default'; });
-  document.getElementById('optsBox').classList.add('graded');
 
-  // Update meta
+  // Update meta count
   const done = Object.keys(state.selected).length;
   const total = state.current.questions.length;
   $('qMetaRight').textContent = `已答 ${done}/${total}`;
 
-  // Update next button label when on last question
-  const last = state.currentQ === total - 1;
+  // Update next button label on last question
+  const last = qIdx === total - 1;
   if (last) {
     $('nextBtn').textContent = '提交并判分';
     $('nextBtn').classList.add('submit');
@@ -1028,10 +1037,10 @@ function onOptClick(e){
 
   renderAnswerGrids();
 
-  // Auto-advance after user sees feedback (if not last question)
+  // Auto-advance — only fires if user hasn't manually navigated away
   if (!last) {
     setTimeout(() => {
-      if (!state.graded) nextOrSubmit();
+      if (!state.graded && state.currentQ === qIdx) nextOrSubmit();
     }, 850);
   }
 }
