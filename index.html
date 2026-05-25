@@ -263,6 +263,12 @@ body.quiz-mode .wrap{padding-bottom:calc(74px + var(--safe-bottom));}
 }
 .qbar .primary:active{background:var(--primary-hover);}
 .qbar .primary.submit{background:var(--green);}
+.qbar .sub-btn{
+  height:44px;background:transparent;border:2px solid var(--primary);
+  color:var(--primary);border-radius:99px;font-size:13px;font-weight:700;
+  padding:0 12px;flex:none;
+}
+.qbar .sub-btn:active{background:var(--primary-light);}
 
 /* ===== Bottom sheets ===== */
 .sheet-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:50;display:none;}
@@ -501,6 +507,7 @@ body.quiz-mode .toast{bottom:calc(60px + var(--safe-bottom) + 12px);}
       <button class="icon-btn" onclick="openSheet()" title="答题卡">卡</button>
       <button class="icon-btn" onclick="prevQ()" id="prevBtn" title="上一题">‹</button>
       <button class="primary" id="nextBtn" onclick="nextOrSubmit()">下一题</button>
+      <button class="sub-btn" id="submitBtn" onclick="submitGrade()">交卷</button>
     </div>
 
     <!-- ===== Bottom tab bar (mobile) ===== -->
@@ -914,6 +921,7 @@ async function startQuiz(id, opts){
   ['home','favs','wrong','stats','data'].forEach(t=>$('page-'+t).classList.add('hidden'));
   $('page-quiz').classList.remove('hidden');
   $('qbar').classList.remove('hidden');
+  $('submitBtn').style.display = '';
   document.body.classList.add('quiz-mode');
   // header (no category text)
   $('quizTitle').textContent = data.title;
@@ -953,28 +961,30 @@ function renderCurrentQ(){
   $('qMetaRight').textContent = state.graded ? '已判分' : `已答 ${done}/${total}`;
   // body
   const body = $('qBody');
-  const verdictTxt = state.graded
+  const hasAnswer = state.selected[item.num] != null;
+  const verdictTxt = (state.graded || hasAnswer)
     ? (state.selected[item.num] === item.answer
-        ? `<div class="verdict ok">回答正确 · 答案 ${item.answer}</div>`
-        : `<div class="verdict no">${state.selected[item.num] ? '回答错误' : '未作答'} · 你的答案 ${state.selected[item.num]||'—'} · 正确答案 ${item.answer}</div>`)
+        ? `<div class="verdict ok" style="display:block">✓ 答对了 · 答案是 ${item.answer}</div>`
+        : `<div class="verdict no" style="display:block">${state.selected[item.num] ? '✗ 答错了' : '未作答'} · 你答了 ${state.selected[item.num]||'—'} · 正确答案 ${item.answer}</div>`)
     : '';
   body.innerHTML = `
-    <div class="q-stem-card ${state.graded?'graded':''}" id="qCard">
+    <div class="q-stem-card" id="qCard">
       <div class="stem">${escapeHtml(item.stem)}</div>
     </div>
-    <div class="opts ${state.graded?'graded':''}" id="optsBox">
+    <div class="opts ${(state.graded || hasAnswer)?'graded':''}" id="optsBox">
       ${['A','B','C','D'].map(L=>{
         let cls = '';
-        if (state.graded){
+        const ans = state.selected[item.num];
+        if (state.graded || ans) {
           if (L === item.answer) cls = 'correct';
-          else if (L === state.selected[item.num]) cls = 'wrong';
-        } else if (state.selected[item.num] === L){ cls = 'sel'; }
+          else if (L === ans) cls = 'wrong';
+        }
         return `<div class="opt ${cls}" data-L="${L}"><div class="tag">${L}</div><div class="txt">${escapeHtml(item.options[L]||'')}</div></div>`;
       }).join('')}
     </div>
     ${verdictTxt}
   `;
-  if (!state.graded){
+  if (!state.graded && !hasAnswer){
     body.querySelectorAll('.opt').forEach(o=>o.addEventListener('click', onOptClick));
   }
   // favorite state
@@ -993,21 +1003,53 @@ function renderCurrentQ(){
 
 function onOptClick(e){
   if (state.graded) return;
+  const item = state.current.questions[state.currentQ];
+  if (state.selected[item.num]) return; // already answered
+
   const el = e.currentTarget;
   const L = el.dataset.L;
-  const qNum = state.current.questions[state.currentQ].num;
-  state.selected[qNum] = L;
-  // visual
-  el.parentElement.querySelectorAll('.opt').forEach(o=>o.classList.toggle('sel', o===el));
-  // update meta count
+  state.selected[item.num] = L;
+
+  const isCorrect = L === item.answer;
+
+  // Show immediate correct/wrong feedback on all options
+  el.parentElement.querySelectorAll('.opt').forEach(o => {
+    const oL = o.dataset.L;
+    if (oL === item.answer) o.classList.add('correct');
+    else if (oL === L) o.classList.add('wrong');
+    o.style.cursor = 'default';
+  });
+  document.getElementById('optsBox').classList.add('graded');
+
+  // Show verdict below options
+  const vEl = document.createElement('div');
+  vEl.className = 'verdict ' + (isCorrect ? 'ok' : 'no');
+  vEl.style.display = 'block';
+  vEl.textContent = isCorrect
+    ? `✓ 答对了 · 答案是 ${item.answer}`
+    : `✗ 答错了 · 你答了 ${L} · 正确答案 ${item.answer}`;
+  document.getElementById('optsBox').insertAdjacentElement('afterend', vEl);
+
+  // Update meta
   const done = Object.keys(state.selected).length;
   const total = state.current.questions.length;
   $('qMetaRight').textContent = `已答 ${done}/${total}`;
-  // auto advance after short delay (if not last)
-  if (state.currentQ < total - 1){
-    setTimeout(()=>{ if (state.currentQ < total - 1) nextOrSubmit(); }, 280);
+
+  // Update next button label when on last question
+  const last = state.currentQ === total - 1;
+  if (last) {
+    $('nextBtn').textContent = '提交并判分';
+    $('nextBtn').classList.add('submit');
   }
+
   renderAnswerGrids();
+
+  // Auto-advance after user sees feedback (if not last question)
+  if (!last) {
+    setTimeout(() => {
+      if (!state.graded) nextOrSubmit();
+    }, 850);
+  }
 }
 
 function prevQ(){
@@ -1042,6 +1084,7 @@ function submitGrade(){
   }
   state.graded = true;
   stopTimer();
+  $('submitBtn').style.display = 'none';
   // compute
   let correct = 0;
   for (const item of data.questions){
