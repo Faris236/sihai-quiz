@@ -965,22 +965,21 @@ function renderCurrentQ(){
   $('qMetaRight').textContent = state.graded ? '已判分' : `已答 ${done}/${total}`;
   // body
   const body = $('qBody');
-  const hasAnswer = state.selected[item.num] != null;
   body.innerHTML = `
     <div class="q-stem-card" id="qCard">
       <div class="stem">${escapeHtml(item.stem)}</div>
     </div>
-    <div class="opts ${(hasAnswer || state.graded) ? 'graded' : ''}" id="optsBox">
+    <div class="opts ${state.graded ? 'graded' : ''}" id="optsBox">
       ${['A','B','C','D'].map(L=>{
         const ans = state.selected[item.num];
-        // Only color the option the user actually picked
+        // Color the previously-selected option (changeable before graded)
         let cls = '';
         if (ans && L === ans) cls = ans === item.answer ? 'correct' : 'wrong';
         return `<div class="opt ${cls}" data-key="${L}"><div class="tag">${L}</div><div class="txt">${escapeHtml(item.options[L]||'')}</div></div>`;
       }).join('')}
     </div>
   `;
-  if (!state.graded && !hasAnswer){
+  if (!state.graded){
     body.querySelectorAll('.opt').forEach(o=>o.addEventListener('click', onOptClick));
   }
   // favorite state
@@ -999,29 +998,29 @@ function renderCurrentQ(){
 
 function onOptClick(e){
   if (state.graded) return;
-  // Snapshot current question at the moment of click
   const qIdx = state.currentQ;
   const item = state.current.questions[qIdx];
-  if (!item || state.selected[item.num] != null) return; // already answered
+  if (!item) return;
 
   const el = e.currentTarget;
   const L = el.dataset.key;
+  if (!L) return;
+
+  const wasAnswered = state.selected[item.num] != null;
   state.selected[item.num] = L;
 
-  // ── Immediately remove ALL click handlers so no option can be re-clicked ──
+  // Update option colors in-place (clear all, highlight only selected)
   const optsBox = document.getElementById('optsBox');
   if (optsBox) {
+    const correctAnswer = String(item.answer || '').trim();
     optsBox.querySelectorAll('.opt').forEach(o => {
-      o.removeEventListener('click', onOptClick);
-      o.style.cursor = 'default';
+      const oL = o.dataset.key;
+      o.classList.remove('correct', 'wrong');
+      if (oL === L) {
+        o.classList.add(oL === correctAnswer ? 'correct' : 'wrong');
+      }
     });
-    optsBox.classList.add('graded');
   }
-
-  // Color only the selected option: green = correct, red = wrong
-  const correctAnswer = String(item.answer || '').trim();
-  const isCorrect = L === correctAnswer;
-  el.classList.add(isCorrect ? 'correct' : 'wrong');
 
   // Update meta count
   const done = Object.keys(state.selected).length;
@@ -1037,8 +1036,8 @@ function onOptClick(e){
 
   renderAnswerGrids();
 
-  // Auto-advance — only fires if user hasn't manually navigated away
-  if (!last) {
+  // Auto-advance only on FIRST selection — if changing a previous answer, stay put
+  if (!wasAnswered && !last) {
     setTimeout(() => {
       if (!state.graded && state.currentQ === qIdx) nextOrSubmit();
     }, 850);
