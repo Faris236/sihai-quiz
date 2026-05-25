@@ -976,7 +976,7 @@ function renderCurrentQ(){
         // Only color the option the user actually picked
         let cls = '';
         if (ans && L === ans) cls = ans === item.answer ? 'correct' : 'wrong';
-        return `<div class="opt ${cls}" data-L="${L}"><div class="tag">${L}</div><div class="txt">${escapeHtml(item.options[L]||'')}</div></div>`;
+        return `<div class="opt ${cls}" data-key="${L}"><div class="tag">${L}</div><div class="txt">${escapeHtml(item.options[L]||'')}</div></div>`;
       }).join('')}
     </div>
   `;
@@ -1005,7 +1005,7 @@ function onOptClick(e){
   if (!item || state.selected[item.num] != null) return; // already answered
 
   const el = e.currentTarget;
-  const L = el.dataset.L;
+  const L = el.dataset.key;
   state.selected[item.num] = L;
 
   // ── Immediately remove ALL click handlers so no option can be re-clicked ──
