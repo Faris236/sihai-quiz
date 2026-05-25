@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="刷题册">
 <meta name="theme-color" content="#1f3a4d">
 <link rel="manifest" href="manifest.webmanifest">
@@ -12,41 +12,46 @@
 <title>公考刷题册</title>
 <style>
 :root{
-  --bg:#f4f5f7;
+  --bg:#f0f2f5;
   --surface:#ffffff;
-  --surface-2:#f8f9fb;
-  --border:#e4e7eb;
-  --border-strong:#c9cfd6;
-  --ink:#1a2330;
-  --ink-soft:#3b4654;
-  --muted:#8a93a3;
-  --muted-2:#a8b0bd;
+  --surface-2:#f5f7fa;
+  --border:#eaecef;
+  --ink:#111827;
+  --ink-2:#374151;
+  --muted:#9ca3af;
+  --muted-2:#c4cad3;
   --primary:#1f3a4d;
-  --primary-soft:#cfd9e2;
+  --primary-light:#e8f0f6;
   --primary-hover:#2a4a61;
-  --accent:#4a6b85;
-  --green:#3d8b5e;
-  --green-soft:#dbeede;
-  --red:#a04545;
-  --red-soft:#f4dada;
-  --gold:#b88742;
-  --shadow:0 1px 2px rgba(20,30,45,.04), 0 1px 3px rgba(20,30,45,.06);
-  --shadow-lg:0 4px 14px rgba(20,30,45,.10);
-  --r-sm:6px;
-  --r-md:10px;
-  --r-lg:14px;
+  --green:#15803d;
+  --green-soft:#dcfce7;
+  --red:#b91c1c;
+  --red-soft:#fee2e2;
+  --gold:#b45309;
+  --tab-h:56px;
+  --safe-top:env(safe-area-inset-top,0px);
+  --safe-bottom:env(safe-area-inset-bottom,0px);
+  --shadow:0 2px 8px rgba(0,0,0,.07),0 1px 2px rgba(0,0,0,.04);
+  --shadow-lg:0 8px 24px rgba(0,0,0,.10);
+  --r:12px;
+  --r-sm:8px;
+  --r-lg:16px;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-html,body{background:var(--bg);color:var(--ink);height:100%;}
-body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei","Noto Sans SC",sans-serif;
-  line-height:1.55;font-size:15px;font-weight:400;
-  padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom);
-  -webkit-font-smoothing:antialiased;}
-button{font-family:inherit;color:inherit;}
+html{background:var(--bg);}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Noto Sans SC",sans-serif;
+  font-size:16px;line-height:1.5;color:var(--ink);background:var(--bg);
+  padding-top:var(--safe-top);
+  -webkit-font-smoothing:antialiased;
+}
+button{font-family:inherit;color:inherit;cursor:pointer;}
 input,select,textarea{font-family:inherit;}
 
 /* ===== App shell ===== */
 .app{display:flex;min-height:100vh;}
+
+/* ===== Sidebar (iPad only) ===== */
 .sidebar{display:none;flex-direction:column;width:220px;flex:none;background:var(--primary);color:#dbe3eb;
   padding:18px 0;transition:width .22s ease;position:sticky;top:0;height:100vh;overflow-y:auto;}
 .sidebar.collapsed{width:60px;}
@@ -65,176 +70,292 @@ input,select,textarea{font-family:inherit;}
 .sidebar-toggle{background:transparent;border:none;color:#bcc8d3;padding:8px 14px;cursor:pointer;font-size:18px;text-align:left;}
 .sidebar-toggle:hover{color:#fff;}
 
+/* ===== Main ===== */
 .main{flex:1;min-width:0;display:flex;flex-direction:column;min-height:100vh;}
-.wrap{max-width:760px;width:100%;margin:0 auto;padding:14px 16px 90px;flex:1;}
+.wrap{max-width:600px;width:100%;margin:0 auto;
+  padding:16px 16px calc(var(--tab-h) + var(--safe-bottom) + 20px);}
 
-/* ===== Mobile top nav ===== */
-.topnav{display:flex;gap:2px;background:var(--surface);border-bottom:1px solid var(--border);padding:6px 8px;overflow-x:auto;position:sticky;top:0;z-index:10;}
-.topnav button{background:transparent;border:none;color:var(--muted);padding:8px 14px;border-radius:6px;font-size:13.5px;cursor:pointer;font-weight:500;white-space:nowrap;transition:.15s;}
-.topnav button.on{background:var(--primary);color:#fff;font-weight:600;}
+/* ===== Bottom tab bar ===== */
+.tabbar{
+  position:fixed;bottom:0;left:0;right:0;
+  background:rgba(255,255,255,.94);
+  -webkit-backdrop-filter:blur(20px);
+  backdrop-filter:blur(20px);
+  border-top:1px solid rgba(0,0,0,.08);
+  display:flex;align-items:stretch;
+  height:calc(var(--tab-h) + var(--safe-bottom));
+  padding-bottom:var(--safe-bottom);
+  z-index:20;
+}
+.tabbar .tab{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:none;border:none;padding:6px 4px 4px;gap:2px;
+  color:var(--muted);transition:.13s;
+}
+.tabbar .tab .ico{font-size:22px;line-height:1;display:block;opacity:.45;transition:.13s;}
+.tabbar .tab .lbl{font-size:10px;font-weight:500;letter-spacing:.02em;display:block;}
+.tabbar .tab.on .ico{opacity:1;}
+.tabbar .tab.on .lbl{color:var(--primary);font-weight:700;}
+body.quiz-mode .tabbar{display:none;}
 
-/* ===== Mast / page heading ===== */
-.mast{padding:16px 0 8px;}
-.mast h1{font-size:22px;font-weight:700;letter-spacing:.02em;}
-.mast .sub{color:var(--muted);font-size:13px;margin-top:2px;}
+/* ===== Page headings ===== */
+.page-head{padding:16px 0 10px;}
+.page-head h1{font-size:26px;font-weight:800;letter-spacing:-.4px;color:var(--ink);}
 
-.sec-head{font-weight:700;font-size:15.5px;margin:18px 0 10px;display:flex;align-items:baseline;gap:10px;color:var(--ink);}
-.sec-head .sub{color:var(--muted);font-size:12.5px;font-weight:400;}
-.empty{color:var(--muted);font-size:13.5px;text-align:center;padding:36px 12px;font-style:normal;background:var(--surface);border:1px dashed var(--border);border-radius:var(--r-md);}
+.sec-label{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin:20px 0 10px;}
+.empty{color:var(--muted);font-size:14px;text-align:center;padding:48px 20px;background:var(--surface);border-radius:var(--r);box-shadow:var(--shadow);}
 
-/* ===== Cards ===== */
-.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:14px 16px;box-shadow:var(--shadow);}
+/* ===== Category cards ===== */
 .cards{display:flex;flex-direction:column;gap:10px;}
-.cat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:14px 14px;display:flex;align-items:center;gap:12px;cursor:pointer;box-shadow:var(--shadow);transition:.15s;}
-.cat-card:active{transform:scale(.99);}
-.cat-card .glyph{width:42px;height:42px;flex:none;background:var(--primary);color:#fff;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px;}
+.cat-card{
+  background:var(--surface);border-radius:var(--r-lg);
+  padding:16px;display:flex;align-items:center;gap:14px;
+  cursor:pointer;box-shadow:var(--shadow);
+  transition:transform .12s,box-shadow .12s;
+}
+.cat-card:active{transform:scale(.98);box-shadow:0 1px 3px rgba(0,0,0,.06);}
+.cat-card .glyph{
+  width:50px;height:50px;flex:none;background:var(--primary);color:#fff;
+  border-radius:12px;display:flex;align-items:center;justify-content:center;
+  font-weight:800;font-size:20px;letter-spacing:-.5px;
+}
 .cat-card .body{flex:1;min-width:0;}
-.cat-card .ttl{font-weight:600;font-size:15.5px;color:var(--ink);display:flex;align-items:baseline;gap:8px;}
-.cat-card .pill{font-size:11.5px;color:var(--muted);font-weight:400;background:var(--surface-2);border:1px solid var(--border);padding:1px 8px;border-radius:99px;}
-.cat-card .stats{display:flex;gap:14px;font-size:12px;color:var(--muted);margin-top:5px;}
-.cat-card .stats b{color:var(--ink);font-weight:600;}
-.cat-card .arrow{color:var(--muted-2);font-size:20px;flex:none;font-weight:300;}
+.cat-card .name{font-weight:700;font-size:17px;color:var(--ink);margin-bottom:4px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.cat-card .meta{font-size:13px;color:var(--muted);}
+.cat-card .meta b{color:var(--ink-2);font-weight:600;}
+.cat-card .chev{color:var(--muted-2);font-size:20px;font-weight:300;flex:none;}
 
-.paper-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:14px 15px;cursor:pointer;box-shadow:var(--shadow);transition:.15s;}
-.paper-card:active{transform:scale(.99);}
-.paper-card .row1{display:flex;justify-content:space-between;align-items:baseline;gap:8px;}
-.paper-card .title{font-weight:600;font-size:15.5px;color:var(--ink);}
-.paper-card .pill{font-size:11.5px;color:var(--muted);background:var(--surface-2);border:1px solid var(--border);padding:1px 8px;border-radius:99px;}
-.paper-card .row2{display:flex;gap:14px;font-size:12px;color:var(--muted);margin-top:6px;}
-.paper-card .row2 b{color:var(--ink);font-weight:600;}
-.paper-card .row1{position:relative;}
-.paper-card .menu-btn{background:transparent;border:none;color:var(--muted);font-size:18px;line-height:1;padding:2px 6px;border-radius:6px;cursor:pointer;font-weight:700;letter-spacing:.5px;}
-.paper-card .menu-btn:hover{background:var(--surface-2);color:var(--ink);}
-.paper-card .resume{margin-top:6px;color:var(--primary);font-size:12px;font-weight:600;display:flex;align-items:center;gap:6px;}
-.paper-card .resume::before{content:'▶';font-size:9px;}
-.menu-item{display:block;width:100%;text-align:left;background:transparent;border:none;padding:14px 6px;font-size:15px;color:var(--ink);cursor:pointer;border-bottom:1px solid var(--border);}
+/* ===== Paper cards ===== */
+.paper-card{
+  background:var(--surface);border-radius:var(--r);
+  padding:16px;cursor:pointer;box-shadow:var(--shadow);
+  transition:transform .12s,box-shadow .12s;
+}
+.paper-card:active{transform:scale(.98);box-shadow:0 1px 3px rgba(0,0,0,.06);}
+.paper-card .p-top{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px;}
+.paper-card .p-title{font-weight:700;font-size:16px;color:var(--ink);flex:1;min-width:0;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.paper-card .p-count{font-size:12px;color:var(--muted);background:var(--bg);
+  border-radius:6px;padding:3px 8px;white-space:nowrap;flex:none;}
+.paper-card .menu-btn{background:transparent;border:none;color:var(--muted);
+  font-size:20px;padding:0 4px;line-height:1;font-weight:700;letter-spacing:.5px;flex:none;}
+.paper-card .p-stats{display:flex;gap:16px;align-items:center;}
+.paper-card .p-stat{font-size:13px;color:var(--muted);}
+.paper-card .p-stat b{color:var(--ink-2);font-weight:700;}
+.paper-card .p-resume{
+  margin-top:10px;padding:8px 12px;
+  background:var(--primary-light);border-radius:8px;
+  font-size:13px;color:var(--primary);font-weight:600;
+  display:flex;align-items:center;gap:6px;
+}
+.paper-card .p-resume::before{content:'▶';font-size:9px;opacity:.7;}
+
+/* ===== Menu sheet items ===== */
+.menu-item{display:block;width:100%;text-align:left;background:transparent;border:none;
+  padding:16px 4px;font-size:16px;color:var(--ink);cursor:pointer;
+  border-bottom:1px solid var(--border);}
 .menu-item:last-child{border-bottom:none;}
-.menu-item:hover{background:var(--surface-2);}
+.menu-item:active{background:var(--surface-2);}
 .menu-item.danger{color:var(--red);}
-.menu-item .sub{display:block;font-size:12px;color:var(--muted);margin-top:2px;font-weight:400;}
+.menu-item .sub{display:block;font-size:12px;color:var(--muted);margin-top:3px;font-weight:400;}
 
-.crumb{display:flex;align-items:center;gap:8px;margin:4px 0 4px;font-size:13.5px;color:var(--muted);}
-.crumb button{background:none;border:none;color:var(--muted);cursor:pointer;font-size:13.5px;padding:0;}
-.crumb button:hover{color:var(--ink);}
-.crumb .cur{color:var(--ink);font-weight:600;}
+/* ===== Breadcrumb ===== */
+.crumb{display:flex;align-items:center;gap:6px;margin:0 0 10px;font-size:14px;}
+.crumb button{background:none;border:none;color:var(--primary);font-size:14px;font-weight:600;padding:0;}
+.crumb .cur{color:var(--ink);font-weight:700;}
 .crumb .sep{color:var(--muted-2);}
 
 /* ===== Quiz layout ===== */
-.quiz-shell{display:flex;flex-direction:column;flex:1;min-height:0;}
-.q-header{background:var(--surface);border-bottom:1px solid var(--border);padding:10px 14px;display:flex;align-items:center;gap:8px;position:sticky;top:0;z-index:9;}
-.q-header .back{background:transparent;border:none;color:var(--ink);font-size:20px;width:32px;height:32px;border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
-.q-header .back:hover{background:var(--surface-2);}
-.q-header .title{flex:1;min-width:0;}
-.q-header .title .t{font-weight:700;font-size:15px;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.q-header .title .meta{font-size:11.5px;color:var(--muted);margin-top:1px;}
-.q-header .timer{font-variant-numeric:tabular-nums;background:var(--surface-2);border:1px solid var(--border);color:var(--ink-soft);font-size:12.5px;padding:5px 10px;border-radius:99px;font-weight:600;}
+body.quiz-mode .wrap{padding-bottom:calc(74px + var(--safe-bottom));}
+.quiz-shell{display:flex;flex-direction:column;flex:1;}
+
+.q-header{
+  background:var(--surface);border-bottom:1px solid var(--border);
+  padding:10px 16px;display:flex;align-items:center;gap:10px;
+  position:sticky;top:0;z-index:9;
+}
+.q-header .back{
+  background:var(--bg);border:none;color:var(--ink);
+  width:36px;height:36px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-size:22px;flex:none;
+}
+.q-header .info{flex:1;min-width:0;}
+.q-header .info .t{font-weight:700;font-size:15px;color:var(--ink);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.q-header .info .m{font-size:12px;color:var(--muted);margin-top:1px;}
+.q-header .timer{
+  font-variant-numeric:tabular-nums;
+  background:var(--bg);color:var(--ink-2);
+  font-size:13px;font-weight:600;padding:6px 12px;
+  border-radius:99px;white-space:nowrap;flex:none;
+}
 
 .qprog-track{height:3px;background:var(--border);overflow:hidden;}
-.qprog-fill{height:100%;background:var(--primary);transition:width .3s;width:0;}
+.qprog-fill{height:100%;background:var(--primary);transition:width .3s;}
 
-.q-tabs{display:flex;gap:4px;padding:10px 14px 6px;background:var(--surface);border-bottom:1px solid var(--border);}
-.q-tabs button{background:transparent;border:none;font-size:13.5px;color:var(--muted);padding:5px 12px;border-radius:99px;cursor:pointer;font-weight:500;}
-.q-tabs button.on{background:var(--ink);color:#fff;}
-.q-tabs button:disabled{opacity:.4;cursor:not-allowed;}
+.q-pos{
+  padding:12px 16px 4px;
+  display:flex;justify-content:space-between;align-items:center;
+}
+.q-pos .num{font-size:13px;font-weight:600;color:var(--muted);}
+.q-pos .done{font-size:13px;color:var(--muted);}
 
-.q-meta{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);padding:10px 16px 4px;}
+.q-body{padding:4px 16px 16px;}
+.q-stem-card{
+  background:var(--surface);border-radius:var(--r);
+  padding:18px 16px;box-shadow:var(--shadow);margin-bottom:12px;
+}
+.q-stem-card .stem{font-size:16px;line-height:1.8;color:var(--ink);white-space:pre-wrap;}
 
-.q-body{flex:1;padding:6px 16px 16px;}
-.q-stem-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:16px 16px;box-shadow:var(--shadow);margin-bottom:12px;}
-.q-stem-card .stem{font-size:15.5px;line-height:1.75;color:var(--ink);white-space:pre-wrap;}
-
-.opts{display:flex;flex-direction:column;gap:9px;}
-.opt{display:flex;gap:12px;align-items:flex-start;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r-md);padding:12px 14px;cursor:pointer;transition:.15s;box-shadow:var(--shadow);}
-.opt:hover{border-color:var(--border-strong);}
-.opt .tag{font-weight:700;font-size:13.5px;width:24px;height:24px;flex:none;border:1.5px solid var(--border-strong);color:var(--ink-soft);border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--surface);transition:.15s;}
-.opt .txt{flex:1;font-size:14.5px;line-height:1.65;color:var(--ink);padding-top:1px;}
-.opt.sel{border-color:var(--primary);background:#eef3f8;}
+/* ===== Answer options ===== */
+.opts{display:flex;flex-direction:column;gap:10px;}
+.opt{
+  display:flex;gap:14px;align-items:flex-start;
+  background:var(--surface);border:2px solid var(--border);
+  border-radius:var(--r);padding:14px 16px;cursor:pointer;
+  box-shadow:var(--shadow);transition:.12s;
+}
+.opt:active{transform:scale(.99);}
+.opt .tag{
+  font-weight:700;font-size:14px;
+  width:28px;height:28px;flex:none;
+  border:2px solid var(--border);color:var(--muted);
+  border-radius:50%;display:flex;align-items:center;justify-content:center;
+  background:var(--bg);transition:.12s;
+}
+.opt .txt{flex:1;font-size:15px;line-height:1.65;color:var(--ink);padding-top:2px;}
+.opt.sel{border-color:var(--primary);background:var(--primary-light);}
 .opt.sel .tag{background:var(--primary);color:#fff;border-color:var(--primary);}
 .opt.correct{border-color:var(--green);background:var(--green-soft);}
 .opt.correct .tag{background:var(--green);color:#fff;border-color:var(--green);}
 .opt.wrong{border-color:var(--red);background:var(--red-soft);}
 .opt.wrong .tag{background:var(--red);color:#fff;border-color:var(--red);}
 .graded .opt{cursor:default;}
-.verdict{margin-top:12px;padding:10px 14px;background:var(--surface-2);border-radius:var(--r-sm);font-size:13px;color:var(--muted);display:none;}
+.verdict{
+  margin-top:12px;padding:12px 14px;border-radius:var(--r-sm);
+  font-size:14px;font-weight:500;display:none;
+}
 .graded .verdict{display:block;}
-.graded .verdict.ok{background:var(--green-soft);color:#1f5e3a;}
-.graded .verdict.no{background:var(--red-soft);color:#7a2f2f;}
+.graded .verdict.ok{background:var(--green-soft);color:#14532d;}
+.graded .verdict.no{background:var(--red-soft);color:#7f1d1d;}
 
-/* ===== Bottom bar (quiz) ===== */
-.qbar{position:sticky;bottom:0;background:var(--surface);border-top:1px solid var(--border);padding:10px 12px calc(10px + env(safe-area-inset-bottom));display:flex;gap:8px;align-items:center;z-index:8;}
-.qbar .icon-btn{background:var(--surface-2);border:1px solid var(--border);color:var(--ink-soft);width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;flex:none;transition:.15s;}
-.qbar .icon-btn:hover{border-color:var(--border-strong);}
-.qbar .icon-btn.on{color:var(--gold);background:#fdf3e0;border-color:#e8d3a3;}
-.qbar .icon-btn.disabled{opacity:.4;pointer-events:none;}
-.qbar .primary{flex:1;height:42px;background:var(--primary);color:#fff;border:none;border-radius:99px;font-size:15px;font-weight:600;cursor:pointer;transition:.15s;}
-.qbar .primary:hover{background:var(--primary-hover);}
+/* ===== Quiz bottom bar ===== */
+.qbar{
+  position:fixed;bottom:0;left:0;right:0;
+  background:rgba(255,255,255,.94);
+  -webkit-backdrop-filter:blur(20px);
+  backdrop-filter:blur(20px);
+  border-top:1px solid rgba(0,0,0,.08);
+  padding:8px 16px calc(8px + var(--safe-bottom));
+  display:flex;gap:10px;align-items:center;z-index:18;
+}
+.qbar .icon-btn{
+  background:var(--bg);border:none;color:var(--ink-2);
+  width:44px;height:44px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-size:17px;flex:none;
+}
+.qbar .icon-btn.on{color:var(--gold);background:#fef3c7;}
+.qbar .icon-btn.disabled{opacity:.35;pointer-events:none;}
+.qbar .primary{
+  flex:1;height:44px;background:var(--primary);color:#fff;
+  border:none;border-radius:99px;font-size:15px;font-weight:700;
+}
+.qbar .primary:active{background:var(--primary-hover);}
 .qbar .primary.submit{background:var(--green);}
 
-/* ===== Answer card sheet ===== */
-.sheet-backdrop{position:fixed;inset:0;background:rgba(20,30,45,.45);z-index:50;display:none;}
+/* ===== Bottom sheets ===== */
+.sheet-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:50;display:none;}
 .sheet-backdrop.show{display:block;}
-.sheet{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-radius:18px 18px 0 0;padding:14px 16px calc(20px + env(safe-area-inset-bottom));z-index:51;transform:translateY(100%);transition:transform .25s ease;max-height:70vh;overflow-y:auto;}
+.sheet{
+  position:fixed;left:0;right:0;bottom:0;
+  background:var(--surface);border-radius:20px 20px 0 0;
+  padding:12px 18px calc(20px + var(--safe-bottom));
+  z-index:51;transform:translateY(100%);
+  transition:transform .28s cubic-bezier(.32,.72,0,1);
+  max-height:72vh;overflow-y:auto;
+}
 .sheet.show{transform:translateY(0);}
-.sheet .grab{width:38px;height:4px;background:var(--border-strong);border-radius:99px;margin:0 auto 12px;}
-.sheet .ttl{font-weight:700;font-size:15px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:baseline;}
-.sheet .legend{font-size:11.5px;color:var(--muted);display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;}
-.sheet .legend span{display:inline-flex;align-items:center;gap:5px;}
-.sheet .legend i{width:11px;height:11px;border-radius:3px;display:inline-block;border:1px solid var(--border);}
-.sheet .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(40px,1fr));gap:7px;}
-.acell{aspect-ratio:1;border:1.5px solid var(--border);background:var(--surface);color:var(--ink-soft);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;cursor:pointer;transition:.13s;}
-.acell:hover{border-color:var(--border-strong);}
+.sheet .grab{width:36px;height:4px;background:var(--muted-2);border-radius:99px;margin:0 auto 14px;}
+.sheet .s-ttl{font-weight:700;font-size:16px;margin-bottom:6px;
+  display:flex;justify-content:space-between;align-items:baseline;}
+.sheet .legend{font-size:12px;color:var(--muted);display:flex;gap:12px;flex-wrap:wrap;margin-bottom:14px;}
+.sheet .legend span{display:inline-flex;align-items:center;gap:4px;}
+.sheet .legend i{width:10px;height:10px;border-radius:3px;display:inline-block;border:1px solid var(--border);}
+.sheet .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(42px,1fr));gap:8px;}
+.acell{
+  aspect-ratio:1;border:2px solid var(--border);background:var(--bg);
+  color:var(--ink-2);border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:700;cursor:pointer;
+}
 .acell.answered{border-color:var(--primary);color:var(--primary);}
 .acell.correct{background:var(--green);border-color:var(--green);color:#fff;}
 .acell.wrong{background:var(--red);border-color:var(--red);color:#fff;}
-.acell.cur{box-shadow:0 0 0 2.5px var(--primary);}
-.sheet .acts{display:flex;gap:8px;margin-top:16px;}
+.acell.cur{box-shadow:0 0 0 3px rgba(31,58,77,.28);}
+.sheet .acts{display:flex;gap:10px;margin-top:18px;}
 .sheet .acts button{flex:1;}
 
 /* ===== Buttons ===== */
-.btn{font-size:13.5px;border:1px solid var(--border);background:var(--surface);color:var(--ink);padding:9px 16px;border-radius:6px;cursor:pointer;font-weight:500;transition:.13s;}
-.btn:hover{border-color:var(--border-strong);}
+.btn{font-size:14px;border:1.5px solid var(--border);background:var(--surface);
+  color:var(--ink);padding:10px 18px;border-radius:99px;font-weight:600;}
+.btn:active{background:var(--surface-2);}
 .btn.primary{background:var(--primary);color:#fff;border-color:var(--primary);}
-.btn.primary:hover{background:var(--primary-hover);}
-.btn.danger{color:var(--red);border-color:var(--red-soft);}
-.btn.danger:hover{background:var(--red-soft);}
-.btn.sm{font-size:12.5px;padding:6px 11px;}
+.btn.primary:active{background:var(--primary-hover);}
+.btn.danger{color:var(--red);border-color:transparent;background:var(--red-soft);}
+.btn.sm{font-size:13px;padding:7px 14px;}
 
 /* ===== Scorecard ===== */
-.scorecard{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:24px 18px;text-align:center;box-shadow:var(--shadow-lg);margin-bottom:14px;}
-.scorecard .pct{font-size:46px;font-weight:800;color:var(--primary);line-height:1;}
-.scorecard .pct small{font-size:18px;color:var(--muted);font-weight:600;margin-left:2px;}
-.scorecard .label{font-size:13px;color:var(--muted);margin-top:8px;}
-.scorecard .acts{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:18px;}
+.scorecard{
+  background:var(--surface);border-radius:var(--r-lg);
+  padding:32px 20px;text-align:center;box-shadow:var(--shadow-lg);margin-bottom:16px;
+}
+.scorecard .pct{font-size:64px;font-weight:800;color:var(--primary);line-height:1;letter-spacing:-2px;}
+.scorecard .pct small{font-size:24px;color:var(--muted);font-weight:600;}
+.scorecard .label{font-size:14px;color:var(--muted);margin-top:10px;}
+.scorecard .acts{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:22px;}
 
-/* ===== Stats / Favs / Wrong ===== */
-.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:6px 0 16px;}
-.stat-cell{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:12px 10px;text-align:center;box-shadow:var(--shadow);}
-.stat-cell .v{font-weight:700;font-size:20px;color:var(--primary);line-height:1.1;}
-.stat-cell .l{font-size:11.5px;color:var(--muted);margin-top:3px;}
-.filter-row{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 12px;}
-.filter-row select{font-size:12.5px;border:1px solid var(--border);background:var(--surface);color:var(--ink);padding:6px 28px 6px 10px;border-radius:6px;appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);background-position:calc(100% - 14px) center,calc(100% - 10px) center;background-size:4px 4px,4px 4px;background-repeat:no-repeat;}
+/* ===== Stats ===== */
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:8px 0 20px;}
+.stat-cell{background:var(--surface);border-radius:var(--r);padding:14px 10px;
+  text-align:center;box-shadow:var(--shadow);}
+.stat-cell .v{font-weight:800;font-size:22px;color:var(--primary);line-height:1.1;}
+.stat-cell .l{font-size:11px;color:var(--muted);margin-top:4px;font-weight:500;}
+.filter-row{display:flex;gap:8px;flex-wrap:wrap;margin:4px 0 14px;}
+.filter-row select{
+  font-size:13px;border:1.5px solid var(--border);background:var(--surface);
+  color:var(--ink);padding:8px 28px 8px 12px;border-radius:99px;appearance:none;
+  background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),
+    linear-gradient(135deg,var(--muted) 50%,transparent 50%);
+  background-position:calc(100% - 14px) center,calc(100% - 10px) center;
+  background-size:4px 4px,4px 4px;background-repeat:no-repeat;
+}
 
-.history-row{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:11px 13px;font-size:13px;box-shadow:var(--shadow);}
-.history-row .top{display:flex;justify-content:space-between;gap:8px;align-items:baseline;}
-.history-row .ttl{font-weight:600;font-size:14px;color:var(--ink);}
-.history-row .ts{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums;}
-.history-row .bot{display:flex;gap:14px;margin-top:4px;font-size:12px;color:var(--muted);}
-.history-row .bot b{color:var(--ink);font-weight:600;}
-.history-row .del{background:transparent;border:1px solid var(--border);color:var(--muted);width:24px;height:24px;border-radius:50%;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;flex:none;transition:.13s;line-height:1;}
-.history-row .del:hover{border-color:var(--red);color:var(--red);}
-.acc-hi{color:var(--green);} .acc-mid{color:var(--gold);} .acc-lo{color:var(--red);}
+.history-row{background:var(--surface);border-radius:var(--r);padding:14px 15px;box-shadow:var(--shadow);}
+.history-row .top{display:flex;justify-content:space-between;gap:8px;align-items:baseline;margin-bottom:6px;}
+.history-row .ttl{font-weight:700;font-size:15px;color:var(--ink);}
+.history-row .ts{font-size:11px;color:var(--muted);}
+.history-row .bot{display:flex;gap:14px;font-size:13px;color:var(--muted);align-items:center;}
+.history-row .bot b{color:var(--ink-2);font-weight:700;}
+.history-row .del{background:transparent;border:1.5px solid var(--border);color:var(--muted);
+  width:26px;height:26px;border-radius:50%;font-size:14px;
+  display:flex;align-items:center;justify-content:center;flex:none;margin-left:auto;}
+.history-row .del:active{border-color:var(--red);color:var(--red);}
+.acc-hi{color:var(--green)!important;} .acc-mid{color:var(--gold)!important;} .acc-lo{color:var(--red)!important;}
 
-.qitem{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:12px 14px;box-shadow:var(--shadow);cursor:pointer;transition:.13s;}
+.qitem{background:var(--surface);border-radius:var(--r);padding:14px 15px;box-shadow:var(--shadow);cursor:pointer;}
 .qitem:active{transform:scale(.99);}
-.qitem .top{display:flex;justify-content:space-between;align-items:baseline;gap:8px;}
-.qitem .src{font-size:11.5px;color:var(--muted);}
-.qitem .stem{font-size:14px;color:var(--ink);margin-top:4px;line-height:1.55;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
-.qitem .bot{display:flex;gap:14px;margin-top:6px;font-size:11.5px;color:var(--muted);}
-.qitem .bot .your{color:var(--red);} .qitem .bot .ans{color:var(--green);}
-.qitem .actions{display:flex;gap:8px;margin-top:8px;}
+.qitem .top{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:6px;}
+.qitem .src{font-size:12px;color:var(--muted);}
+.qitem .stem{font-size:14px;color:var(--ink);line-height:1.6;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.qitem .bot{display:flex;gap:14px;margin-top:8px;font-size:13px;color:var(--muted);}
+.qitem .bot .your{color:var(--red);font-weight:600;} .qitem .bot .ans{color:var(--green);font-weight:600;}
+.qitem .actions{display:flex;gap:8px;margin-top:10px;}
 
 /* ===== Right answer card (iPad) ===== */
-.right-pane{display:none;flex:none;width:260px;border-left:1px solid var(--border);background:var(--surface);padding:14px;height:100vh;position:sticky;top:0;overflow-y:auto;}
+.right-pane{display:none;flex:none;width:260px;border-left:1px solid var(--border);
+  background:var(--surface);padding:16px;height:100vh;position:sticky;top:0;overflow-y:auto;}
 .right-pane .ttl{font-weight:700;font-size:14px;margin-bottom:10px;}
 .right-pane .legend{font-size:11px;color:var(--muted);display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
 .right-pane .legend i{width:10px;height:10px;border-radius:3px;border:1px solid var(--border);display:inline-block;margin-right:3px;vertical-align:middle;}
@@ -242,24 +363,32 @@ input,select,textarea{font-family:inherit;}
 .right-pane .acts{display:flex;flex-direction:column;gap:8px;margin-top:14px;}
 
 /* ===== Data tab ===== */
-.data-section p{color:var(--muted);font-size:13.5px;line-height:1.7;margin-bottom:14px;}
+.data-section p{color:var(--ink-2);font-size:14px;line-height:1.75;margin-bottom:14px;}
 
 /* ===== Toast ===== */
-.toast{position:fixed;left:50%;bottom:80px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 18px;border-radius:99px;font-size:13px;z-index:99;opacity:0;transition:opacity .25s;pointer-events:none;max-width:80vw;text-align:center;}
-.toast.show{opacity:.95;}
+.toast{
+  position:fixed;left:50%;
+  bottom:calc(var(--tab-h) + var(--safe-bottom) + 12px);
+  transform:translateX(-50%);
+  background:rgba(17,24,39,.9);color:#fff;
+  padding:10px 20px;border-radius:99px;
+  font-size:14px;font-weight:500;
+  z-index:99;opacity:0;transition:opacity .25s;pointer-events:none;
+  max-width:80vw;text-align:center;white-space:nowrap;
+}
+.toast.show{opacity:1;}
+body.quiz-mode .toast{bottom:calc(60px + var(--safe-bottom) + 12px);}
 
 .hidden{display:none!important;}
 
 /* ===== iPad / wide screen ===== */
 @media (min-width: 880px){
   .sidebar{display:flex;}
-  .topnav{display:none;}
+  .tabbar{display:none;}
   .wrap{max-width:none;padding:18px 28px 90px;}
   body.quiz-mode .right-pane{display:block;}
   body.quiz-mode .wrap{max-width:760px;}
-  .qbar{border-radius:0;}
 }
-
 @media (max-width: 879px){
   .right-pane{display:none!important;}
   .sidebar{display:none!important;}
@@ -287,37 +416,28 @@ input,select,textarea{font-family:inherit;}
 
   <!-- ===== Main ===== -->
   <div class="main">
-    <!-- ===== Mobile top nav ===== -->
-    <div class="topnav" id="topnav">
-      <button data-tab="home" onclick="go('home')">题库</button>
-      <button data-tab="favs" onclick="go('favs')">收藏</button>
-      <button data-tab="wrong" onclick="go('wrong')">错题</button>
-      <button data-tab="stats" onclick="go('stats')">统计</button>
-      <button data-tab="data" onclick="go('data')">数据</button>
-    </div>
-
     <div class="wrap" id="wrap">
       <!-- HOME -->
       <section id="page-home">
-        <div class="mast"><h1>题库</h1><div class="sub">选择题库 → 进入对应试卷开始练习</div></div>
+        <div class="page-head"><h1>题库</h1></div>
         <div id="homeContent"></div>
       </section>
 
       <!-- FAVORITES -->
       <section id="page-favs" class="hidden">
-        <div class="mast"><h1>收藏题目</h1><div class="sub">在做题页点击 ☆ 即可收藏，便于后续重看</div></div>
+        <div class="page-head"><h1>收藏</h1></div>
         <div id="favsContent"></div>
       </section>
 
       <!-- WRONG -->
       <section id="page-wrong" class="hidden">
-        <div class="mast"><h1>错题本</h1><div class="sub">汇总你做错过的题目，按"做错次数"或最近一次时间排序</div></div>
+        <div class="page-head"><h1>错题本</h1></div>
         <div id="wrongContent"></div>
       </section>
 
       <!-- STATS -->
       <section id="page-stats" class="hidden">
-        <div class="mast"><h1>统计</h1><div class="sub" id="statsRange">所有历史记录</div></div>
+        <div class="page-head"><h1>统计</h1></div>
         <div class="filter-row">
           <select id="fCat"><option value="">全部分类</option></select>
           <select id="fPaper"><option value="">全部题册</option></select>
@@ -333,25 +453,25 @@ input,select,textarea{font-family:inherit;}
           <div class="stat-cell"><div class="v" id="sAvgAcc">—</div><div class="l">平均正确率</div></div>
           <div class="stat-cell"><div class="v" id="sBestAcc">—</div><div class="l">最高正确率</div></div>
           <div class="stat-cell"><div class="v" id="sTotalQ">0</div><div class="l">累计答题</div></div>
-          <div class="stat-cell"><div class="v" id="sCorrect">0</div><div class="l">累计答对</div></div>
+          <div class="stat-cell"><div class="v" id="sCorrect">0</div><div class="l">答对题数</div></div>
           <div class="stat-cell"><div class="v" id="sTime">0m</div><div class="l">累计用时</div></div>
         </div>
-        <div class="sec-head">历史记录</div>
+        <div class="sec-label">历史记录</div>
         <div id="historyList" class="cards"></div>
       </section>
 
       <!-- DATA -->
       <section id="page-data" class="hidden data-section">
-        <div class="mast"><h1>数据备份</h1></div>
-        <p>做题记录、收藏、错题本都存在你手机的浏览器本地存储里。建议偶尔点一下"导出"，把 JSON 文件存到 iCloud / 邮箱 / 网盘里，换设备或清缓存后可"导入"恢复。</p>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;">
-          <button class="btn primary" onclick="exportData()">导出全部数据</button>
-          <button class="btn" onclick="document.getElementById('importFile').click()">导入数据 JSON</button>
+        <div class="page-head"><h1>数据</h1></div>
+        <p>做题记录、收藏、错题本都存在手机本地。建议偶尔导出备份，换设备或清缓存后可导入恢复。</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:24px;">
+          <button class="btn primary" onclick="exportData()">导出备份</button>
+          <button class="btn" onclick="document.getElementById('importFile').click()">导入 JSON</button>
           <input type="file" id="importFile" accept="application/json,.json" style="display:none" onchange="importData(event)">
-          <button class="btn danger" onclick="clearAllData()" style="margin-left:auto;">清空所有记录</button>
+          <button class="btn danger" onclick="clearAllData()">清空所有记录</button>
         </div>
-        <div class="sec-head">关于</div>
-        <p>公考判断推理 / 课程试卷 离线刷题工具 · PWA · 纯静态网页 · 添加到主屏幕后可完全离线使用 · 题库随项目更新自动同步 · 做题数据不离开本机。</p>
+        <div class="sec-label">关于</div>
+        <p>公考判断推理离线刷题工具 · PWA · 纯静态网页 · 添加到主屏幕后完全离线可用 · 数据不离开本机。</p>
       </section>
 
       <!-- QUIZ -->
@@ -359,21 +479,16 @@ input,select,textarea{font-family:inherit;}
         <div class="quiz-shell">
           <div class="q-header">
             <button class="back" onclick="quitQuiz()" title="返回">‹</button>
-            <div class="title">
+            <div class="info">
               <div class="t" id="quizTitle"></div>
-              <div class="meta" id="quizMeta"></div>
+              <div class="m" id="quizMeta"></div>
             </div>
             <div class="timer" id="quizTimer">00:00</div>
           </div>
           <div class="qprog-track"><div class="qprog-fill" id="qprogFill"></div></div>
-          <div class="q-tabs">
-            <button class="on">题目</button>
-            <button disabled title="尚未提供">解析</button>
-            <button disabled title="尚未提供">笔记</button>
-          </div>
-          <div class="q-meta">
-            <span id="qMetaLeft">—</span>
-            <span id="qMetaRight">—</span>
+          <div class="q-pos">
+            <span class="num" id="qMetaLeft">—</span>
+            <span class="done" id="qMetaRight">—</span>
           </div>
           <div class="q-body" id="qBody"></div>
         </div>
@@ -387,6 +502,25 @@ input,select,textarea{font-family:inherit;}
       <button class="icon-btn" onclick="prevQ()" id="prevBtn" title="上一题">‹</button>
       <button class="primary" id="nextBtn" onclick="nextOrSubmit()">下一题</button>
     </div>
+
+    <!-- ===== Bottom tab bar (mobile) ===== -->
+    <nav class="tabbar" id="tabbar">
+      <button class="tab on" data-tab="home" onclick="go('home')">
+        <span class="ico">📚</span><span class="lbl">题库</span>
+      </button>
+      <button class="tab" data-tab="favs" onclick="go('favs')">
+        <span class="ico">⭐</span><span class="lbl">收藏</span>
+      </button>
+      <button class="tab" data-tab="wrong" onclick="go('wrong')">
+        <span class="ico">📝</span><span class="lbl">错题</span>
+      </button>
+      <button class="tab" data-tab="stats" onclick="go('stats')">
+        <span class="ico">📊</span><span class="lbl">统计</span>
+      </button>
+      <button class="tab" data-tab="data" onclick="go('data')">
+        <span class="ico">⚙️</span><span class="lbl">更多</span>
+      </button>
+    </nav>
   </div>
 
   <!-- ===== Right answer pane (iPad) ===== -->
@@ -410,7 +544,7 @@ input,select,textarea{font-family:inherit;}
 <div class="sheet-backdrop" id="sheetBd" onclick="closeSheet()"></div>
 <div class="sheet" id="sheet">
   <div class="grab"></div>
-  <div class="ttl"><span>答题卡</span><span style="font-weight:400;font-size:12.5px;color:var(--muted);" id="sheetSub"></span></div>
+  <div class="s-ttl"><span>答题卡</span><span style="font-weight:400;font-size:13px;color:var(--muted);" id="sheetSub"></span></div>
   <div class="legend">
     <span><i style="background:#fff;border-color:var(--border);"></i>未答</span>
     <span><i style="background:#fff;border-color:var(--primary);"></i>已选</span>
@@ -428,7 +562,7 @@ input,select,textarea{font-family:inherit;}
 <div class="sheet-backdrop" id="menuBd" onclick="closeMenu()"></div>
 <div class="sheet" id="menuSheet">
   <div class="grab"></div>
-  <div class="ttl"><span id="menuTtl"></span></div>
+  <div class="s-ttl"><span id="menuTtl"></span></div>
   <div id="menuItems"></div>
 </div>
 
@@ -512,7 +646,7 @@ function go(tab){
   });
   $('qbar').classList.add('hidden');
   // mark active on both navs
-  document.querySelectorAll('.topnav button, .sidebar nav button').forEach(b=>{
+  document.querySelectorAll('.tabbar .tab, .sidebar nav button').forEach(b=>{
     b.classList.toggle('on', b.dataset.tab === tab);
   });
   $('page-'+tab).classList.remove('hidden');
@@ -575,10 +709,10 @@ function renderCategoryList(root){
   for (const h of hist){
     (histByCat[h.category] = histByCat[h.category] || []).push(h);
   }
-  const head = document.createElement('div');
-  head.className = 'sec-head';
-  head.innerHTML = `所有题库 <span class="sub">${Object.keys(groups).length} 个分类</span>`;
-  root.appendChild(head);
+  const label = document.createElement('div');
+  label.className = 'sec-label';
+  label.textContent = Object.keys(groups).length + ' 个分类';
+  root.appendChild(label);
   const cards = document.createElement('div'); cards.className = 'cards';
   for (const cat of Object.keys(groups)){
     const ps = groups[cat];
@@ -589,16 +723,16 @@ function renderCategoryList(root){
       ? recs.reduce((s,r)=>s+r.correctCount,0) / recs.reduce((s,r)=>s+r.total,0)
       : null;
     const card = document.createElement('div'); card.className = 'cat-card';
+    const metaTxt = att
+      ? `<b>${ps.length}</b> 套 &nbsp;·&nbsp; 做了 <b>${att}</b> 次 &nbsp;·&nbsp; 均 <b>${Math.round(avgAcc*100)}%</b>`
+      : `<b>${ps.length}</b> 套 &nbsp;·&nbsp; ${totalQ} 题`;
     card.innerHTML = `
       <div class="glyph">${escapeHtml(cat.charAt(0))}</div>
       <div class="body">
-        <div class="ttl">${escapeHtml(cat)} <span class="pill">${ps.length} 套 · ${totalQ} 题</span></div>
-        <div class="stats">
-          <span>完成 <b>${att}</b> 次</span>
-          <span>平均 <b>${avgAcc===null?'—':Math.round(avgAcc*100)+'%'}</b></span>
-        </div>
+        <div class="name">${escapeHtml(cat)}</div>
+        <div class="meta">${metaTxt}</div>
       </div>
-      <div class="arrow">›</div>`;
+      <div class="chev">›</div>`;
     card.onclick = ()=>enterCategory(cat);
     cards.appendChild(card);
   }
@@ -606,7 +740,7 @@ function renderCategoryList(root){
 }
 function renderPaperList(root, cat){
   const crumb = document.createElement('div'); crumb.className = 'crumb';
-  crumb.innerHTML = `<button onclick="backToCategories()">‹ 题库</button><span class="sep">/</span><span class="cur">${escapeHtml(cat)}</span>`;
+  crumb.innerHTML = `<button onclick="backToCategories()">‹ 题库</button><span class="sep"> / </span><span class="cur">${escapeHtml(cat)}</span>`;
   root.appendChild(crumb);
 
   const ps = state.papers.filter(p=>p.category===cat);
@@ -615,9 +749,9 @@ function renderPaperList(root, cat){
   for (const h of hist){
     (byPaper[h.paperId] = byPaper[h.paperId] || []).push(h);
   }
-  const head = document.createElement('div'); head.className = 'sec-head';
-  head.innerHTML = `${escapeHtml(cat)} <span class="sub">${ps.length} 套试卷 · 点击开始</span>`;
-  root.appendChild(head);
+  const label = document.createElement('div'); label.className = 'sec-label';
+  label.textContent = ps.length + ' 套试卷';
+  root.appendChild(label);
   const cards = document.createElement('div'); cards.className = 'cards';
   for (const p of ps){
     const recs = byPaper[p.id] || [];
@@ -627,19 +761,18 @@ function renderPaperList(root, cat){
     const sess = getSession(p.id);
     const card = document.createElement('div'); card.className = 'paper-card';
     const resumeBadge = (sess && Object.keys(sess.selected||{}).length>0)
-      ? `<div class="resume">上次做到第 ${(sess.currentQ||0)+1} 题 · 已答 ${Object.keys(sess.selected).length}/${p.count} · 用时 ${fmtDuration(Math.floor((sess.elapsedMs||0)/1000))}</div>`
+      ? `<div class="p-resume">上次第 ${(sess.currentQ||0)+1} 题 · 已答 ${Object.keys(sess.selected).length}/${p.count} · ${fmtDuration(Math.floor((sess.elapsedMs||0)/1000))}</div>`
       : '';
+    const statHtml = att
+      ? `<span class="p-stat">已做 <b>${att}</b> 次</span><span class="p-stat">最高 <b>${Math.round(best*100)}%</b></span>`
+      : `<span class="p-stat" style="color:var(--muted-2)">未做过</span>`;
     card.innerHTML = `
-      <div class="row1">
-        <div class="title">${escapeHtml(p.title)}</div>
-        <div class="pill">${p.count} 题</div>
+      <div class="p-top">
+        <div class="p-title">${escapeHtml(p.title)}</div>
+        <div class="p-count">${p.count} 题</div>
         <button class="menu-btn" title="更多">⋯</button>
       </div>
-      <div class="row2">
-        <span>完成 <b>${att}</b> 次</span>
-        <span>最高 <b>${best===null?'—':Math.round(best*100)+'%'}</b></span>
-        <span>${last?'上次 '+Math.round(last.accuracy*100)+'%':'未做过'}</span>
-      </div>
+      <div class="p-stats">${statHtml}</div>
       ${resumeBadge}`;
     card.querySelector('.menu-btn').addEventListener('click', (e)=>{
       e.stopPropagation();
@@ -729,7 +862,7 @@ function setPaperCategory(p, newCat){
   if (state.homeView === 'papers'){
     const stillHas = state.papers.some(x=>x.category===state.activeCategory);
     if (!stillHas) backToCategories();
-    else if (state.activeCategory !== newCat){ /* still showing old category, fine */ renderHome(); }
+    else if (state.activeCategory !== newCat){ renderHome(); }
     else renderHome();
   } else { renderHome(); }
 }
@@ -886,7 +1019,6 @@ function prevQ(){
 function nextOrSubmit(){
   const last = state.currentQ === state.current.questions.length - 1;
   if (state.graded){
-    // post-grade nav: just move (loop if needed: no, stop at last)
     if (!last){ state.currentQ++; renderCurrentQ(); window.scrollTo({top:0,behavior:'instant'}); }
     else { showScorecard(); }
     return;
@@ -960,8 +1092,6 @@ function showScorecard(precomputed){
   `;
   $('qprogFill').style.width = '100%';
   $('qMetaRight').textContent = '已判分';
-  // hide qbar in scorecard view (optional, keep visible to let them prev to questions)
-  // We'll keep qbar so user can prev/next to review each q.
   $('nextBtn').textContent = '查看题目';
   $('nextBtn').classList.remove('submit');
   $('nextBtn').onclick = ()=>{ state.currentQ = 0; renderCurrentQ(); window.scrollTo({top:0,behavior:'instant'}); };
@@ -973,7 +1103,6 @@ function reviewWrong(){
   if (firstWrong === -1){ toast('全对，没有错题'); return; }
   state.currentQ = firstWrong;
   renderCurrentQ();
-  // restore default next handler
   $('nextBtn').onclick = nextOrSubmit;
   window.scrollTo({top:0,behavior:'instant'});
 }
@@ -1063,7 +1192,7 @@ async function renderFavs(){
     for (const qn of favs[pid]) pairs.push([pid, qn]);
   }
   if (!pairs.length){
-    root.innerHTML = '<div class="empty">还没有收藏。在做题页点击右下角 ☆ 即可收藏当前题目。</div>';
+    root.innerHTML = '<div class="empty">还没有收藏。在做题页点击 ☆ 即可收藏当前题目。</div>';
     return;
   }
   // ensure paper data
@@ -1079,8 +1208,8 @@ async function renderFavs(){
   for (const pid of Object.keys(byPaper)){
     const data = state.paperData[pid];
     if (!data) continue;
-    const head = document.createElement('div'); head.className='sec-head';
-    head.innerHTML = `${escapeHtml(data.title)} <span class="sub">${byPaper[pid].length} 题</span>`;
+    const head = document.createElement('div'); head.className='sec-label';
+    head.textContent = data.title + ' · ' + byPaper[pid].length + ' 题';
     root.appendChild(head);
     const wrap = document.createElement('div'); wrap.className='cards';
     for (const qn of byPaper[pid]){
@@ -1088,7 +1217,7 @@ async function renderFavs(){
       if (!q) continue;
       const item = document.createElement('div'); item.className='qitem';
       item.innerHTML = `
-        <div class="top"><span style="font-weight:600;">第 ${q.num} 题</span><span class="src">${escapeHtml(data.category||'')}</span></div>
+        <div class="top"><span style="font-weight:700;">第 ${q.num} 题</span><span class="src">${escapeHtml(data.category||'')}</span></div>
         <div class="stem">${escapeHtml(q.stem)}</div>
         <div class="actions">
           <button class="btn sm" onclick="event.stopPropagation();startQuiz('${pid}',${qn})">去做</button>
@@ -1117,18 +1246,11 @@ async function renderWrong(){
     root.innerHTML = '<div class="empty">还没有做题记录，做完一套题之后做错的题会出现在这里。</div>';
     return;
   }
-  // aggregate per (paper, qNum)
-  const agg = {}; // key = pid::qn
-  for (const h of hist){
-    for (const qnStr of Object.keys(h.answers||{})){
-      const qn = +qnStr;
-      // we don't know correct answer w/o paper data — defer; but we record attempts to recompute below
-    }
-  }
   // Need paper data for all referenced papers
   const pids = [...new Set(hist.map(h=>h.paperId))];
   for (const pid of pids){ try{ await loadPaper(pid); }catch{} }
   // walk history again with paper data
+  const agg = {};
   for (const h of hist){
     const data = state.paperData[h.paperId]; if (!data) continue;
     for (const q of data.questions){
@@ -1154,8 +1276,8 @@ async function renderWrong(){
   for (const it of items){ (byPaper[it.pid] = byPaper[it.pid] || []).push(it); }
   for (const pid of Object.keys(byPaper)){
     const data = state.paperData[pid]; if (!data) continue;
-    const head = document.createElement('div'); head.className='sec-head';
-    head.innerHTML = `${escapeHtml(data.title)} <span class="sub">${byPaper[pid].length} 题错过</span>`;
+    const head = document.createElement('div'); head.className='sec-label';
+    head.textContent = data.title + ' · ' + byPaper[pid].length + ' 题错过';
     root.appendChild(head);
     const wrap = document.createElement('div'); wrap.className='cards';
     for (const it of byPaper[pid]){
@@ -1163,13 +1285,13 @@ async function renderWrong(){
       const item = document.createElement('div'); item.className='qitem';
       item.innerHTML = `
         <div class="top">
-          <span style="font-weight:600;">第 ${q.num} 题</span>
+          <span style="font-weight:700;">第 ${q.num} 题</span>
           <span class="src">错 ${it.count} 次 · ${new Date(it.lastTs).toISOString().slice(0,10)}</span>
         </div>
         <div class="stem">${escapeHtml(q.stem)}</div>
         <div class="bot">
-          <span class="your">你的：${escapeHtml(it.lastWrong||'')}</span>
-          <span class="ans">答案：${escapeHtml(q.answer)}</span>
+          <span class="your">你答：${escapeHtml(it.lastWrong||'')}</span>
+          <span class="ans">正确：${escapeHtml(q.answer)}</span>
         </div>
         <div class="actions">
           <button class="btn sm" onclick="event.stopPropagation();startQuiz('${pid}',${it.qn})">重做这题</button>
@@ -1212,9 +1334,6 @@ function renderStats(){
   $('sTotalQ').textContent = totalQ;
   $('sCorrect').textContent = totalC;
   $('sTime').textContent = fmtDuration(totalT);
-  const rangeStr = range==='all' ? '不限时间' : `近 ${range} 天`;
-  const tags = [rangeStr]; if (cat) tags.push(cat); if (pid){ const p=state.papers.find(x=>x.id===pid); if (p) tags.push(p.title); }
-  $('statsRange').textContent = tags.join(' · ');
   const list = $('historyList'); list.innerHTML = '';
   if (!filtered.length){ list.innerHTML = '<div class="empty">没有匹配的做题记录。</div>'; return; }
   const sorted = filtered.slice().sort((a,b)=>b.finishedAt-a.finishedAt);
@@ -1226,13 +1345,12 @@ function renderStats(){
       <div class="top">
         <span class="ttl">${escapeHtml(h.paperTitle)}</span>
         <span class="ts">${fmtDate(h.finishedAt)}</span>
-        <button class="del" title="删除这条记录">×</button>
       </div>
       <div class="bot">
         <span>正确率 <b class="${cls}">${accPct}%</b></span>
         <span>${h.correctCount}/${h.total}</span>
         <span>用时 ${fmtDuration(h.durationSec)}</span>
-        <span style="margin-left:auto;">${escapeHtml(h.category||'')}</span>
+        <button class="del" title="删除这条记录">×</button>
       </div>`;
     row.querySelector('.del').addEventListener('click', (e)=>{ e.stopPropagation(); deleteHistory(h.sessionId); });
     list.appendChild(row);
@@ -1310,8 +1428,6 @@ function clearAllData(){
   localStorage.removeItem(STORE_FAVS);
   localStorage.removeItem(STORE_SESSIONS);
   localStorage.removeItem(STORE_OVERRIDES);
-  // re-apply (empty) overrides to reset category labels back to defaults
-  // Easiest: reload all papers from index.json on next nav; here just toast & go home.
   toast('已清空');
   location.reload();
 }
