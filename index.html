@@ -102,6 +102,16 @@ input,select,textarea{font-family:inherit;}
 .paper-card .pill{font-size:11.5px;color:var(--muted);background:var(--surface-2);border:1px solid var(--border);padding:1px 8px;border-radius:99px;}
 .paper-card .row2{display:flex;gap:14px;font-size:12px;color:var(--muted);margin-top:6px;}
 .paper-card .row2 b{color:var(--ink);font-weight:600;}
+.paper-card .row1{position:relative;}
+.paper-card .menu-btn{background:transparent;border:none;color:var(--muted);font-size:18px;line-height:1;padding:2px 6px;border-radius:6px;cursor:pointer;font-weight:700;letter-spacing:.5px;}
+.paper-card .menu-btn:hover{background:var(--surface-2);color:var(--ink);}
+.paper-card .resume{margin-top:6px;color:var(--primary);font-size:12px;font-weight:600;display:flex;align-items:center;gap:6px;}
+.paper-card .resume::before{content:'▶';font-size:9px;}
+.menu-item{display:block;width:100%;text-align:left;background:transparent;border:none;padding:14px 6px;font-size:15px;color:var(--ink);cursor:pointer;border-bottom:1px solid var(--border);}
+.menu-item:last-child{border-bottom:none;}
+.menu-item:hover{background:var(--surface-2);}
+.menu-item.danger{color:var(--red);}
+.menu-item .sub{display:block;font-size:12px;color:var(--muted);margin-top:2px;font-weight:400;}
 
 .crumb{display:flex;align-items:center;gap:8px;margin:4px 0 4px;font-size:13.5px;color:var(--muted);}
 .crumb button{background:none;border:none;color:var(--muted);cursor:pointer;font-size:13.5px;padding:0;}
@@ -414,15 +424,25 @@ input,select,textarea{font-family:inherit;}
   </div>
 </div>
 
+<!-- ===== Generic menu sheet ===== -->
+<div class="sheet-backdrop" id="menuBd" onclick="closeMenu()"></div>
+<div class="sheet" id="menuSheet">
+  <div class="grab"></div>
+  <div class="ttl"><span id="menuTtl"></span></div>
+  <div id="menuItems"></div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
 'use strict';
 
 // =========== Constants & State ===========
-const STORE_HISTORY  = 'sihai_quiz_history_v1';
-const STORE_FAVS     = 'sihai_quiz_favs_v1';
-const STORE_SIDEBAR  = 'sihai_quiz_sidebar_collapsed_v1';
+const STORE_HISTORY   = 'sihai_quiz_history_v1';
+const STORE_FAVS      = 'sihai_quiz_favs_v1';
+const STORE_SIDEBAR   = 'sihai_quiz_sidebar_collapsed_v1';
+const STORE_OVERRIDES = 'sihai_quiz_overrides_v1';  // per-paper user edits (category)
+const STORE_SESSIONS  = 'sihai_quiz_sessions_v1';   // in-progress sessions
 
 const state = {
   papers: [],
@@ -465,6 +485,23 @@ function loadHistory(){try{return JSON.parse(localStorage.getItem(STORE_HISTORY)
 function saveHistory(a){localStorage.setItem(STORE_HISTORY, JSON.stringify(a));}
 function loadFavs(){try{return JSON.parse(localStorage.getItem(STORE_FAVS)||'{}');}catch{return{};}}
 function saveFavs(o){localStorage.setItem(STORE_FAVS, JSON.stringify(o));}
+function loadOverrides(){try{return JSON.parse(localStorage.getItem(STORE_OVERRIDES)||'{}');}catch{return{};}}
+function saveOverrides(o){localStorage.setItem(STORE_OVERRIDES, JSON.stringify(o));}
+function loadSessions(){try{return JSON.parse(localStorage.getItem(STORE_SESSIONS)||'{}');}catch{return{};}}
+function saveSessions(o){localStorage.setItem(STORE_SESSIONS, JSON.stringify(o));}
+function getSession(pid){return loadSessions()[pid]||null;}
+function setSession(pid, s){const all=loadSessions(); all[pid]=s; saveSessions(all);}
+function clearSessionFor(pid){const all=loadSessions(); delete all[pid]; saveSessions(all);}
+
+// Apply user-defined category overrides on top of the loaded papers
+function applyOverrides(){
+  const ov = loadOverrides();
+  for (const p of state.papers){
+    if (ov[p.id] && ov[p.id].category){
+      p.category = ov[p.id].category;
+    }
+  }
+}
 
 // =========== Routing ===========
 function go(tab){
@@ -505,6 +542,7 @@ async function init(){
     const res = await fetch('data/index.json', {cache:'no-cache'});
     const idx = await res.json();
     state.papers = idx.papers || [];
+    applyOverrides();
   }catch(e){
     state.papers = []; toast('题库索引加载失败');
   }
@@ -586,24 +624,124 @@ function renderPaperList(root, cat){
     const att = recs.length;
     const best = att ? Math.max(...recs.map(r=>r.accuracy)) : null;
     const last = att ? recs[recs.length-1] : null;
+    const sess = getSession(p.id);
     const card = document.createElement('div'); card.className = 'paper-card';
+    const resumeBadge = (sess && Object.keys(sess.selected||{}).length>0)
+      ? `<div class="resume">上次做到第 ${(sess.currentQ||0)+1} 题 · 已答 ${Object.keys(sess.selected).length}/${p.count} · 用时 ${fmtDuration(Math.floor((sess.elapsedMs||0)/1000))}</div>`
+      : '';
     card.innerHTML = `
       <div class="row1">
         <div class="title">${escapeHtml(p.title)}</div>
         <div class="pill">${p.count} 题</div>
+        <button class="menu-btn" title="更多">⋯</button>
       </div>
       <div class="row2">
         <span>完成 <b>${att}</b> 次</span>
         <span>最高 <b>${best===null?'—':Math.round(best*100)+'%'}</b></span>
         <span>${last?'上次 '+Math.round(last.accuracy*100)+'%':'未做过'}</span>
-      </div>`;
-    card.onclick = ()=>startQuiz(p.id);
+      </div>
+      ${resumeBadge}`;
+    card.querySelector('.menu-btn').addEventListener('click', (e)=>{
+      e.stopPropagation();
+      openPaperMenu(p);
+    });
+    card.onclick = ()=>openPaper(p.id);
     cards.appendChild(card);
   }
   root.appendChild(cards);
 }
+
+// Click a paper card → if there's a saved session, ask to resume; otherwise start fresh
+function openPaper(pid){
+  const sess = getSession(pid);
+  if (sess && Object.keys(sess.selected||{}).length>0){
+    const ans = Object.keys(sess.selected).length;
+    const mins = Math.floor((sess.elapsedMs||0)/60000);
+    const ok = confirm(`检测到上次进度：第 ${(sess.currentQ||0)+1} 题，已答 ${ans} 题，用时约 ${mins} 分钟。\n\n点【确定】继续，点【取消】重新开始。`);
+    if (ok) return startQuiz(pid, { resume:true });
+    clearSessionFor(pid);
+  }
+  startQuiz(pid);
+}
 function enterCategory(cat){ state.homeView='papers'; state.activeCategory=cat; renderHome(); window.scrollTo({top:0,behavior:'instant'}); }
 function backToCategories(){ state.homeView='categories'; state.activeCategory=null; renderHome(); window.scrollTo({top:0,behavior:'instant'}); }
+
+// =========== Paper menu (⋯) ===========
+function openMenu(title, items){
+  $('menuTtl').textContent = title;
+  const root = $('menuItems'); root.innerHTML = '';
+  for (const it of items){
+    const b = document.createElement('button');
+    b.className = 'menu-item' + (it.danger?' danger':'');
+    b.innerHTML = it.label + (it.sub?`<span class="sub">${escapeHtml(it.sub)}</span>`:'');
+    b.addEventListener('click', ()=>{ closeMenu(); setTimeout(it.onClick, 50); });
+    root.appendChild(b);
+  }
+  $('menuSheet').classList.add('show');
+  $('menuBd').classList.add('show');
+}
+function closeMenu(){
+  $('menuSheet').classList.remove('show');
+  $('menuBd').classList.remove('show');
+}
+function openPaperMenu(p){
+  const sess = getSession(p.id);
+  const hist = loadHistory().filter(h=>h.paperId===p.id);
+  const items = [];
+  items.push({ label:'更改分类', sub:'当前：'+p.category, onClick:()=>promptCategoryChange(p) });
+  if (hist.length || sess){
+    items.push({ label:`清空本套记录 (${hist.length} 条历史${sess?' + 进行中进度':''})`, danger:true, onClick:()=>clearPaperData(p) });
+  }
+  items.push({ label:'取消', onClick:()=>{} });
+  openMenu(p.title, items);
+}
+
+function promptCategoryChange(p){
+  // build options: existing distinct categories + 新建分类
+  const existing = [...new Set(state.papers.map(x=>x.category))];
+  const items = existing.map(c=>({
+    label: c + (c===p.category?'  ✓':''),
+    onClick: ()=>setPaperCategory(p, c),
+  }));
+  items.push({ label:'＋ 新建分类…', onClick:()=>{
+    const name = (prompt('新分类名称（例如：言语理解 / 资料分析 / 套题训练 / 课程试卷）','')||'').trim();
+    if (name) setPaperCategory(p, name);
+  }});
+  items.push({ label:'取消', onClick:()=>{} });
+  openMenu('为《'+p.title+'》选择分类', items);
+}
+
+function setPaperCategory(p, newCat){
+  if (!newCat || newCat === p.category){ return; }
+  // persist override
+  const ov = loadOverrides();
+  ov[p.id] = ov[p.id] || {};
+  ov[p.id].category = newCat;
+  saveOverrides(ov);
+  p.category = newCat;
+  // update all history rows for this paper to keep stats consistent
+  const hist = loadHistory();
+  let changed = 0;
+  for (const h of hist){ if (h.paperId === p.id && h.category !== newCat){ h.category = newCat; changed++; } }
+  if (changed) saveHistory(hist);
+  toast('已分类到「'+newCat+'」');
+  // re-render: if we were inside the old category and it's now empty, back out
+  if (state.homeView === 'papers'){
+    const stillHas = state.papers.some(x=>x.category===state.activeCategory);
+    if (!stillHas) backToCategories();
+    else if (state.activeCategory !== newCat){ /* still showing old category, fine */ renderHome(); }
+    else renderHome();
+  } else { renderHome(); }
+}
+
+function clearPaperData(p){
+  if (!confirm(`确定清空《${p.title}》的所有做题记录和进行中的进度？\n此操作不可撤销。`)) return;
+  const next = loadHistory().filter(h=>h.paperId !== p.id);
+  saveHistory(next);
+  clearSessionFor(p.id);
+  toast('已清空');
+  renderHome();
+}
 
 // =========== Quiz ===========
 async function loadPaper(id){
@@ -616,25 +754,44 @@ async function loadPaper(id){
   return data;
 }
 
-async function startQuiz(id, jumpToQNum=null){
+async function startQuiz(id, opts){
+  // opts: { resume?:bool, jumpToQNum?:int }
+  opts = opts || {};
+  // backward-compat: previous signature was startQuiz(id, qNum)
+  if (typeof opts === 'number') opts = { jumpToQNum: opts };
   const data = await loadPaper(id);
   state.current = data;
   state.currentQ = 0;
   state.selected = {};
   state.graded = false;
   state.startedAt = Date.now();
+  // resume from saved session
+  if (opts.resume){
+    const sess = getSession(id);
+    if (sess){
+      state.selected = sess.selected || {};
+      state.currentQ = sess.currentQ || 0;
+      state.startedAt = Date.now() - (sess.elapsedMs || 0);
+    }
+  } else {
+    // fresh start clears any stale session for this paper
+    clearSessionFor(id);
+  }
   // hide non-quiz sections
   ['home','favs','wrong','stats','data'].forEach(t=>$('page-'+t).classList.add('hidden'));
   $('page-quiz').classList.remove('hidden');
   $('qbar').classList.remove('hidden');
   document.body.classList.add('quiz-mode');
-  // header
+  // header (no category text)
   $('quizTitle').textContent = data.title;
-  $('quizMeta').textContent  = (data.category||'') + ' · 共 ' + data.questions.length + ' 题';
+  $('quizMeta').textContent  = '共 ' + data.questions.length + ' 题';
   // timer
   startTimer();
-  if (jumpToQNum != null){
-    const idx = data.questions.findIndex(q=>q.num===jumpToQNum);
+  // reset next handler in case scorecard reassigned it
+  $('nextBtn').onclick = nextOrSubmit;
+  // jump after restoration
+  if (opts.jumpToQNum != null){
+    const idx = data.questions.findIndex(q=>q.num===opts.jumpToQNum);
     if (idx>=0) state.currentQ = idx;
   }
   renderCurrentQ();
@@ -660,7 +817,7 @@ function renderCurrentQ(){
   $('qprogFill').style.width = (state.graded ? 100 : (i+1)/total*100) + '%';
   // meta
   $('qMetaLeft').textContent = `第 ${item.num} 题 / 共 ${total} 题`;
-  $('qMetaRight').textContent = (data.category||'') + (state.graded ? ' · 已判分' : ` · 已答 ${done}/${total}`);
+  $('qMetaRight').textContent = state.graded ? '已判分' : `已答 ${done}/${total}`;
   // body
   const body = $('qBody');
   const verdictTxt = state.graded
@@ -712,7 +869,7 @@ function onOptClick(e){
   // update meta count
   const done = Object.keys(state.selected).length;
   const total = state.current.questions.length;
-  $('qMetaRight').textContent = (state.current.category||'') + ` · 已答 ${done}/${total}`;
+  $('qMetaRight').textContent = `已答 ${done}/${total}`;
   // auto advance after short delay (if not last)
   if (state.currentQ < total - 1){
     setTimeout(()=>{ if (state.currentQ < total - 1) nextOrSubmit(); }, 280);
@@ -774,6 +931,7 @@ function submitGrade(){
     total, accuracy: acc,
   };
   const hist = loadHistory(); hist.push(rec); saveHistory(hist);
+  clearSessionFor(data.id);  // submitted → drop in-progress
   closeSheet();
   toast(`已提交 · 正确率 ${Math.round(acc*100)}%`);
   showScorecard(rec);
@@ -801,7 +959,7 @@ function showScorecard(precomputed){
     </div>
   `;
   $('qprogFill').style.width = '100%';
-  $('qMetaRight').textContent = (data.category||'') + ' · 已判分';
+  $('qMetaRight').textContent = '已判分';
   // hide qbar in scorecard view (optional, keep visible to let them prev to questions)
   // We'll keep qbar so user can prev/next to review each q.
   $('nextBtn').textContent = '查看题目';
@@ -822,14 +980,20 @@ function reviewWrong(){
 
 function restartQuiz(){
   const id = state.current.id;
+  clearSessionFor(id);
   startQuiz(id);
-  // reset next handler
-  $('nextBtn').onclick = nextOrSubmit;
 }
 
 function quitQuiz(){
-  if (!state.graded && Object.keys(state.selected).length>0){
-    if (!confirm('本次未提交，离开会丢失进度，确定？')) return;
+  // Auto-save in-progress session (timer pauses, can resume next time)
+  if (state.current && !state.graded && Object.keys(state.selected).length>0){
+    setSession(state.current.id, {
+      selected: {...state.selected},
+      currentQ: state.currentQ,
+      elapsedMs: Date.now() - state.startedAt,
+      savedAt: Date.now(),
+    });
+    toast('进度已暂存，下次可继续');
   }
   stopTimer();
   state.current = null;
@@ -1091,6 +1255,7 @@ function exportData(){
     exportedAt: new Date().toISOString(),
     history: loadHistory(),
     favorites: loadFavs(),
+    overrides: loadOverrides(),
   };
   const blob = new Blob([JSON.stringify(data,null,2)], {type:'application/json'});
   const url = URL.createObjectURL(blob);
@@ -1123,6 +1288,15 @@ function importData(ev){
         }
         saveFavs(cur);
       }
+      // overrides (category) merge — incoming wins
+      if (obj.overrides && typeof obj.overrides === 'object'){
+        const cur = loadOverrides();
+        for (const pid of Object.keys(obj.overrides)){
+          cur[pid] = Object.assign(cur[pid]||{}, obj.overrides[pid]||{});
+        }
+        saveOverrides(cur);
+        applyOverrides();
+      }
       toast('已合并');
       go('stats');
     }catch(e){ alert('导入失败：'+e.message); }
@@ -1131,11 +1305,15 @@ function importData(ev){
   ev.target.value = '';
 }
 function clearAllData(){
-  if (!confirm('确定清空所有做题记录与收藏？此操作不可恢复。')) return;
+  if (!confirm('确定清空所有做题记录、收藏、进行中的进度与自定义分类？此操作不可恢复。')) return;
   localStorage.removeItem(STORE_HISTORY);
   localStorage.removeItem(STORE_FAVS);
+  localStorage.removeItem(STORE_SESSIONS);
+  localStorage.removeItem(STORE_OVERRIDES);
+  // re-apply (empty) overrides to reset category labels back to defaults
+  // Easiest: reload all papers from index.json on next nav; here just toast & go home.
   toast('已清空');
-  go('stats');
+  location.reload();
 }
 
 init();
