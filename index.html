@@ -442,6 +442,10 @@ body.quiz-mode .toast{bottom:calc(60px + var(--safe-bottom) + 12px);}
       <!-- WRONG -->
       <section id="page-wrong" class="hidden">
         <div class="page-head"><h1>错题本</h1></div>
+        <div class="filter-row">
+          <select id="wfCat"><option value="">全部分类</option></select>
+          <select id="wfPaper"><option value="">全部题册</option></select>
+        </div>
         <div id="wrongContent"></div>
       </section>
 
@@ -507,9 +511,9 @@ body.quiz-mode .toast{bottom:calc(60px + var(--safe-bottom) + 12px);}
 
     <!-- Quiz bottom bar -->
     <div class="qbar hidden" id="qbar">
-      <button class="icon-btn" id="favBtn" onclick="toggleFav()" title="收藏">☆</button>
-      <button class="icon-btn" onclick="openSheet()" title="答题卡">卡</button>
       <button class="icon-btn" onclick="prevQ()" id="prevBtn" title="上一题">‹</button>
+      <button class="icon-btn" onclick="openSheet()" title="答题卡">卡</button>
+      <button class="icon-btn" id="favBtn" onclick="toggleFav()" title="收藏">☆</button>
       <button class="primary" id="nextBtn" onclick="nextOrSubmit()">下一题</button>
       <button class="sub-btn" id="submitBtn" onclick="submitGrade()">交卷</button>
     </div>
@@ -1277,6 +1281,22 @@ function unfav(pid, qn){
 async function renderWrong(){
   const root = $('wrongContent'); root.innerHTML = '';
   const hist = loadHistory();
+
+  // Populate filter dropdowns
+  const wfCat = $('wfCat'); const prevCat = wfCat.value;
+  const wfPaper = $('wfPaper'); const prevPaper = wfPaper.value;
+  const cats = [...new Set(state.papers.map(p=>p.category))];
+  wfCat.innerHTML = '<option value="">全部分类</option>' +
+    cats.map(c=>`<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');
+  wfCat.value = prevCat;
+  const selCat = wfCat.value;
+  wfPaper.innerHTML = '<option value="">全部题册</option>' +
+    state.papers
+      .filter(p => !selCat || p.category === selCat)
+      .map(p=>`<option value="${p.id}">${escapeHtml(p.title)}</option>`).join('');
+  wfPaper.value = prevPaper;
+  const selPaper = wfPaper.value;
+
   if (!hist.length){
     root.innerHTML = '<div class="empty">还没有做题记录，做完一套题之后做错的题会出现在这里。</div>';
     return;
@@ -1284,10 +1304,13 @@ async function renderWrong(){
   // Need paper data for all referenced papers
   const pids = [...new Set(hist.map(h=>h.paperId))];
   for (const pid of pids){ try{ await loadPaper(pid); }catch{} }
-  // walk history again with paper data
+  // Aggregate wrong answers across all history
   const agg = {};
   for (const h of hist){
     const data = state.paperData[h.paperId]; if (!data) continue;
+    // apply filters
+    if (selPaper && h.paperId !== selPaper) continue;
+    if (selCat && data.category !== selCat) continue;
     for (const q of data.questions){
       const userAns = h.answers[q.num];
       const wrong = userAns && userAns !== q.answer;
@@ -1303,7 +1326,8 @@ async function renderWrong(){
   }
   const items = Object.values(agg).sort((a,b)=>b.count-a.count || b.lastTs-a.lastTs);
   if (!items.length){
-    root.innerHTML = '<div class="empty">全部做对！还没有错题。</div>';
+    const msg = (selCat || selPaper) ? '该筛选条件下没有错题。' : '全部做对！还没有错题。';
+    root.innerHTML = `<div class="empty">${msg}</div>`;
     return;
   }
   // group by paper
@@ -1455,6 +1479,7 @@ function deleteHistory(id){
 }
 document.addEventListener('change', (e)=>{
   if (['fCat','fPaper','fRange'].includes(e.target.id)) renderStats();
+  if (['wfCat','wfPaper'].includes(e.target.id)) renderWrong();
 });
 
 // =========== Data ===========
