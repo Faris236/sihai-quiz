@@ -99,6 +99,40 @@
 
     const status = document.getElementById('syncStatusText');
     if (status) status.textContent = text;
+    const last = loadMeta().lastSyncAt;
+    let actionLabel = '立即同步';
+    let actionState = last ? `上次 ${new Date(last).toLocaleTimeString('zh-CN', {hour: '2-digit', minute: '2-digit'})}` : '已连接云端';
+    let quizLabel = '同步';
+    if (!config.syncCode) {
+      actionLabel = '设置同步';
+      actionState = '首次点击输入口令';
+      quizLabel = '设置';
+    } else if (!navigator.onLine) {
+      actionLabel = '离线待同步';
+      actionState = queueCount ? `${queueCount} 项已保存在本机` : '联网后自动同步';
+      quizLabel = '离线';
+    } else if (mode === 'syncing') {
+      actionLabel = '同步中…';
+      actionState = '正在连接云端';
+      quizLabel = '同步中';
+    } else if (mode === 'error') {
+      actionLabel = '重试同步';
+      actionState = '本地记录已保存';
+      quizLabel = '重试';
+    } else if (queueCount) {
+      actionState = `${queueCount} 项等待上传`;
+    }
+    const sidebarLabel = document.getElementById('sidebarSyncLabel');
+    const sidebarState = document.getElementById('sidebarSyncState');
+    const quizSyncLabel = document.getElementById('quizSyncLabel');
+    const quickButtons = [document.getElementById('sidebarSyncBtn'), document.getElementById('quizSyncBtn')].filter(Boolean);
+    if (sidebarLabel) sidebarLabel.textContent = actionLabel;
+    if (sidebarState) sidebarState.textContent = actionState;
+    if (quizSyncLabel) quizSyncLabel.textContent = quizLabel;
+    for (const button of quickButtons) {
+      button.classList.toggle('syncing', mode === 'syncing');
+      button.disabled = mode === 'syncing';
+    }
     const bannerTitle = document.getElementById('syncBannerTitle');
     const bannerText = document.getElementById('syncBannerText');
     if (bannerTitle && bannerText) {
@@ -480,6 +514,20 @@
     await syncNow({announce: true});
   }
 
+  async function manualSync() {
+    const config = loadConfig();
+    if (!config.syncCode) {
+      await setup();
+      return;
+    }
+    if (!navigator.onLine) {
+      updateStatus('offline');
+      if (typeof global.toast === 'function') global.toast('当前离线，进度已保存在本机');
+      return;
+    }
+    await syncNow({announce: true});
+  }
+
   async function init(options) {
     hooks = options || {};
     const config = loadConfig();
@@ -500,6 +548,7 @@
   global.QuizSync = {
     init,
     setup,
+    manualSync,
     syncNow,
     updateStatus,
     captureHistory,

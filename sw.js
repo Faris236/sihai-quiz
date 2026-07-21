@@ -1,5 +1,5 @@
 /* Service Worker — offline-first cache for 公考刷题系统 */
-const CACHE = 'sihai-quiz-v22';
+const CACHE = 'sihai-quiz-v23';
 const SHELL = [
   './',
   './index.html',

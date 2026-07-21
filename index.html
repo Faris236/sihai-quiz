@@ -66,6 +66,20 @@ input,select,textarea{font-family:inherit;}
 .sidebar nav button.on{background:rgba(255,255,255,.12);color:#fff;font-weight:600;}
 .sidebar nav button .ico{width:18px;text-align:center;font-size:15px;flex:none;}
 .sidebar.collapsed nav button .lbl{display:none;}
+.sidebar nav .sidebar-sync{
+  min-height:56px;margin-top:10px;padding:9px 12px;
+  color:#fff;background:linear-gradient(135deg,#2185b7,#176387);
+  border:1px solid rgba(255,255,255,.2);box-shadow:0 8px 20px rgba(4,31,47,.22);
+}
+.sidebar nav .sidebar-sync:hover{background:linear-gradient(135deg,#2894c8,#1b7299);color:#fff;}
+.sidebar-sync .sync-copy{display:flex;flex-direction:column;gap:2px;min-width:0;}
+.sidebar-sync .sync-main{font-size:14px;font-weight:750;color:#fff;}
+.sidebar-sync .sync-sub{font-size:10px;color:rgba(255,255,255,.72);overflow:hidden;text-overflow:ellipsis;}
+.sidebar-sync .sync-spinner{display:none;}
+.sidebar-sync.syncing .sync-cloud{display:none;}
+.sidebar-sync.syncing .sync-spinner{display:block;animation:sync-spin .9s linear infinite;}
+.sidebar.collapsed nav .sidebar-sync{justify-content:center;padding:9px 0;}
+@keyframes sync-spin{to{transform:rotate(360deg);}}
 .sidebar .foot{padding:10px 14px;color:rgba(255,255,255,.4);font-size:11px;letter-spacing:.06em;}
 .sidebar.collapsed .foot{display:none;}
 .sidebar-toggle{background:transparent;border:none;color:#bcc8d3;padding:8px 14px;cursor:pointer;font-size:18px;text-align:left;}
@@ -274,6 +288,17 @@ body.quiz-mode .wrap{padding-bottom:calc(74px + var(--safe-bottom));}
   padding:0 12px;flex:none;
 }
 .qbar .sub-btn:active{background:var(--primary-light);}
+.qbar .sync-btn{
+  height:44px;padding:0 13px;display:flex;align-items:center;justify-content:center;gap:6px;flex:none;
+  background:#e8f4fa;color:#155d7e;border:1.5px solid #a9d4e7;border-radius:12px;
+  font-size:13px;font-weight:750;white-space:nowrap;
+}
+.qbar .sync-btn:hover{background:#dceff8;border-color:#7fbed9;}
+.qbar .sync-btn .ui-icon{width:18px;height:18px;}
+.qbar .sync-btn .sync-spinner{display:none;animation:sync-spin .9s linear infinite;}
+.qbar .sync-btn.syncing .sync-cloud{display:none;}
+.qbar .sync-btn.syncing .sync-spinner{display:block;}
+.qbar .sync-btn:disabled{opacity:.72;cursor:wait;}
 
 /* ===== Bottom sheets ===== */
 .sheet-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:50;display:none;}
@@ -403,6 +428,9 @@ body.quiz-mode .toast{bottom:calc(60px + var(--safe-bottom) + 12px);}
   .wrap{max-width:none;padding:18px 28px 90px;}
   body.quiz-mode .right-pane{display:block;}
   body.quiz-mode .wrap{max-width:760px;}
+  body.quiz-mode .qbar{left:220px;right:260px;justify-content:center;padding-left:20px;padding-right:20px;}
+  body.quiz-mode .sidebar.collapsed + .main .qbar{left:60px;}
+  body.quiz-mode .qbar .primary{flex:0 1 220px;min-width:110px;max-width:220px;}
 }
 @media (max-width: 879px){
   .right-pane{display:none!important;}
@@ -636,6 +664,12 @@ button,select{min-height:44px;}
   body.quiz-mode .q-header{padding-left:18px;padding-right:18px;}
   body.quiz-mode .q-pos{padding-left:20px;padding-right:20px;}
   body.quiz-mode .q-body{padding-left:18px;padding-right:18px;}
+  .qbar{gap:6px;padding-left:8px;padding-right:8px;}
+  .qbar .icon-btn{width:40px;height:40px;}
+  .qbar .sync-btn{width:40px;height:40px;padding:0;}
+  .qbar .sync-btn .sync-label{display:none;}
+  .qbar .primary{min-width:0;height:40px;}
+  .qbar .sub-btn{height:40px;padding:0 9px;}
 }
 
 @media (min-width:880px){
@@ -643,6 +677,14 @@ button,select{min-height:44px;}
   .page-head{padding-top:12px;}
   .category-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
   .home-dashboard{max-width:760px;margin:0 auto;}
+}
+@media (min-width:880px) and (max-width:1099px){
+  body.quiz-mode .qbar{gap:6px;padding-left:8px;padding-right:8px;}
+  body.quiz-mode .qbar .icon-btn{width:38px;height:38px;}
+  body.quiz-mode .qbar .sync-btn{width:38px;height:38px;padding:0;}
+  body.quiz-mode .qbar .sync-btn .sync-label{display:none;}
+  body.quiz-mode .qbar .primary{height:38px;min-width:80px;max-width:160px;}
+  body.quiz-mode .qbar .sub-btn{height:38px;padding:0 8px;}
 }
 </style>
 </head>
@@ -659,6 +701,10 @@ button,select{min-height:44px;}
       <button data-tab="wrong" onclick="go('wrong')"><span class="ico"><svg class="ui-icon"><circle cx="12" cy="12" r="9"/><path d="m9 9 6 6m0-6-6 6"/></svg></span><span class="lbl">错题</span></button>
       <button data-tab="stats" onclick="go('stats')"><span class="ico"><svg class="ui-icon"><path d="M4 20V10m6 10V4m6 16v-7m5 7H2"/></svg></span><span class="lbl">记录</span></button>
       <button data-tab="data" onclick="go('data')"><span class="ico"><svg class="ui-icon"><circle cx="12" cy="8" r="4"/><path d="M4.5 21a7.5 7.5 0 0 1 15 0"/></svg></span><span class="lbl">我的</span></button>
+      <button class="sidebar-sync" id="sidebarSyncBtn" onclick="QuizSync.manualSync()" title="立即同步做题进度">
+        <span class="ico"><svg class="ui-icon sync-cloud"><path d="M7 18h10a4 4 0 0 0 .7-7.9A6 6 0 0 0 6.2 8.8 4.6 4.6 0 0 0 7 18Z"/><path d="m9 13 3-3 3 3m-3-3v6"/></svg><svg class="ui-icon sync-spinner"><path d="M20 12a8 8 0 1 1-2.34-5.66"/></svg></span>
+        <span class="lbl sync-copy"><span class="sync-main" id="sidebarSyncLabel">设置同步</span><span class="sync-sub" id="sidebarSyncState">首次点击输入口令</span></span>
+      </button>
     </nav>
     <button class="sidebar-toggle" onclick="toggleSidebar()" title="折叠/展开">⇤</button>
     <div class="foot">OFFLINE · LOCAL</div>
@@ -762,6 +808,7 @@ button,select{min-height:44px;}
       <button class="icon-btn" onclick="prevQ()" id="prevBtn" title="上一题">‹</button>
       <button class="icon-btn answer-card-btn" onclick="openSheet()" title="答题卡" aria-label="打开答题卡"><svg class="ui-icon sm" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></button>
       <button class="icon-btn" id="favBtn" onclick="toggleFav()" title="收藏">☆</button>
+      <button class="sync-btn" id="quizSyncBtn" onclick="QuizSync.manualSync()" title="立即同步做题进度" aria-label="立即同步做题进度"><svg class="ui-icon sync-cloud"><path d="M7 18h10a4 4 0 0 0 .7-7.9A6 6 0 0 0 6.2 8.8 4.6 4.6 0 0 0 7 18Z"/><path d="m9 13 3-3 3 3m-3-3v6"/></svg><svg class="ui-icon sync-spinner"><path d="M20 12a8 8 0 1 1-2.34-5.66"/></svg><span class="sync-label" id="quizSyncLabel">同步</span></button>
       <button class="primary" id="nextBtn" onclick="nextOrSubmit()">下一题</button>
       <button class="sub-btn" id="submitBtn" onclick="submitGrade()">交卷</button>
     </div>
