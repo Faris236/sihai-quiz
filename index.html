@@ -556,23 +556,56 @@ button,select{min-height:44px;}
 /* result */
 .score-mode .q-pos{display:none;}
 .score-mode .qbar{display:none!important;}
-.scorecard{box-shadow:none;border:0;background:transparent;padding:22px 0 10px;margin:0;}
-.scorecard .paper-name{font-size:14px;color:var(--muted);margin-bottom:8px;}
-.scorecard .pct{font-size:70px;font-weight:700;letter-spacing:-3px;}
-.scorecard .pct small{font-size:25px;color:var(--primary);font-weight:600;}
-.scorecard .delta{display:inline-flex;margin-top:12px;padding:5px 10px;border-radius:99px;background:var(--primary-light);color:var(--primary);font-size:12px;font-weight:600;}
-.score-metrics{display:grid;grid-template-columns:repeat(2,1fr);gap:0;margin:26px 0 22px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
-.score-metric{padding:16px 8px;text-align:center;border-right:1px solid var(--border);border-bottom:1px solid var(--border);}
-.score-metric:nth-child(2n){border-right:0;}
-.score-metric:nth-last-child(-n+2){border-bottom:0;}
-.score-metric .value{font-size:21px;font-weight:700;color:var(--ink);}
-.score-metric.correct .value{color:var(--green);}
-.score-metric.wrong .value{color:var(--red);}
-.score-metric .label{font-size:12px;color:var(--muted);margin-top:4px;}
-.scorecard .acts{display:grid;gap:10px;margin-top:0;}
-.scorecard .acts .btn{width:100%;border-radius:12px;min-height:50px;}
-.scorecard .acts .primary{order:-1;}
-.scorecard .acts .ghost{border-color:transparent;background:transparent;color:var(--muted);}
+.score-mode{background:linear-gradient(180deg,#eaf1ff 0,#f4f6fa 250px,#f4f6fa 100%);}
+.score-mode .qprog-track,.score-mode .q-header .timer{display:none;}
+.score-mode .q-body{padding-top:16px;}
+.report-page{display:flex;flex-direction:column;gap:14px;padding-bottom:18px;}
+.report-card{background:rgba(255,255,255,.96);border:1px solid rgba(219,227,237,.95);border-radius:18px;padding:18px;box-shadow:0 8px 24px rgba(50,72,105,.08);}
+.report-summary{position:relative;text-align:center;padding-top:22px;}
+.report-score-pill{position:absolute;right:16px;top:14px;background:#165bd8;color:#fff;border-radius:99px;padding:5px 11px;font-size:12px;font-weight:700;box-shadow:0 4px 12px rgba(22,91,216,.22);}
+.report-ring{--score:0deg;width:164px;height:164px;margin:2px auto 18px;border-radius:50%;background:conic-gradient(#2466e8 0 var(--score),#dfe6f8 var(--score) 360deg);position:relative;display:grid;place-items:center;}
+.report-ring::before{content:"";position:absolute;inset:15px;border-radius:50%;background:#fff;box-shadow:inset 0 0 0 1px rgba(226,232,240,.8);}
+.report-ring-core{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;line-height:1;}
+.report-ring-core span{font-size:14px;color:var(--muted);margin-bottom:7px;}
+.report-ring-core b{font-size:50px;letter-spacing:-2px;color:var(--ink);}
+.report-ring-core em{font-size:15px;font-style:normal;color:var(--muted);margin-top:5px;}
+.report-delta{display:inline-flex;margin:-6px auto 14px;padding:5px 10px;border-radius:99px;background:var(--primary-light);color:var(--primary);font-size:12px;font-weight:650;}
+.report-meta{border-top:1px solid var(--border);padding-top:13px;display:grid;gap:8px;text-align:left;}
+.report-meta-row{display:flex;justify-content:space-between;gap:14px;font-size:13px;color:var(--muted);}
+.report-meta-row strong{color:var(--ink-2);font-weight:600;text-align:right;}
+.report-card-title{display:flex;align-items:center;gap:10px;font-size:19px;font-weight:730;margin-bottom:15px;}
+.report-title-icon{width:28px;height:28px;border-radius:8px;background:#e7f0ff;color:#165bd8;display:grid;place-items:center;flex:none;}
+.report-title-icon .ui-icon{width:17px;height:17px;}
+.report-metrics{display:grid;grid-template-columns:repeat(5,1fr);background:#f2f5fa;border-radius:12px;padding:13px 4px;margin-bottom:16px;}
+.report-metric{text-align:center;border-right:1px solid #dfe5ee;min-width:0;}
+.report-metric:last-child{border-right:0;}
+.report-metric span{display:block;font-size:11px;color:var(--muted);white-space:nowrap;}
+.report-metric b{display:block;font-size:18px;margin-top:3px;color:var(--ink);white-space:nowrap;}
+.report-metric.correct b{color:var(--green);}.report-metric.wrong b{color:var(--red);}.report-metric.time b{color:#165bd8;font-size:15px;padding-top:3px;}
+.report-category{display:flex;align-items:flex-start;gap:10px;}
+.report-category .dot{width:24px;height:24px;border-radius:50%;background:#165bd8;color:#fff;display:grid;place-items:center;flex:none;margin-top:1px;}
+.report-category strong{display:block;font-size:16px;margin-bottom:3px;}
+.report-category p{font-size:13px;color:var(--muted);line-height:1.55;}
+.report-card-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px;}
+.report-card-head .report-card-title{margin:0;}
+.report-legend{display:flex;align-items:center;gap:9px;font-size:11px;color:var(--muted);}
+.report-legend span{display:inline-flex;align-items:center;gap:4px;}.report-legend i{width:8px;height:8px;border-radius:50%;display:block;}
+.report-answer-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:13px 10px;}
+.report-answer-grid button{width:42px;height:42px;min-height:42px;border:0;border-radius:50%;justify-self:center;font-size:14px;font-weight:650;background:#eef1f5;color:var(--muted);}
+.report-answer-grid button.correct{background:#13a675;color:#fff;}.report-answer-grid button.wrong{background:#e64949;color:#fff;}.report-answer-grid button.unanswered{background:#edf0f4;color:#8a95a5;}
+.report-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:2px;}
+.report-actions .btn{width:100%;min-height:50px;border-radius:14px;}
+.report-actions .primary{background:#165bd8;border-color:#165bd8;color:#fff;}
+.report-actions .wide{grid-column:1/-1;}
+.report-actions .ghost{border-color:transparent;background:transparent;color:var(--muted);}
+
+/* richer history rows; swipe-to-delete remains available */
+.history-row{display:flex;align-items:center;gap:13px;padding:15px 16px;cursor:pointer;}
+.history-score{width:52px;height:52px;border-radius:14px;background:var(--primary-light);color:var(--primary);display:grid;place-items:center;font-size:17px;font-weight:750;flex:none;}
+.history-score.acc-hi{background:var(--green-soft);}.history-score.acc-mid{background:#fff5df;}.history-score.acc-lo{background:var(--red-soft);}
+.history-main{flex:1;min-width:0;}.history-main .top{margin:0 0 4px;align-items:center;}.history-main .bot{gap:10px;font-size:12px;flex-wrap:wrap;}
+.history-main .ttl{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}.history-main .ts{flex:none;}
+.history-view{color:var(--muted-2);font-size:22px;flex:none;}
 
 /* keep quiz interactions, align visuals */
 .q-header{padding:10px 16px;background:rgba(255,255,255,.97);}
@@ -586,8 +619,17 @@ button,select{min-height:44px;}
 .opt .tag{border:0;background:var(--surface-2);color:var(--muted);}
 .qbar{gap:8px;border-color:var(--border);}
 .qbar .icon-btn{background:var(--surface-2);color:var(--ink-2);}
+.qbar .answer-card-btn .ui-icon{width:20px;height:20px;stroke-width:1.7;}
 .qbar .primary,.qbar .sub-btn{border-radius:12px;}
 .qbar .sub-btn{border-width:1.5px;}
+
+@media (max-width:879px){
+  body.quiz-mode .wrap{padding:0 0 calc(74px + var(--safe-bottom));max-width:none;}
+  body.quiz-mode #page-quiz{width:100%;}
+  body.quiz-mode .q-header{padding-left:18px;padding-right:18px;}
+  body.quiz-mode .q-pos{padding-left:20px;padding-right:20px;}
+  body.quiz-mode .q-body{padding-left:18px;padding-right:18px;}
+}
 
 @media (min-width:880px){
   .wrap{padding:22px 32px 90px;}
@@ -690,7 +732,7 @@ button,select{min-height:44px;}
       <section id="page-quiz" class="hidden">
         <div class="quiz-shell">
           <div class="q-header">
-            <button class="back" onclick="quitQuiz()" title="返回">‹</button>
+            <button class="back" onclick="quizBack()" title="返回">‹</button>
             <div class="info">
               <div class="t" id="quizTitle"></div>
               <div class="m" id="quizMeta"></div>
@@ -710,7 +752,7 @@ button,select{min-height:44px;}
     <!-- Quiz bottom bar -->
     <div class="qbar hidden" id="qbar">
       <button class="icon-btn" onclick="prevQ()" id="prevBtn" title="上一题">‹</button>
-      <button class="icon-btn" onclick="openSheet()" title="答题卡">卡</button>
+      <button class="icon-btn answer-card-btn" onclick="openSheet()" title="答题卡" aria-label="打开答题卡"><svg class="ui-icon sm" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></button>
       <button class="icon-btn" id="favBtn" onclick="toggleFav()" title="收藏">☆</button>
       <button class="primary" id="nextBtn" onclick="nextOrSubmit()">下一题</button>
       <button class="sub-btn" id="submitBtn" onclick="submitGrade()">交卷</button>
@@ -801,6 +843,8 @@ const state = {
   graded: false,
   startedAt: 0,
   timerId: 0,
+  reportReturn: null,
+  reportRecord: null,
 };
 
 // =========== Helpers ===========
@@ -816,10 +860,10 @@ function fmtDate(ts){
   return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`;
 }
 function fmtDuration(sec){
-  if (sec<60) return sec+'s';
+  if (sec<60) return sec+'秒';
   const m=Math.floor(sec/60), s=sec%60;
-  if (m<60) return `${m}m${s?` ${s}s`:''}`;
-  return `${Math.floor(m/60)}h ${m%60}m`;
+  if (m<60) return `${m}分${s?`${s}秒`:''}`;
+  return `${Math.floor(m/60)}小时${m%60?`${m%60}分`:''}`;
 }
 function mmss(sec){
   const m=Math.floor(sec/60), s=sec%60;
@@ -1174,6 +1218,8 @@ async function startQuiz(id, opts){
   state.selected = {};
   state.graded = false;
   state.startedAt = Date.now();
+  state.reportReturn = null;
+  state.reportRecord = null;
   document.body.classList.remove('score-mode');
   // resume from saved session
   if (opts.resume){
@@ -1372,42 +1418,72 @@ function submitGrade(){
 
 function showScorecard(precomputed){
   const data = state.current;
+  const reportRec = precomputed || state.reportRecord;
+  if (precomputed) state.reportRecord = precomputed;
   let correct = 0;
   for (const item of data.questions){
     if (state.selected[item.num] === item.answer) correct++;
   }
   const total = data.questions.length;
   const acc = correct/total;
-  const dur = Math.round(((precomputed && precomputed.durationSec) || (Date.now()-state.startedAt)/1000));
+  const dur = Math.round(((reportRec && reportRec.durationSec) || (Date.now()-state.startedAt)/1000));
   const answered = Object.keys(state.selected).length;
   const wrong = Math.max(0, answered-correct);
   const unanswered = Math.max(0, total-answered);
   const previous = loadHistory()
-    .filter(h=>h.paperId===data.id && (!precomputed || h.sessionId!==precomputed.sessionId))
+    .filter(h=>h.paperId===data.id && (!reportRec || h.sessionId!==reportRec.sessionId))
     .sort((a,b)=>b.finishedAt-a.finishedAt)[0];
   const delta = previous ? Math.round((acc-previous.accuracy)*100) : null;
-  const deltaHtml = delta === null ? '' : `<div class="delta">${delta>0?'较上次提高 '+delta+'%':delta<0?'较上次下降 '+Math.abs(delta)+'%':'与上次持平'}</div>`;
+  const deltaHtml = delta === null ? '' : `<div class="report-delta">${delta>0?'较上次提高 '+delta+'%':delta<0?'较上次下降 '+Math.abs(delta)+'%':'与上次持平'}</div>`;
   const reviewCount = wrong + unanswered;
+  const finishedAt = (reportRec && reportRec.finishedAt) || Date.now();
+  const returnLabel = state.reportReturn === 'stats' ? '返回记录' : '返回题库';
+  const answerGrid = data.questions.map((q,idx)=>{
+    const picked = state.selected[q.num];
+    const cls = !picked ? 'unanswered' : picked === q.answer ? 'correct' : 'wrong';
+    return `<button class="${cls}" onclick="reviewQuestion(${idx})" title="查看第 ${q.num} 题">${q.num}</button>`;
+  }).join('');
   const body = $('qBody');
   body.innerHTML = `
-    <div class="scorecard">
-      <div class="paper-name">${escapeHtml(data.title)} · 本次成绩</div>
-      <div class="pct">${Math.round(acc*100)}<small>%</small></div>
-      ${deltaHtml}
-      <div class="score-metrics">
-        <div class="score-metric correct"><div class="value">${correct}</div><div class="label">答对</div></div>
-        <div class="score-metric wrong"><div class="value">${wrong}</div><div class="label">答错</div></div>
-        <div class="score-metric"><div class="value">${unanswered}</div><div class="label">未答</div></div>
-        <div class="score-metric"><div class="value">${fmtDuration(dur)}</div><div class="label">用时</div></div>
-      </div>
-      <div class="acts">
-        ${reviewCount?`<button class="btn primary" onclick="reviewWrong()">查看 ${reviewCount} 道错题</button>`:`<button class="btn primary" onclick="quitQuiz()">返回题库</button>`}
-        <button class="btn" onclick="restartQuiz()">再做一遍</button>
-        ${reviewCount?'<button class="btn ghost" onclick="quitQuiz()">返回题库</button>':''}
+    <div class="report-page">
+      <section class="report-card report-summary">
+        <div class="report-score-pill">正确率 ${Math.round(acc*100)}%</div>
+        <div class="report-ring" style="--score:${Math.round(acc*360)}deg"><div class="report-ring-core"><span>答对</span><b>${correct}</b><em>/ ${total}</em></div></div>
+        ${deltaHtml}
+        <div class="report-meta">
+          <div class="report-meta-row"><span>练习类型</span><strong>${escapeHtml(data.category || '试卷练习')}</strong></div>
+          <div class="report-meta-row"><span>交卷时间</span><strong>${fmtDate(finishedAt)}</strong></div>
+        </div>
+      </section>
+
+      <section class="report-card">
+        <div class="report-card-title"><span class="report-title-icon"><svg class="ui-icon"><path d="M5 12.5 9.2 17 19 7"/></svg></span>考试情况</div>
+        <div class="report-metrics">
+          <div class="report-metric"><span>共</span><b>${total}</b></div>
+          <div class="report-metric correct"><span>答对</span><b>${correct}</b></div>
+          <div class="report-metric wrong"><span>答错</span><b>${wrong}</b></div>
+          <div class="report-metric"><span>未答</span><b>${unanswered}</b></div>
+          <div class="report-metric time"><span>用时</span><b>${fmtDuration(dur)}</b></div>
+        </div>
+        <div class="report-category"><span class="dot">⌄</span><div><strong>${escapeHtml(homeCategoryFor(data.category))}</strong><p>共 ${total} 题，答对 ${correct} 题，正确率 ${Math.round(acc*100)}%，用时 ${fmtDuration(dur)}</p></div></div>
+      </section>
+
+      <section class="report-card">
+        <div class="report-card-head"><div class="report-card-title"><span class="report-title-icon"><svg class="ui-icon"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 9h.01m4 0h.01m4 0h.01M8 15h.01m4 0h.01m4 0h.01"/></svg></span>答题卡</div><div class="report-legend"><span><i style="background:#edf0f4"></i>未答</span><span><i style="background:#13a675"></i>答对</span><span><i style="background:#e64949"></i>答错</span></div></div>
+        <div class="report-answer-grid">${answerGrid}</div>
+      </section>
+
+      <div class="report-actions">
+        <button class="btn" onclick="reviewQuestion(0)">查看全部题目</button>
+        ${reviewCount?`<button class="btn primary" onclick="reviewWrong()">查看错题</button>`:`<button class="btn primary" onclick="quitQuiz()">${returnLabel}</button>`}
+        <button class="btn wide" onclick="restartQuiz()">再做一遍</button>
+        ${reviewCount?`<button class="btn ghost wide" onclick="quitQuiz()">${returnLabel}</button>`:''}
       </div>
     </div>
   `;
   document.body.classList.add('score-mode');
+  $('quizTitle').textContent = '练习报告';
+  $('quizMeta').textContent = data.title;
   $('qbar').classList.add('hidden');
   $('qprogFill').style.width = '100%';
   $('qMetaLeft').textContent = '本次成绩';
@@ -1417,16 +1493,23 @@ function showScorecard(precomputed){
   $('nextBtn').onclick = ()=>{ state.currentQ = 0; renderCurrentQ(); window.scrollTo({top:0,behavior:'instant'}); };
 }
 
+function reviewQuestion(idx){
+  const data = state.current;
+  document.body.classList.remove('score-mode');
+  $('qbar').classList.remove('hidden');
+  $('quizTitle').textContent = data.title;
+  $('quizMeta').textContent = '共 ' + data.questions.length + ' 题';
+  state.currentQ = Math.max(0, Math.min(idx, data.questions.length-1));
+  renderCurrentQ();
+  $('nextBtn').onclick = nextOrSubmit;
+  window.scrollTo({top:0,behavior:'instant'});
+}
+
 function reviewWrong(){
   const data = state.current;
   const firstWrong = data.questions.findIndex(q=>state.selected[q.num] !== q.answer);
   if (firstWrong === -1){ toast('全对，没有错题'); return; }
-  document.body.classList.remove('score-mode');
-  $('qbar').classList.remove('hidden');
-  state.currentQ = firstWrong;
-  renderCurrentQ();
-  $('nextBtn').onclick = nextOrSubmit;
-  window.scrollTo({top:0,behavior:'instant'});
+  reviewQuestion(firstWrong);
 }
 
 function restartQuiz(){
@@ -1436,6 +1519,7 @@ function restartQuiz(){
 }
 
 function quitQuiz(){
+  const returnTab = state.reportReturn || 'home';
   // Auto-save in-progress session (timer pauses, can resume next time)
   if (state.current && !state.graded && Object.keys(state.selected).length>0){
     setSession(state.current.id, {
@@ -1449,8 +1533,19 @@ function quitQuiz(){
   stopTimer();
   document.body.classList.remove('score-mode');
   state.current = null;
+  state.reportReturn = null;
+  state.reportRecord = null;
   $('nextBtn').onclick = nextOrSubmit;
-  go('home');
+  go(returnTab);
+}
+
+function quizBack(){
+  if (state.graded && state.reportRecord && !document.body.classList.contains('score-mode')){
+    showScorecard();
+    window.scrollTo({top:0,behavior:'instant'});
+    return;
+  }
+  quitQuiz();
 }
 
 // =========== Answer card grids ===========
@@ -1696,6 +1791,32 @@ function enableSwipeDelete(wrapEl) {
 }
 
 // =========== Stats ===========
+async function openHistoryReport(sessionId){
+  const rec = loadHistory().find(h=>h.sessionId===sessionId);
+  if (!rec){ toast('这条记录已不存在'); return; }
+  try{
+    const data = await loadPaper(rec.paperId);
+    state.current = data;
+    state.currentQ = 0;
+    state.selected = {...(rec.answers||{})};
+    state.graded = true;
+    state.startedAt = rec.startedAt || (rec.finishedAt-rec.durationSec*1000);
+    state.reportReturn = 'stats';
+    state.reportRecord = rec;
+    stopTimer();
+    ['home','favs','wrong','stats','data'].forEach(t=>$('page-'+t).classList.add('hidden'));
+    $('page-quiz').classList.remove('hidden');
+    $('qbar').classList.add('hidden');
+    $('submitBtn').style.display = 'none';
+    $('quizTimer').textContent = mmss(rec.durationSec||0);
+    document.body.classList.add('quiz-mode');
+    showScorecard(rec);
+    window.scrollTo({top:0,behavior:'instant'});
+  }catch(e){
+    toast('报告加载失败，请稍后重试');
+  }
+}
+
 function renderStats(){
   const hist = loadHistory();
   const cats = [...new Set(state.papers.map(p=>p.category))];
@@ -1734,16 +1855,20 @@ function renderStats(){
     const cls = accPct>=80?'acc-hi':accPct>=60?'acc-mid':'acc-lo';
     const wrap = document.createElement('div'); wrap.className = 'history-wrap';
     const row = document.createElement('div'); row.className = 'history-row';
+    row.setAttribute('role','button'); row.tabIndex = 0;
     row.innerHTML = `
-      <div class="top">
-        <span class="ttl">${escapeHtml(h.paperTitle)}</span>
-        <span class="ts">${fmtDate(h.finishedAt)}</span>
+      <div class="history-score ${cls}">${accPct}%</div>
+      <div class="history-main">
+        <div class="top"><span class="ttl">${escapeHtml(h.paperTitle)}</span><span class="ts">${fmtDate(h.finishedAt)}</span></div>
+        <div class="bot"><span>答对 ${h.correctCount}/${h.total}</span><span>用时 ${fmtDuration(h.durationSec)}</span><span>${escapeHtml(homeCategoryFor(h.category))}</span></div>
       </div>
-      <div class="bot">
-        <span>正确率 <b class="${cls}">${accPct}%</b></span>
-        <span>${h.correctCount}/${h.total}</span>
-        <span>用时 ${fmtDuration(h.durationSec)}</span>
-      </div>`;
+      <span class="history-view">›</span>`;
+    const openReport = ()=>{
+      if ((row.style.transform||'').includes('-')) return;
+      openHistoryReport(h.sessionId);
+    };
+    row.addEventListener('click', openReport);
+    row.addEventListener('keydown', e=>{ if (e.key==='Enter' || e.key===' ') { e.preventDefault(); openReport(); } });
     const delBtn = document.createElement('button');
     delBtn.className = 'history-del';
     delBtn.textContent = '删除';
