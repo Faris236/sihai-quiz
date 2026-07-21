@@ -719,10 +719,11 @@ button,select{min-height:44px;}
       <!-- DATA -->
       <section id="page-data" class="hidden data-section">
         <div class="page-head"><h1>我的</h1></div>
-        <div class="profile-banner"><strong>数据仅保存在当前设备</strong><span>建议定期导出备份，避免清缓存或换机后丢失。</span></div>
+        <div class="profile-banner" id="syncBanner"><strong id="syncBannerTitle">数据保存在当前设备</strong><span id="syncBannerText">设置云同步后，可在电脑和手机之间自动接续。</span></div>
         <div class="sec-label" style="display:block">数据安全</div>
         <div class="settings-group">
-          <button class="setting-row" onclick="exportData()"><span class="setting-icon"><svg class="ui-icon sm"><path d="M12 3v12m0 0 4-4m-4 4-4-4"/><path d="M5 19h14"/></svg></span><span class="setting-body"><span class="setting-title">导出数据备份</span><span class="setting-meta">保存历史、收藏和自定义分类</span></span><span class="row-chev">›</span></button>
+          <button class="setting-row" onclick="QuizSync.setup()"><span class="setting-icon"><svg class="ui-icon sm"><path d="M7 18h10a4 4 0 0 0 .7-7.9A6 6 0 0 0 6.2 8.8 4.6 4.6 0 0 0 7 18Z"/><path d="m9 13 3-3 3 3m-3-3v6"/></svg></span><span class="setting-body"><span class="setting-title">电脑与手机云同步</span><span class="setting-meta" id="syncStatusText">未设置 · 数据只保存在本机</span></span><span class="row-chev">›</span></button>
+          <button class="setting-row" onclick="exportData()"><span class="setting-icon"><svg class="ui-icon sm"><path d="M12 3v12m0 0 4-4m-4 4-4-4"/><path d="M5 19h14"/></svg></span><span class="setting-body"><span class="setting-title">导出数据备份</span><span class="setting-meta">保存历史、收藏、进度和自定义分类</span></span><span class="row-chev">›</span></button>
           <button class="setting-row" onclick="document.getElementById('importFile').click()"><span class="setting-icon"><svg class="ui-icon sm"><path d="M12 21V9m0 0 4 4m-4-4-4 4"/><path d="M5 5h14"/></svg></span><span class="setting-body"><span class="setting-title">导入数据备份</span><span class="setting-meta">从 JSON 文件恢复或合并数据</span></span><span class="row-chev">›</span></button>
           <input type="file" id="importFile" accept="application/json,.json" style="display:none" onchange="importData(event)">
         </div>
@@ -732,7 +733,7 @@ button,select{min-height:44px;}
           <button class="setting-row danger" onclick="clearAllData()"><span class="setting-icon"><svg class="ui-icon sm"><path d="M4 7h16M9 7V4h6v3m-8 0 1 14h8l1-14"/></svg></span><span class="setting-body"><span class="setting-title">清空所有记录</span><span class="setting-meta">历史、收藏、进度与自定义分类</span></span><span class="row-chev">›</span></button>
         </div>
         <div class="sec-label" style="display:block">关于</div>
-        <div class="settings-group"><div class="setting-row"><span class="setting-icon"><svg class="ui-icon sm"><circle cx="12" cy="12" r="9"/><path d="M12 11v6m0-10h.01"/></svg></span><span class="setting-body"><span class="setting-title">公考刷题系统</span><span class="setting-meta">离线 PWA · 个人做题数据不离开本机</span></span></div></div>
+        <div class="settings-group"><div class="setting-row"><span class="setting-icon"><svg class="ui-icon sm"><circle cx="12" cy="12" r="9"/><path d="M12 11v6m0-10h.01"/></svg></span><span class="setting-body"><span class="setting-title">公考刷题系统</span><span class="setting-meta">离线 PWA · 本地优先 · 可选云同步</span></span></div></div>
       </section>
 
       <!-- QUIZ -->
@@ -827,6 +828,7 @@ button,select{min-height:44px;}
 
 <div class="toast" id="toast"></div>
 
+<script src="sync.js"></script>
 <script>
 'use strict';
 
@@ -904,13 +906,13 @@ function categoryIcon(cat){
   return '<svg class="ui-icon"><path d="M4 5.5A3.5 3.5 0 0 1 7.5 2H20v17H7.5A3.5 3.5 0 0 0 4 22z"/><path d="M4 5.5V22M8 6h8m-8 4h7"/></svg>';
 }
 function loadHistory(){try{return JSON.parse(localStorage.getItem(STORE_HISTORY)||'[]');}catch{return[];}}
-function saveHistory(a){localStorage.setItem(STORE_HISTORY, JSON.stringify(a));}
+function saveHistory(a){const before=loadHistory();localStorage.setItem(STORE_HISTORY, JSON.stringify(a));QuizSync.captureHistory(before,a);}
 function loadFavs(){try{return JSON.parse(localStorage.getItem(STORE_FAVS)||'{}');}catch{return{};}}
-function saveFavs(o){localStorage.setItem(STORE_FAVS, JSON.stringify(o));}
+function saveFavs(o){const before=loadFavs();localStorage.setItem(STORE_FAVS, JSON.stringify(o));QuizSync.captureFavorites(before,o);}
 function loadOverrides(){try{return JSON.parse(localStorage.getItem(STORE_OVERRIDES)||'{}');}catch{return{};}}
-function saveOverrides(o){localStorage.setItem(STORE_OVERRIDES, JSON.stringify(o));}
+function saveOverrides(o){const before=loadOverrides();localStorage.setItem(STORE_OVERRIDES, JSON.stringify(o));QuizSync.captureOverrides(before,o);}
 function loadSessions(){try{return JSON.parse(localStorage.getItem(STORE_SESSIONS)||'{}');}catch{return{};}}
-function saveSessions(o){localStorage.setItem(STORE_SESSIONS, JSON.stringify(o));}
+function saveSessions(o){const before=loadSessions();localStorage.setItem(STORE_SESSIONS, JSON.stringify(o));QuizSync.captureSessions(before,o);}
 function getSession(pid){return loadSessions()[pid]||null;}
 function setSession(pid, s){const all=loadSessions(); all[pid]=s; saveSessions(all);}
 function clearSessionFor(pid){const all=loadSessions(); delete all[pid]; saveSessions(all);}
@@ -973,6 +975,16 @@ async function init(){
   }catch(e){
     state.papers = []; toast('题库索引加载失败');
   }
+  await QuizSync.init({
+    onRemoteApplied: ()=>{
+      applyOverrides();
+      if (state.current) return;
+      if (!$('page-home').classList.contains('hidden')) renderHome();
+      if (!$('page-stats').classList.contains('hidden')) renderStats();
+      if (!$('page-favs').classList.contains('hidden')) renderFavs();
+      if (!$('page-wrong').classList.contains('hidden')) renderWrong();
+    },
+  });
   go('home');
   if ('serviceWorker' in navigator){
     navigator.serviceWorker.register('sw.js').catch(()=>{});
@@ -1350,6 +1362,7 @@ function onOptClick(e){
 
   const wasAnswered = state.selected[item.num] != null;
   state.selected[item.num] = L;
+  persistActiveSession();
 
   // Update option colors in-place (clear all, highlight only selected)
   const optsBox = document.getElementById('optsBox');
@@ -1389,6 +1402,7 @@ function onOptClick(e){
 function prevQ(){
   if (state.currentQ === 0) return;
   state.currentQ--;
+  persistActiveSession();
   renderCurrentQ();
   window.scrollTo({top:0,behavior:'instant'});
 }
@@ -1401,10 +1415,12 @@ function nextOrSubmit(){
   }
   if (last){ submitGrade(); return; }
   state.currentQ++; renderCurrentQ();
+  persistActiveSession();
   window.scrollTo({top:0,behavior:'instant'});
 }
 function jumpQ(idx){
   state.currentQ = idx;
+  persistActiveSession();
   renderCurrentQ();
   closeSheet();
   window.scrollTo({top:0,behavior:'instant'});
@@ -1617,16 +1633,21 @@ function restartQuiz(){
   startQuiz(id);
 }
 
+function persistActiveSession(){
+  if (!state.current || state.graded || Object.keys(state.selected).length===0) return;
+  setSession(state.current.id, {
+    selected: {...state.selected},
+    currentQ: state.currentQ,
+    elapsedMs: Date.now() - state.startedAt,
+    savedAt: Date.now(),
+  });
+}
+
 function quitQuiz(){
   const returnTab = state.reportReturn || 'home';
   // Auto-save in-progress session (timer pauses, can resume next time)
   if (state.current && !state.graded && Object.keys(state.selected).length>0){
-    setSession(state.current.id, {
-      selected: {...state.selected},
-      currentQ: state.currentQ,
-      elapsedMs: Date.now() - state.startedAt,
-      savedAt: Date.now(),
-    });
+    persistActiveSession();
     toast('进度已暂存，下次可继续');
   }
   stopTimer();
@@ -2009,6 +2030,7 @@ function exportData(){
     history: loadHistory(),
     favorites: loadFavs(),
     overrides: loadOverrides(),
+    sessions: loadSessions(),
   };
   const blob = new Blob([JSON.stringify(data,null,2)], {type:'application/json'});
   const url = URL.createObjectURL(blob);
@@ -2050,6 +2072,15 @@ function importData(ev){
         saveOverrides(cur);
         applyOverrides();
       }
+      // in-progress sessions merge — newer savedAt wins
+      if (obj.sessions && typeof obj.sessions === 'object'){
+        const cur = loadSessions();
+        for (const pid of Object.keys(obj.sessions)){
+          const incoming = obj.sessions[pid];
+          if (!cur[pid] || Number(incoming.savedAt||0) > Number(cur[pid].savedAt||0)) cur[pid] = incoming;
+        }
+        saveSessions(cur);
+      }
       toast('已合并');
       go('stats');
     }catch(e){ alert('导入失败：'+e.message); }
@@ -2059,10 +2090,10 @@ function importData(ev){
 }
 function clearAllData(){
   if (!confirm('确定清空所有做题记录、收藏、进行中的进度与自定义分类？此操作不可恢复。')) return;
-  localStorage.removeItem(STORE_HISTORY);
-  localStorage.removeItem(STORE_FAVS);
-  localStorage.removeItem(STORE_SESSIONS);
-  localStorage.removeItem(STORE_OVERRIDES);
+  saveHistory([]);
+  saveFavs({});
+  saveSessions({});
+  saveOverrides({});
   toast('已清空');
   location.reload();
 }
