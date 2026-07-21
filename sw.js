@@ -1,9 +1,9 @@
 /* Service Worker — offline-first cache for 公考刷题系统 */
-const CACHE = 'sihai-quiz-v23';
+const CACHE = 'sihai-quiz-v24';
 const SHELL = [
   './',
   './index.html',
-  './sync.js',
+  './sync.js?v=24',
   './manifest.webmanifest',
   './icons/icon-192.png',
   './icons/icon-512.png',
