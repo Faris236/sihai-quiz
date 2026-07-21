@@ -1,15 +1,7 @@
 {
-  "version": 2,
+  "version": 5,
   "updatedAt": "2026-07-21",
   "papers": [
-    {
-      "id": "def-1",
-      "title": "定义刷题1",
-      "category": "定义判断",
-      "source": "四海判断推理题本",
-      "count": 30,
-      "file": "data/def-1.json"
-    },
     {
       "id": "logic-1-30",
       "title": "逻辑判断600题",
@@ -18,6 +10,15 @@
       "count": 600,
       "grading": "none",
       "file": "data/logic-1-30.json"
+    },
+    {
+      "id": "reading-1-30",
+      "title": "片段阅读600题",
+      "category": "言语理解与表达",
+      "source": "花生十三片段阅读600题",
+      "count": 600,
+      "grading": "none",
+      "file": "data/reading-1-30.json"
     }
   ]
 }
