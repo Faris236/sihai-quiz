@@ -1,6 +1,6 @@
 {
-  "name": "四海刷题册",
-  "short_name": "刷题册",
+  "name": "公考刷题系统",
+  "short_name": "刷题系统",
   "description": "考公判断推理离线刷题工具",
   "start_url": "./",
   "scope": "./",

@@ -5,12 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="刷题册">
+<meta name="apple-mobile-web-app-title" content="公考刷题系统">
 <meta name="theme-color" content="#143f5b">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <link rel="icon" href="icons/icon-192.png" type="image/png">
-<title>公考刷题册</title>
+<title>公考刷题系统</title>
 <style>
 :root{
   --bg:#f0f2f5;
@@ -208,6 +208,10 @@ body.quiz-mode .wrap{padding-bottom:calc(74px + var(--safe-bottom));}
   padding:18px 16px;box-shadow:var(--shadow);margin-bottom:12px;
 }
 .q-stem-card .stem{font-size:16px;line-height:1.8;color:var(--ink);white-space:pre-wrap;}
+.q-stem-card .q-figure{
+  display:block;width:100%;height:auto;max-width:520px;margin:14px auto 0;
+  border-radius:10px;background:#fff;object-fit:contain;
+}
 
 /* ===== Answer options ===== */
 .opts{display:flex;flex-direction:column;gap:10px;}
@@ -577,6 +581,7 @@ button,select{min-height:44px;}
 .report-title-icon{width:28px;height:28px;border-radius:8px;background:#e7f0ff;color:#165bd8;display:grid;place-items:center;flex:none;}
 .report-title-icon .ui-icon{width:17px;height:17px;}
 .report-metrics{display:grid;grid-template-columns:repeat(5,1fr);background:#f2f5fa;border-radius:12px;padding:13px 4px;margin-bottom:16px;}
+.report-metrics.practice{grid-template-columns:repeat(4,1fr);}
 .report-metric{text-align:center;border-right:1px solid #dfe5ee;min-width:0;}
 .report-metric:last-child{border-right:0;}
 .report-metric span{display:block;font-size:11px;color:var(--muted);white-space:nowrap;}
@@ -593,6 +598,7 @@ button,select{min-height:44px;}
 .report-answer-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:13px 10px;}
 .report-answer-grid button{width:42px;height:42px;min-height:42px;border:0;border-radius:50%;justify-self:center;font-size:14px;font-weight:650;background:#eef1f5;color:var(--muted);}
 .report-answer-grid button.correct{background:#13a675;color:#fff;}.report-answer-grid button.wrong{background:#e64949;color:#fff;}.report-answer-grid button.unanswered{background:#edf0f4;color:#8a95a5;}
+.report-answer-grid button.answered{background:var(--primary);color:#fff;}
 .report-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:2px;}
 .report-actions .btn{width:100%;min-height:50px;border-radius:14px;}
 .report-actions .primary{background:#165bd8;border-color:#165bd8;color:#fff;}
@@ -603,6 +609,7 @@ button,select{min-height:44px;}
 .history-row{display:flex;align-items:center;gap:13px;padding:15px 16px;cursor:pointer;}
 .history-score{width:52px;height:52px;border-radius:14px;background:var(--primary-light);color:var(--primary);display:grid;place-items:center;font-size:17px;font-weight:750;flex:none;}
 .history-score.acc-hi{background:var(--green-soft);}.history-score.acc-mid{background:#fff5df;}.history-score.acc-lo{background:var(--red-soft);}
+.history-score.practice{background:var(--primary-light);color:var(--primary);}
 .history-main{flex:1;min-width:0;}.history-main .top{margin:0 0 4px;align-items:center;}.history-main .bot{gap:10px;font-size:12px;flex-wrap:wrap;}
 .history-main .ttl{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}.history-main .ts{flex:none;}
 .history-view{color:var(--muted-2);font-size:22px;flex:none;}
@@ -645,7 +652,7 @@ button,select{min-height:44px;}
   <aside class="sidebar" id="sidebar">
     <div class="brand">
       <div class="logo">政</div>
-      <div class="name">公考刷题册</div>
+      <div class="name">公考刷题系统</div>
     </div>
     <nav>
       <button data-tab="home" onclick="go('home')"><span class="ico"><svg class="ui-icon"><path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9.5V21h13V9.5"/><path d="M9 21v-7h6v7"/></svg></span><span class="lbl">练习</span></button>
@@ -725,7 +732,7 @@ button,select{min-height:44px;}
           <button class="setting-row danger" onclick="clearAllData()"><span class="setting-icon"><svg class="ui-icon sm"><path d="M4 7h16M9 7V4h6v3m-8 0 1 14h8l1-14"/></svg></span><span class="setting-body"><span class="setting-title">清空所有记录</span><span class="setting-meta">历史、收藏、进度与自定义分类</span></span><span class="row-chev">›</span></button>
         </div>
         <div class="sec-label" style="display:block">关于</div>
-        <div class="settings-group"><div class="setting-row"><span class="setting-icon"><svg class="ui-icon sm"><circle cx="12" cy="12" r="9"/><path d="M12 11v6m0-10h.01"/></svg></span><span class="setting-body"><span class="setting-title">公考刷题册</span><span class="setting-meta">离线 PWA · 个人做题数据不离开本机</span></span></div></div>
+        <div class="settings-group"><div class="setting-row"><span class="setting-icon"><svg class="ui-icon sm"><circle cx="12" cy="12" r="9"/><path d="M12 11v6m0-10h.01"/></svg></span><span class="setting-body"><span class="setting-title">公考刷题系统</span><span class="setting-meta">离线 PWA · 个人做题数据不离开本机</span></span></div></div>
       </section>
 
       <!-- QUIZ -->
@@ -781,8 +788,8 @@ button,select{min-height:44px;}
     <div class="legend">
       <span><i style="background:#fff;border-color:var(--border);"></i>未答</span>
       <span><i style="background:#fff;border-color:var(--primary);"></i>已选</span>
-      <span><i style="background:var(--green);border-color:var(--green);"></i>正确</span>
-      <span><i style="background:var(--red);border-color:var(--red);"></i>错误</span>
+      <span class="graded-only"><i style="background:var(--green);border-color:var(--green);"></i>正确</span>
+      <span class="graded-only"><i style="background:var(--red);border-color:var(--red);"></i>错误</span>
     </div>
     <div class="grid" id="rightGrid"></div>
     <div class="acts">
@@ -800,8 +807,8 @@ button,select{min-height:44px;}
   <div class="legend">
     <span><i style="background:#fff;border-color:var(--border);"></i>未答</span>
     <span><i style="background:#fff;border-color:var(--primary);"></i>已选</span>
-    <span><i style="background:var(--green);border-color:var(--green);"></i>正确</span>
-    <span><i style="background:var(--red);border-color:var(--red);"></i>错误</span>
+    <span class="graded-only"><i style="background:var(--green);border-color:var(--green);"></i>正确</span>
+    <span class="graded-only"><i style="background:var(--red);border-color:var(--red);"></i>错误</span>
   </div>
   <div class="grid" id="sheetGrid"></div>
   <div class="acts">
@@ -868,6 +875,14 @@ function fmtDuration(sec){
 function mmss(sec){
   const m=Math.floor(sec/60), s=sec%60;
   return String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+}
+function isGradablePaper(data){
+  if (!data || data.grading === 'none') return false;
+  return Array.isArray(data.questions) && data.questions.length > 0 &&
+    data.questions.every(q=>String(q.answer || '').trim());
+}
+function isPracticeRecord(record){
+  return !!record && (record.grading === 'none' || record.accuracy == null);
 }
 const HOME_CATEGORY_DEFS = [
   {name:'判断推理', test:/判断|定义|逻辑|图形|类比|推理/},
@@ -1048,9 +1063,14 @@ function renderDashboard(root){
   for (const {paper,rec,sess} of recent){
     const row=document.createElement('div'); row.className='group-row';
     const savedCount = sess ? Object.keys(sess.selected||{}).length : 0;
+    const recAnswered = rec ? (rec.answeredCount != null ? rec.answeredCount : Object.keys(rec.answers||{}).length) : 0;
+    const recCompletion = rec ? Math.round(recAnswered/rec.total*1000)/10 : 0;
     const meta = savedCount
       ? `进行中 · 已答 ${savedCount}/${paper.count} · 用时 ${mmss(Math.floor((sess.elapsedMs||0)/1000))}`
-      : rec ? `上次 ${Math.round(rec.accuracy*100)}% · 用时 ${fmtDuration(rec.durationSec)}` : `尚未练习 · ${paper.count} 题`;
+      : rec ? (isPracticeRecord(rec)
+        ? `上次完成 ${recCompletion}% · 用时 ${fmtDuration(rec.durationSec)}`
+        : `上次 ${Math.round(rec.accuracy*100)}% · 用时 ${fmtDuration(rec.durationSec)}`)
+      : `尚未练习 · ${paper.count} 题`;
     row.innerHTML=`<div class="row-body"><div class="row-title">${escapeHtml(paper.title)}</div><div class="row-meta">${meta}</div></div><span class="row-chev">›</span>`;
     row.onclick=()=>openPaper(paper.id);
     list.appendChild(row);
@@ -1075,16 +1095,21 @@ function renderPaperList(root, cat){
   for (const p of ps){
     const recs = byPaper[p.id] || [];
     const att = recs.length;
-    const best = att ? Math.max(...recs.map(r=>r.accuracy)) : null;
+    const scoredRecs = recs.filter(r=>!isPracticeRecord(r));
+    const best = scoredRecs.length ? Math.max(...scoredRecs.map(r=>r.accuracy)) : null;
     const last = att ? recs.slice().sort((a,b)=>b.finishedAt-a.finishedAt)[0] : null;
     const sess = getSession(p.id);
     const card = document.createElement('div'); card.className = 'paper-card';
     const resumeBadge = (sess && Object.keys(sess.selected||{}).length>0)
       ? `<div class="p-resume">上次第 ${(sess.currentQ||0)+1} 题 · 已答 ${Object.keys(sess.selected).length}/${p.count} · ${fmtDuration(Math.floor((sess.elapsedMs||0)/1000))}</div>`
       : '';
-    const statHtml = att
-      ? `<span class="p-stat">上次 ${Math.round(last.accuracy*100)}% · 用时 ${fmtDuration(last.durationSec)} · 最高 ${Math.round(best*100)}%</span>`
-      : `<span class="p-stat">尚未练习</span>`;
+    const lastAnswered = last ? (last.answeredCount != null ? last.answeredCount : Object.keys(last.answers||{}).length) : 0;
+    const lastCompletion = last ? Math.round(lastAnswered/last.total*1000)/10 : 0;
+    const statHtml = !att
+      ? `<span class="p-stat">尚未练习</span>`
+      : isPracticeRecord(last)
+        ? `<span class="p-stat">上次完成 ${lastCompletion}% · 已答 ${lastAnswered}/${last.total} · 用时 ${fmtDuration(last.durationSec)}</span>`
+        : `<span class="p-stat">上次 ${Math.round(last.accuracy*100)}% · 用时 ${fmtDuration(last.durationSec)} · 最高 ${Math.round(best*100)}%</span>`;
     card.innerHTML = `
       <div class="p-top">
         <div class="p-title">${escapeHtml(p.title)}</div>
@@ -1238,6 +1263,8 @@ async function startQuiz(id, opts){
   $('page-quiz').classList.remove('hidden');
   $('qbar').classList.remove('hidden');
   $('submitBtn').style.display = '';
+  $('submitBtn').textContent = isGradablePaper(data) ? '交卷' : '提交';
+  document.querySelectorAll('.graded-only').forEach(el=>el.classList.toggle('hidden', !isGradablePaper(data)));
   document.body.classList.add('quiz-mode');
   // header (no category text)
   $('quizTitle').textContent = data.title;
@@ -1266,6 +1293,7 @@ function stopTimer(){ clearInterval(state.timerId); state.timerId=0; }
 
 function renderCurrentQ(){
   const data = state.current;
+  const gradable = isGradablePaper(data);
   const i = state.currentQ;
   const item = data.questions[i];
   const total = data.questions.length;
@@ -1274,19 +1302,20 @@ function renderCurrentQ(){
   $('qprogFill').style.width = (state.graded ? 100 : (i+1)/total*100) + '%';
   // meta
   $('qMetaLeft').textContent = `第 ${item.num} 题 / 共 ${total} 题`;
-  $('qMetaRight').textContent = state.graded ? '已判分' : `已答 ${done}/${total}`;
+  $('qMetaRight').textContent = state.graded ? (gradable ? '已判分' : '已提交') : `已答 ${done}/${total}`;
   // body
   const body = $('qBody');
   body.innerHTML = `
     <div class="q-stem-card" id="qCard">
       <div class="stem">${escapeHtml(item.stem)}</div>
+      ${item.image ? `<img class="q-figure" src="${escapeHtml(item.image)}" alt="题目附图">` : ''}
     </div>
     <div class="opts ${state.graded ? 'graded' : ''}" id="optsBox">
       ${['A','B','C','D'].map(L=>{
         const ans = state.selected[item.num];
-        // Color the previously-selected option (changeable before graded)
+        // Answered papers use correctness colors; free-practice papers use a neutral selected state.
         let cls = '';
-        if (ans && L === ans) cls = ans === item.answer ? 'correct' : 'wrong';
+        if (ans && L === ans) cls = gradable ? (ans === item.answer ? 'correct' : 'wrong') : 'sel';
         return `<div class="opt ${cls}" data-key="${L}"><div class="tag">${L}</div><div class="txt">${escapeHtml(item.options[L]||'')}</div></div>`;
       }).join('')}
     </div>
@@ -1299,8 +1328,8 @@ function renderCurrentQ(){
   // next button label
   const last = i === total-1;
   $('nextBtn').textContent = state.graded
-    ? (last ? '查看成绩' : '下一题')
-    : (last ? '提交并判分' : '下一题');
+    ? (last ? (gradable ? '查看成绩' : '查看记录') : '下一题')
+    : (last ? (gradable ? '提交并判分' : '提交练习') : '下一题');
   $('nextBtn').classList.toggle('submit', !state.graded && last);
   // prev disabled state
   $('prevBtn').classList.toggle('disabled', i===0);
@@ -1312,6 +1341,7 @@ function onOptClick(e){
   if (state.graded) return;
   const qIdx = state.currentQ;
   const item = state.current.questions[qIdx];
+  const gradable = isGradablePaper(state.current);
   if (!item) return;
 
   const el = e.currentTarget;
@@ -1327,9 +1357,9 @@ function onOptClick(e){
     const correctAnswer = String(item.answer || '').trim();
     optsBox.querySelectorAll('.opt').forEach(o => {
       const oL = o.dataset.key;
-      o.classList.remove('correct', 'wrong');
+      o.classList.remove('correct', 'wrong', 'sel');
       if (oL === L) {
-        o.classList.add(oL === correctAnswer ? 'correct' : 'wrong');
+        o.classList.add(gradable ? (oL === correctAnswer ? 'correct' : 'wrong') : 'sel');
       }
     });
   }
@@ -1342,17 +1372,17 @@ function onOptClick(e){
   // Update next button label on last question
   const last = qIdx === total - 1;
   if (last) {
-    $('nextBtn').textContent = '提交并判分';
+    $('nextBtn').textContent = gradable ? '提交并判分' : '提交练习';
     $('nextBtn').classList.add('submit');
   }
 
   renderAnswerGrids();
 
-  // Auto-advance only on FIRST selection — if changing a previous answer, stay put
-  if (!wasAnswered && !last) {
+  // Free practice always advances after a choice; scored papers keep change-in-place behavior.
+  if (!last && (!gradable || !wasAnswered)) {
     setTimeout(() => {
       if (!state.graded && state.currentQ === qIdx) nextOrSubmit();
-    }, 850);
+    }, gradable ? 850 : 260);
   }
 }
 
@@ -1382,6 +1412,7 @@ function jumpQ(idx){
 
 function submitGrade(){
   const data = state.current;
+  const gradable = isGradablePaper(data);
   const unanswered = data.questions.length - Object.keys(state.selected).length;
   if (unanswered > 0 && !state.graded){
     if (!confirm(`还有 ${unanswered} 题未作答，确定提交？`)){ closeSheet(); return; }
@@ -1395,7 +1426,8 @@ function submitGrade(){
     if (state.selected[item.num] === item.answer) correct++;
   }
   const total = data.questions.length;
-  const acc = correct/total;
+  const acc = gradable ? correct/total : null;
+  const answeredCount = Object.keys(state.selected).length;
   const dur = Math.round((Date.now()-state.startedAt)/1000);
   const rec = {
     sessionId: uuid(),
@@ -1406,18 +1438,85 @@ function submitGrade(){
     finishedAt: Date.now(),
     durationSec: dur,
     answers: {...state.selected},
-    correctCount: correct,
+    answeredCount,
+    grading: gradable ? 'scored' : 'none',
+    correctCount: gradable ? correct : null,
     total, accuracy: acc,
   };
   const hist = loadHistory(); hist.push(rec); saveHistory(hist);
   clearSessionFor(data.id);  // submitted → drop in-progress
   closeSheet();
-  toast(`已提交 · 正确率 ${Math.round(acc*100)}%`);
+  toast(gradable ? `已提交 · 正确率 ${Math.round(acc*100)}%` : `已提交 · 完成 ${answeredCount}/${total}`);
   showScorecard(rec);
+}
+
+function showPracticeReport(precomputed){
+  const data = state.current;
+  const reportRec = precomputed || state.reportRecord;
+  if (precomputed) state.reportRecord = precomputed;
+  const total = data.questions.length;
+  const answered = Object.keys(state.selected).length;
+  const unanswered = Math.max(0, total-answered);
+  const completion = total ? Math.round(answered/total*1000)/10 : 0;
+  const dur = Math.round(((reportRec && reportRec.durationSec) || (Date.now()-state.startedAt)/1000));
+  const finishedAt = (reportRec && reportRec.finishedAt) || Date.now();
+  const returnLabel = state.reportReturn === 'stats' ? '返回记录' : '返回题库';
+  const answerGrid = data.questions.map((q,idx)=>{
+    const cls = state.selected[q.num] ? 'answered' : 'unanswered';
+    return `<button class="${cls}" onclick="reviewQuestion(${idx})" title="查看第 ${q.num} 题">${q.num}</button>`;
+  }).join('');
+  $('qBody').innerHTML = `
+    <div class="report-page">
+      <section class="report-card report-summary">
+        <div class="report-score-pill">完成度 ${completion}%</div>
+        <div class="report-ring" style="--score:${Math.round(completion*3.6)}deg"><div class="report-ring-core"><span>已答</span><b>${answered}</b><em>/ ${total}</em></div></div>
+        <div class="report-meta">
+          <div class="report-meta-row"><span>练习类型</span><strong>自由练习（不判分）</strong></div>
+          <div class="report-meta-row"><span>提交时间</span><strong>${fmtDate(finishedAt)}</strong></div>
+        </div>
+      </section>
+
+      <section class="report-card">
+        <div class="report-card-title"><span class="report-title-icon"><svg class="ui-icon"><path d="M5 12.5 9.2 17 19 7"/></svg></span>练习情况</div>
+        <div class="report-metrics practice">
+          <div class="report-metric"><span>共</span><b>${total}</b></div>
+          <div class="report-metric"><span>已答</span><b>${answered}</b></div>
+          <div class="report-metric"><span>未答</span><b>${unanswered}</b></div>
+          <div class="report-metric time"><span>用时</span><b>${fmtDuration(dur)}</b></div>
+        </div>
+        <div class="report-category"><span class="dot">⌄</span><div><strong>${escapeHtml(homeCategoryFor(data.category))}</strong><p>共 ${total} 题，已答 ${answered} 题，完成度 ${completion}%，用时 ${fmtDuration(dur)}</p></div></div>
+      </section>
+
+      <section class="report-card">
+        <div class="report-card-head"><div class="report-card-title"><span class="report-title-icon"><svg class="ui-icon"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 9h.01m4 0h.01m4 0h.01M8 15h.01m4 0h.01m4 0h.01"/></svg></span>答题卡</div><div class="report-legend"><span><i style="background:#edf0f4"></i>未答</span><span><i style="background:var(--primary)"></i>已答</span></div></div>
+        <div class="report-answer-grid">${answerGrid}</div>
+      </section>
+
+      <div class="report-actions">
+        <button class="btn" onclick="reviewQuestion(0)">查看全部题目</button>
+        <button class="btn primary" onclick="quitQuiz()">${returnLabel}</button>
+        <button class="btn wide" onclick="restartQuiz()">再做一遍</button>
+      </div>
+    </div>
+  `;
+  document.body.classList.add('score-mode');
+  $('quizTitle').textContent = '练习记录';
+  $('quizMeta').textContent = data.title;
+  $('qbar').classList.add('hidden');
+  $('qprogFill').style.width = '100%';
+  $('qMetaLeft').textContent = '本次练习';
+  $('qMetaRight').textContent = '';
+  $('nextBtn').textContent = '查看题目';
+  $('nextBtn').classList.remove('submit');
+  $('nextBtn').onclick = ()=>{ state.currentQ = 0; renderCurrentQ(); window.scrollTo({top:0,behavior:'instant'}); };
 }
 
 function showScorecard(precomputed){
   const data = state.current;
+  if (!isGradablePaper(data)){
+    showPracticeReport(precomputed);
+    return;
+  }
   const reportRec = precomputed || state.reportRecord;
   if (precomputed) state.reportRecord = precomputed;
   let correct = 0;
@@ -1551,10 +1650,11 @@ function quizBack(){
 // =========== Answer card grids ===========
 function renderAnswerGrids(){
   if (!state.current) return;
+  const gradable = isGradablePaper(state.current);
   const html = [];
   state.current.questions.forEach((q, idx)=>{
     let cls = 'acell';
-    if (state.graded){
+    if (state.graded && gradable){
       if (state.selected[q.num] === q.answer) cls += ' correct';
       else if (state.selected[q.num]) cls += ' wrong';
       else cls += ' wrong'; // unanswered also marked wrong
@@ -1565,11 +1665,12 @@ function renderAnswerGrids(){
   const joined = html.join('');
   $('rightGrid').innerHTML = joined;
   $('sheetGrid').innerHTML = joined;
+  document.querySelectorAll('.graded-only').forEach(el=>el.classList.toggle('hidden', !gradable));
   // Submit btn states
   const submitDisabled = state.graded;
-  $('rightSubmit').textContent = submitDisabled ? '已判分' : '提交并判分';
+  $('rightSubmit').textContent = submitDisabled ? (gradable ? '已判分' : '已提交') : (gradable ? '提交并判分' : '提交练习');
   $('rightSubmit').disabled = submitDisabled;
-  $('sheetSubmit').textContent = submitDisabled ? '已判分' : '提交并判分';
+  $('sheetSubmit').textContent = submitDisabled ? (gradable ? '已判分' : '已提交') : (gradable ? '提交并判分' : '提交练习');
   $('sheetSubmit').disabled = submitDisabled;
   $('sheetSub').textContent = `${state.currentQ+1} / ${state.current.questions.length}`;
 }
@@ -1680,13 +1781,19 @@ async function renderWrong(){
     root.innerHTML = '<div class="empty">还没有做题记录，做完一套题之后做错的题会出现在这里。</div>';
     return;
   }
+  const scoredHist = hist.filter(h=>!isPracticeRecord(h));
+  if (!scoredHist.length){
+    root.innerHTML = '<div class="empty">还没有可判分的错题记录。无答案练习不会生成错题。</div>';
+    return;
+  }
   // Need paper data for all referenced papers
-  const pids = [...new Set(hist.map(h=>h.paperId))];
+  const pids = [...new Set(scoredHist.map(h=>h.paperId))];
   for (const pid of pids){ try{ await loadPaper(pid); }catch{} }
   // Aggregate wrong answers across all history
   const agg = {};
-  for (const h of hist){
+  for (const h of scoredHist){
     const data = state.paperData[h.paperId]; if (!data) continue;
+    if (isPracticeRecord(h) || !isGradablePaper(data)) continue;
     // apply filters
     if (selPaper && h.paperId !== selPaper) continue;
     if (selCat && data.category !== selCat) continue;
@@ -1838,12 +1945,14 @@ function renderStats(){
     return true;
   });
   const att = filtered.length;
+  const scored = filtered.filter(h=>!isPracticeRecord(h));
   const totalQ = filtered.reduce((s,h)=>s+h.total,0);
-  const totalC = filtered.reduce((s,h)=>s+h.correctCount,0);
+  const scoredQ = scored.reduce((s,h)=>s+h.total,0);
+  const totalC = scored.reduce((s,h)=>s+(h.correctCount||0),0);
   const totalT = filtered.reduce((s,h)=>s+h.durationSec,0);
   $('sAttempts').textContent = att;
-  $('sAvgAcc').textContent = att ? Math.round(totalC/totalQ*100)+'%' : '—';
-  $('sBestAcc').textContent = att ? Math.round(Math.max(...filtered.map(h=>h.accuracy))*100)+'%' : '—';
+  $('sAvgAcc').textContent = scoredQ ? Math.round(totalC/scoredQ*100)+'%' : '—';
+  $('sBestAcc').textContent = scored.length ? Math.round(Math.max(...scored.map(h=>h.accuracy))*100)+'%' : '—';
   $('sTotalQ').textContent = totalQ;
   $('sCorrect').textContent = totalC;
   $('sTime').textContent = fmtDuration(totalT);
@@ -1851,8 +1960,10 @@ function renderStats(){
   if (!filtered.length){ list.innerHTML = '<div class="empty">没有匹配的做题记录。</div>'; return; }
   const sorted = filtered.slice().sort((a,b)=>b.finishedAt-a.finishedAt);
   for (const h of sorted){
-    const accPct = Math.round(h.accuracy*100);
-    const cls = accPct>=80?'acc-hi':accPct>=60?'acc-mid':'acc-lo';
+    const practice = isPracticeRecord(h);
+    const answered = h.answeredCount != null ? h.answeredCount : Object.keys(h.answers||{}).length;
+    const accPct = practice ? Math.round(answered/h.total*1000)/10 : Math.round(h.accuracy*100);
+    const cls = practice ? 'practice' : (accPct>=80?'acc-hi':accPct>=60?'acc-mid':'acc-lo');
     const wrap = document.createElement('div'); wrap.className = 'history-wrap';
     const row = document.createElement('div'); row.className = 'history-row';
     row.setAttribute('role','button'); row.tabIndex = 0;
@@ -1860,7 +1971,7 @@ function renderStats(){
       <div class="history-score ${cls}">${accPct}%</div>
       <div class="history-main">
         <div class="top"><span class="ttl">${escapeHtml(h.paperTitle)}</span><span class="ts">${fmtDate(h.finishedAt)}</span></div>
-        <div class="bot"><span>答对 ${h.correctCount}/${h.total}</span><span>用时 ${fmtDuration(h.durationSec)}</span><span>${escapeHtml(homeCategoryFor(h.category))}</span></div>
+        <div class="bot"><span>${practice ? `已答 ${answered}/${h.total}` : `答对 ${h.correctCount}/${h.total}`}</span><span>用时 ${fmtDuration(h.durationSec)}</span><span>${escapeHtml(homeCategoryFor(h.category))}</span></div>
       </div>
       <span class="history-view">›</span>`;
     const openReport = ()=>{

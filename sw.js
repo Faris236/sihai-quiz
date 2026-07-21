@@ -1,5 +1,5 @@
-/* Service Worker — offline-first cache for 四海刷题册 */
-const CACHE = 'sihai-quiz-v14';
+/* Service Worker — offline-first cache for 公考刷题系统 */
+const CACHE = 'sihai-quiz-v15';
 const SHELL = [
   './',
   './index.html',
@@ -8,6 +8,14 @@ const SHELL = [
   './icons/icon-512.png',
   './icons/apple-touch-icon.png',
   './data/index.json',
+  './data/def-1.json',
+  './data/logic-1-30.json',
+  './images/questions/logic-02-04.png',
+  './images/questions/logic-03-20.png',
+  './images/questions/logic-05-12.png',
+  './images/questions/logic-05-18.png',
+  './images/questions/logic-13-05.png',
+  './images/questions/logic-14-20.png',
 ];
 
 self.addEventListener('install', (e) => {
