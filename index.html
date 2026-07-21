@@ -6,7 +6,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="刷题册">
-<meta name="theme-color" content="#24485b">
+<meta name="theme-color" content="#143f5b">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <link rel="icon" href="icons/icon-192.png" type="image/png">
@@ -407,85 +407,91 @@ body.quiz-mode .toast{bottom:calc(60px + var(--safe-bottom) + 12px);}
 
 /* ===== 2026 mobile-first visual refresh ===== */
 :root{
-  --bg:#f6f7f9;
+  --bg:#fbfcfe;
   --surface:#ffffff;
-  --surface-2:#f2f5f7;
-  --border:#e8ecf0;
-  --ink:#17212b;
-  --ink-2:#344054;
+  --surface-2:#f4f7fa;
+  --border:#dfe6ec;
+  --ink:#111d2a;
+  --ink-2:#334155;
   --muted:#667085;
-  --muted-2:#98a2b3;
-  --primary:#24485b;
-  --primary-light:#eaf1f5;
-  --primary-hover:#1b3949;
+  --muted-2:#8d99aa;
+  --primary:#143f5b;
+  --primary-light:#e8f1f6;
+  --primary-hover:#0e344d;
   --green:#2f7d5b;
   --green-soft:#e6f3ec;
   --red:#c25555;
   --red-soft:#f9e9e9;
   --gold:#9b6b2f;
-  --shadow:0 2px 10px rgba(23,33,43,.06);
-  --shadow-lg:0 12px 30px rgba(23,33,43,.09);
-  --r:14px;
+  --shadow:0 2px 10px rgba(20,63,91,.05);
+  --shadow-lg:0 10px 28px rgba(20,63,91,.11),0 2px 7px rgba(17,29,42,.05);
+  --r:15px;
   --r-lg:20px;
 }
-body{font-size:16px;line-height:1.55;letter-spacing:0;color:var(--ink);}
+body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","Helvetica Neue","Noto Sans SC",sans-serif;font-size:16px;line-height:1.55;letter-spacing:0;color:var(--ink);}
 button,select{min-height:44px;}
-.wrap{max-width:620px;padding:12px 16px calc(var(--tab-h) + var(--safe-bottom) + 28px);}
-.page-head{padding:18px 2px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
-.page-head h1{font-size:30px;font-weight:700;letter-spacing:-.8px;line-height:1.2;}
+.wrap{max-width:620px;padding:0 18px calc(var(--tab-h) + var(--safe-bottom) + 36px);}
+.page-head{margin:0 -18px 22px;padding:26px 22px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.page-head h1{font-size:32px;font-weight:760;letter-spacing:-1px;line-height:1.18;}
 .page-head .head-action{width:42px;height:42px;border:0;border-radius:50%;background:transparent;color:var(--ink-2);display:flex;align-items:center;justify-content:center;}
 .page-head .head-action:active{background:var(--primary-light);}
 .ui-icon{width:22px;height:22px;display:block;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
 .ui-icon.sm{width:18px;height:18px;}
 
 /* navigation */
-.tabbar{height:calc(64px + var(--safe-bottom));padding:0 12px var(--safe-bottom);background:rgba(255,255,255,.96);border-color:var(--border);}
-.tabbar .tab{padding:8px 4px 6px;gap:3px;color:var(--muted-2);}
-.tabbar .tab .ico{height:24px;display:flex;align-items:center;justify-content:center;opacity:1;}
-.tabbar .tab .ico .ui-icon{width:23px;height:23px;}
-.tabbar .tab .lbl{font-size:11px;font-weight:500;letter-spacing:0;}
+.tabbar{height:calc(70px + var(--safe-bottom));padding:0 14px var(--safe-bottom);background:rgba(255,255,255,.97);border-color:var(--border);}
+.tabbar .tab{padding:9px 4px 7px;gap:3px;color:var(--muted-2);}
+.tabbar .tab .ico{height:25px;display:flex;align-items:center;justify-content:center;opacity:1;}
+.tabbar .tab .ico .ui-icon{width:24px;height:24px;}
+.tabbar .tab .lbl{font-size:12px;font-weight:500;letter-spacing:0;}
 .tabbar .tab.on{color:var(--primary);}
 .tabbar .tab.on .lbl{color:var(--primary);font-weight:700;}
+.tabbar .tab.on .active-fill{fill:currentColor;stroke:currentColor;}
 .sidebar{background:#1c3544;}
 .sidebar .brand .logo{background:#fff;color:var(--primary);border-radius:9px;font-weight:700;}
 .sidebar nav button .ico{height:20px;display:flex;align-items:center;justify-content:center;}
 .sidebar nav button .ui-icon{width:19px;height:19px;}
 
 /* shared grouped surfaces */
-.section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:26px 2px 12px;}
-.section-head h2{font-size:18px;font-weight:700;letter-spacing:-.2px;}
-.section-head button{border:0;background:transparent;color:var(--muted);font-size:14px;padding:0 4px;min-height:36px;}
+.section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:30px 2px 13px;}
+.section-head h2{font-size:20px;font-weight:730;letter-spacing:-.35px;}
+.section-head button{border:0;background:transparent;color:var(--muted);font-size:15px;padding:0 2px;min-height:36px;}
 .group-list{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;}
-.group-row{display:flex;align-items:center;gap:12px;padding:15px 16px;border-bottom:1px solid var(--border);cursor:pointer;min-height:70px;}
+.group-row{display:flex;align-items:center;gap:12px;padding:18px 20px;border-bottom:1px solid var(--border);cursor:pointer;min-height:78px;}
 .group-row:last-child{border-bottom:0;}
 .group-row:active{background:var(--surface-2);}
 .group-row .row-body{flex:1;min-width:0;}
-.group-row .row-title{font-size:16px;font-weight:650;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.group-row .row-meta{font-size:13px;color:var(--muted);margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.group-row .row-title{font-size:17px;font-weight:680;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.group-row .row-meta{font-size:14px;color:var(--muted);margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .group-row .row-chev{color:var(--muted-2);font-size:22px;line-height:1;}
 .empty{box-shadow:none;border:1px solid var(--border);color:var(--muted);padding:44px 20px;}
 .sec-label{font-size:13px;font-weight:600;color:var(--muted);letter-spacing:0;text-transform:none;margin:24px 2px 10px;}
 
 /* redesigned home */
-.home-hero{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:22px 20px;box-shadow:var(--shadow-lg);}
-.home-hero .hero-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;}
-.home-hero .eyebrow{font-size:14px;color:var(--muted);margin-bottom:5px;}
-.home-hero .hero-title{font-size:24px;font-weight:700;letter-spacing:-.5px;}
-.home-hero .status{font-size:12px;font-weight:650;color:var(--primary);background:var(--primary-light);padding:5px 10px;border-radius:99px;white-space:nowrap;}
-.hero-progress{height:8px;background:#e3e9ed;border-radius:99px;overflow:hidden;margin:22px 0 10px;}
+.home-hero{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:22px 21px 21px;box-shadow:var(--shadow-lg);}
+.home-hero .hero-top{display:block;}
+.home-hero .eyebrow{font-size:16px;color:var(--muted);margin-bottom:6px;}
+.home-hero .hero-title{font-size:27px;font-weight:740;letter-spacing:-.65px;line-height:1.25;}
+.hero-status-line{margin-top:10px;}
+.home-hero .status{display:inline-flex;font-size:14px;font-weight:700;color:var(--primary);background:var(--primary-light);padding:5px 11px;border-radius:8px;white-space:nowrap;}
+.hero-progress-line{display:flex;align-items:center;gap:14px;margin:22px 0 13px;}
+.hero-progress{height:8px;flex:1;background:#e5edf2;border-radius:99px;overflow:hidden;}
 .hero-progress span{display:block;height:100%;background:var(--primary);border-radius:inherit;}
-.hero-meta{display:flex;justify-content:space-between;gap:12px;font-size:14px;color:var(--muted);margin-bottom:20px;}
-.hero-btn{width:100%;height:52px;border:0;border-radius:12px;background:var(--primary);color:#fff;font-size:16px;font-weight:700;}
+.hero-progress-value{width:42px;text-align:right;color:var(--muted);font-size:15px;}
+.hero-meta{display:flex;justify-content:flex-start;align-items:center;gap:18px;font-size:15px;color:var(--muted);margin-bottom:20px;}
+.hero-meta .sep{width:1px;height:20px;background:var(--border);}
+.hero-btn{width:100%;height:54px;border:0;border-radius:12px;background:linear-gradient(135deg,#174c70,#113b58);color:#fff;font-size:17px;font-weight:720;box-shadow:0 5px 14px rgba(20,63,91,.16);}
 .hero-btn:active{background:var(--primary-hover);transform:scale(.99);}
 .category-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;}
-.category-grid.one{grid-template-columns:1fr;}
-.category-item{min-height:92px;border:0;background:var(--surface);padding:16px;display:flex;align-items:center;gap:13px;text-align:left;border-right:1px solid var(--border);border-bottom:1px solid var(--border);}
+.category-grid.one{grid-template-columns:repeat(2,minmax(0,1fr));}
+.category-item{min-height:94px;border:0;background:var(--surface);padding:16px 17px;display:flex;align-items:center;gap:13px;text-align:left;border-right:1px solid var(--border);border-bottom:1px solid var(--border);}
 .category-item:nth-child(2n){border-right:0;}
 .category-item:nth-last-child(-n+2){border-bottom:0;}
-.category-grid.one .category-item{border-right:0;border-bottom:0;}
+.category-grid.one .category-item{border-right:1px solid var(--border);border-bottom:1px solid var(--border);}
 .category-item:active{background:var(--surface-2);}
-.category-item .cat-icon{width:38px;height:38px;border-radius:10px;background:var(--primary-light);color:var(--primary);display:flex;align-items:center;justify-content:center;flex:none;}
-.category-item .cat-name{font-size:16px;font-weight:650;color:var(--ink);}
+.category-item .cat-icon{width:42px;height:42px;border-radius:0;background:transparent;color:var(--primary);display:flex;align-items:center;justify-content:center;flex:none;}
+.category-item .cat-icon .ui-icon{width:32px;height:32px;stroke-width:1.6;}
+.category-item .cat-name{font-size:17px;font-weight:650;color:var(--ink);}
 .category-item .cat-meta{font-size:12px;color:var(--muted);margin-top:3px;}
 .category-item .cat-name,.category-item .cat-meta{display:block;}
 
@@ -713,13 +719,13 @@ button,select{min-height:44px;}
     <!-- ===== Bottom tab bar (mobile) ===== -->
     <nav class="tabbar" id="tabbar">
       <button class="tab on" data-tab="home" onclick="go('home')">
-        <span class="ico"><svg class="ui-icon"><path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9.5V21h13V9.5"/><path d="M9 21v-7h6v7"/></svg></span><span class="lbl">练习</span>
+        <span class="ico"><svg class="ui-icon"><path class="active-fill" d="M3 5h7a2 2 0 0 1 2 2v14a2.8 2.8 0 0 0-2.5-2H3z"/><path class="active-fill" d="M21 5h-7a2 2 0 0 0-2 2v14a2.8 2.8 0 0 1 2.5-2H21z"/></svg></span><span class="lbl">练习</span>
       </button>
       <button class="tab" data-tab="wrong" onclick="go('wrong')">
-        <span class="ico"><svg class="ui-icon"><circle cx="12" cy="12" r="9"/><path d="m9 9 6 6m0-6-6 6"/></svg></span><span class="lbl">错题</span>
+        <span class="ico"><svg class="ui-icon"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V2h6v2M9 10h6m-6 4h4"/><path d="m15 15 4 4m0-4-4 4"/></svg></span><span class="lbl">错题</span>
       </button>
       <button class="tab" data-tab="stats" onclick="go('stats')">
-        <span class="ico"><svg class="ui-icon"><path d="M4 20V10m6 10V4m6 16v-7m5 7H2"/></svg></span><span class="lbl">记录</span>
+        <span class="ico"><svg class="ui-icon"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg></span><span class="lbl">记录</span>
       </button>
       <button class="tab" data-tab="data" onclick="go('data')">
         <span class="ico"><svg class="ui-icon"><circle cx="12" cy="8" r="4"/><path d="M4.5 21a7.5 7.5 0 0 1 15 0"/></svg></span><span class="lbl">我的</span>
@@ -819,13 +825,24 @@ function mmss(sec){
   const m=Math.floor(sec/60), s=sec%60;
   return String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
 }
+const HOME_CATEGORY_DEFS = [
+  {name:'判断推理', test:/判断|定义|逻辑|图形|类比|推理/},
+  {name:'言语理解', test:/言语|阅读|语文|词语|片段/},
+  {name:'资料分析', test:/资料|数据|分析/},
+  {name:'课程试卷', test:/课程|套题|模拟|试卷/},
+];
+function homeCategoryFor(raw){
+  const cat = String(raw || '').trim();
+  const found = HOME_CATEGORY_DEFS.find(x=>x.test.test(cat));
+  return found ? found.name : (cat || '其他题库');
+}
 function categoryIcon(cat){
   const c = cat || '';
-  if (/言语|阅读|语文/.test(c)) return '<svg class="ui-icon"><path d="M4 5.5A3.5 3.5 0 0 1 7.5 2H20v17H7.5A3.5 3.5 0 0 0 4 22z"/><path d="M4 5.5V22M8 6h8m-8 4h7"/></svg>';
-  if (/资料|数据/.test(c)) return '<svg class="ui-icon"><path d="M4 20V11m5 9V6m5 14v-5m5 5V3"/><path d="M2 20h20"/></svg>';
-  if (/数量|数学|计算/.test(c)) return '<svg class="ui-icon"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 7h8M8 12h.01m4 0h.01m4 0h.01M8 16h.01m4 0h.01m4 0h.01"/></svg>';
-  if (/课程|套题|模拟/.test(c)) return '<svg class="ui-icon"><path d="M6 2h9l4 4v16H6z"/><path d="M14 2v5h5M9 12h7m-7 4h7"/></svg>';
-  return '<svg class="ui-icon"><circle cx="12" cy="12" r="3"/><path d="M12 3v3m0 12v3m9-9h-3M6 12H3m15.4-6.4-2.1 2.1M7.7 16.3l-2.1 2.1m12.8 0-2.1-2.1M7.7 7.7 5.6 5.6"/></svg>';
+  if (/判断|定义|逻辑|图形|类比|推理/.test(c)) return '<svg class="ui-icon"><path d="M9 20v-3.2l-3-2.4V9.5a6 6 0 1 1 10.8 3.6L15 15v5"/><circle cx="12" cy="9" r="2.2"/><path d="M5.8 10H3.5"/></svg>';
+  if (/言语|阅读|语文|词语|片段/.test(c)) return '<svg class="ui-icon"><path d="M6 2.5h8l4 4V21H6z"/><path d="M14 2.5V7h4M9 11h6m-6 4h6"/></svg>';
+  if (/资料|数据|分析/.test(c)) return '<svg class="ui-icon"><path d="M4 20V13h4v7m3 0V8h4v12m3 0V4h3v16"/><path d="M2 20h20"/></svg>';
+  if (/课程|套题|模拟|试卷/.test(c)) return '<svg class="ui-icon"><path d="M5 3h11l3 3v15H5z"/><path d="M16 3v4h3M9 11h6m-6 4h6"/><path d="M16 21l-2-2-2 2"/></svg>';
+  return '<svg class="ui-icon"><path d="M4 5.5A3.5 3.5 0 0 1 7.5 2H20v17H7.5A3.5 3.5 0 0 0 4 22z"/><path d="M4 5.5V22M8 6h8m-8 4h7"/></svg>';
 }
 function loadHistory(){try{return JSON.parse(localStorage.getItem(STORE_HISTORY)||'[]');}catch{return[];}}
 function saveHistory(a){localStorage.setItem(STORE_HISTORY, JSON.stringify(a));}
@@ -926,8 +943,10 @@ function renderHome(){
 }
 function renderDashboard(root){
   const groups = {};
+  for (const def of HOME_CATEGORY_DEFS) groups[def.name] = [];
   for (const p of state.papers){
-    (groups[p.category] = groups[p.category] || []).push(p);
+    const homeCat = homeCategoryFor(p.category);
+    (groups[homeCat] = groups[homeCat] || []).push(p);
   }
   const hist = loadHistory();
   const sessions = loadSessions();
@@ -936,53 +955,58 @@ function renderDashboard(root){
     .filter(x=>x.paper && x.sess && Object.keys(x.sess.selected||{}).length)
     .sort((a,b)=>(b.sess.savedAt||0)-(a.sess.savedAt||0));
   const latestHist = hist.slice().sort((a,b)=>b.finishedAt-a.finishedAt);
-  const recentIds = [];
-  for (const h of latestHist){ if (!recentIds.includes(h.paperId)) recentIds.push(h.paperId); }
-  const recent = recentIds.map(pid=>({paper:state.papers.find(p=>p.id===pid),rec:latestHist.find(h=>h.paperId===pid)})).filter(x=>x.paper).slice(0,3);
-  if (!recent.length){
-    state.papers.slice(0,3).forEach(p=>recent.push({paper:p,rec:null}));
-  }
+  const recent = [];
+  const addRecent = (paper, rec=null, sess=null)=>{
+    if (paper && !recent.some(x=>x.paper.id===paper.id) && recent.length<3) recent.push({paper,rec,sess});
+  };
+  for (const x of activeSessions) addRecent(x.paper, latestHist.find(h=>h.paperId===x.paper.id)||null, x.sess);
+  for (const h of latestHist) addRecent(state.papers.find(p=>p.id===h.paperId), h, sessions[h.paperId]||null);
+  for (const p of state.papers) addRecent(p, null, sessions[p.id]||null);
 
   const focus = activeSessions[0] || {paper:(recent[0]&&recent[0].paper)||state.papers[0],sess:null};
   if (focus.paper){
     const answered = focus.sess ? Object.keys(focus.sess.selected||{}).length : 0;
     const pct = Math.min(100, Math.round(answered/focus.paper.count*100));
+    const elapsedSec = focus.sess ? Math.floor((focus.sess.elapsedMs||0)/1000) : 0;
     const hero = document.createElement('div'); hero.className='home-hero';
     const heroAction = focus.sess
       ? `startQuiz('${focus.paper.id}',{resume:true})`
       : `openPaper('${focus.paper.id}')`;
     hero.innerHTML = `
       <div class="hero-top">
-        <div><div class="eyebrow">${focus.sess?'继续上次练习':'开始一套练习'}</div><div class="hero-title">${escapeHtml(focus.paper.title)}</div></div>
-        <span class="status">${focus.sess?'进行中':'待开始'}</span>
+        <div class="eyebrow">${focus.sess?'继续上次练习':'开始一套练习'}</div>
+        <div class="hero-title">${escapeHtml(focus.paper.title)}</div>
+        <div class="hero-status-line"><span class="status">${focus.sess?'进行中':'待开始'}</span></div>
       </div>
-      <div class="hero-progress"><span style="width:${pct}%"></span></div>
-      <div class="hero-meta"><span>${focus.sess?`已答 ${answered} / ${focus.paper.count}`:`共 ${focus.paper.count} 题`}</span><span>${focus.sess?`用时 ${fmtDuration(Math.floor((focus.sess.elapsedMs||0)/1000))}`:escapeHtml(focus.paper.category||'')}</span></div>
+      <div class="hero-progress-line"><div class="hero-progress"><span style="width:${pct}%"></span></div><span class="hero-progress-value">${pct}%</span></div>
+      <div class="hero-meta"><span>已答 ${answered} / ${focus.paper.count}</span><i class="sep"></i><span>用时 ${mmss(elapsedSec)}</span></div>
       <button class="hero-btn" onclick="${heroAction}">${focus.sess?'继续练习':'开始练习'}</button>`;
     root.appendChild(hero);
   }
 
   const catHead = document.createElement('div'); catHead.className='section-head';
-  catHead.innerHTML = `<h2>题库分类</h2><button type="button">${Object.keys(groups).length} 个分类</button>`;
+  catHead.innerHTML = `<h2>题库分类</h2><button type="button" onclick="showAllPapers()">全部&nbsp; ›</button>`;
   root.appendChild(catHead);
-  const grid = document.createElement('div'); grid.className='category-grid'+(Object.keys(groups).length===1?' one':'');
+  const grid = document.createElement('div'); grid.className='category-grid';
   for (const cat of Object.keys(groups)){
     const ps = groups[cat];
-    const totalQ = ps.reduce((s,p)=>s+p.count,0);
     const item = document.createElement('button'); item.className='category-item'; item.type='button';
-    item.innerHTML = `<span class="cat-icon">${categoryIcon(cat)}</span><span><span class="cat-name">${escapeHtml(cat)}</span><span class="cat-meta">${ps.length} 套 · ${totalQ} 题</span></span>`;
-    item.onclick=()=>enterCategory(cat);
+    item.innerHTML = `<span class="cat-icon">${categoryIcon(cat)}</span><span class="cat-name">${escapeHtml(cat)}</span>`;
+    item.onclick=()=>ps.length ? enterCategory(cat) : toast('该分类还没有题册');
     grid.appendChild(item);
   }
   root.appendChild(grid);
 
   const recentHead = document.createElement('div'); recentHead.className='section-head';
-  recentHead.innerHTML = `<h2>${latestHist.length?'最近练习':'全部题册'}</h2>`;
+  recentHead.innerHTML = `<h2>最近练习</h2>`;
   root.appendChild(recentHead);
   const list = document.createElement('div'); list.className='group-list';
-  for (const {paper,rec} of recent){
+  for (const {paper,rec,sess} of recent){
     const row=document.createElement('div'); row.className='group-row';
-    const meta = rec ? `上次 ${Math.round(rec.accuracy*100)}% · 用时 ${fmtDuration(rec.durationSec)}` : `尚未练习 · ${paper.count} 题`;
+    const savedCount = sess ? Object.keys(sess.selected||{}).length : 0;
+    const meta = savedCount
+      ? `进行中 · 已答 ${savedCount}/${paper.count} · 用时 ${mmss(Math.floor((sess.elapsedMs||0)/1000))}`
+      : rec ? `上次 ${Math.round(rec.accuracy*100)}% · 用时 ${fmtDuration(rec.durationSec)}` : `尚未练习 · ${paper.count} 题`;
     row.innerHTML=`<div class="row-body"><div class="row-title">${escapeHtml(paper.title)}</div><div class="row-meta">${meta}</div></div><span class="row-chev">›</span>`;
     row.onclick=()=>openPaper(paper.id);
     list.appendChild(row);
@@ -994,7 +1018,7 @@ function renderPaperList(root, cat){
   crumb.innerHTML = `<button onclick="backToCategories()">‹ 返回题库</button>`;
   root.appendChild(crumb);
 
-  const ps = state.papers.filter(p=>p.category===cat);
+  const ps = cat === '全部题库' ? state.papers : state.papers.filter(p=>homeCategoryFor(p.category)===cat);
   const hist = loadHistory();
   const byPaper = {};
   for (const h of hist){
@@ -1048,6 +1072,7 @@ function openPaper(pid){
   startQuiz(pid);
 }
 function enterCategory(cat){ state.homeView='papers'; state.activeCategory=cat; renderHome(); window.scrollTo({top:0,behavior:'instant'}); }
+function showAllPapers(){ state.homeView='papers'; state.activeCategory='全部题库'; renderHome(); window.scrollTo({top:0,behavior:'instant'}); }
 function backToCategories(){ state.homeView='categories'; state.activeCategory=null; renderHome(); window.scrollTo({top:0,behavior:'instant'}); }
 
 // =========== Paper menu (⋯) ===========
