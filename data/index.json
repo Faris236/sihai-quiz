@@ -1,6 +1,6 @@
 {
-  "version": 5,
-  "updatedAt": "2026-07-21",
+  "version": 6,
+  "updatedAt": "2026-10-11",
   "papers": [
     {
       "id": "logic-1-30",
@@ -19,6 +19,15 @@
       "count": 600,
       "grading": "none",
       "file": "data/reading-1-30.json"
+    },
+    {
+      "id": "logic-fb-1-30",
+      "title": "粉笔｜逻辑判断600题",
+      "category": "判断推理",
+      "source": "粉笔教育逻辑判断600题",
+      "count": 600,
+      "grading": "scored",
+      "file": "data/logic-fb-1-30.json"
     }
   ]
 }

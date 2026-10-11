@@ -1368,6 +1368,7 @@ function renderCurrentQ(){
     <div class="q-stem-card" id="qCard">
       <div class="stem">${escapeHtml(item.stem)}</div>
       ${item.image ? `<img class="q-figure" src="${escapeHtml(item.image)}" alt="题目附图">` : ''}
+      ${item.sourceImages && item.sourceImages.length ? `<details class="source-question" style="margin-top:16px"><summary style="cursor:pointer;color:var(--primary);font-size:14px">查看原题扫描图</summary>${item.sourceImages.map((src,i)=>`<img class="q-figure" loading="lazy" src="${escapeHtml(src)}" alt="第 ${item.num} 题原题${item.sourceImages.length>1 ? '，第 '+(i+1)+' 部分' : ''}">`).join('')}</details>` : ''}
     </div>
     <div class="opts ${state.graded ? 'graded' : ''}" id="optsBox">
       ${['A','B','C','D'].map(L=>{
