@@ -1,0 +1,32 @@
+{
+  "library": "Remix Icon",
+  "version": "4.9.1",
+  "source": "https://registry.npmjs.org/remixicon/-/remixicon-4.9.1.tgz",
+  "project": "https://github.com/Remix-Design/RemixIcon",
+  "icons": {
+    "arrow-left-line": "package/icons/Arrows/arrow-left-line.svg",
+    "arrow-left-s-line": "package/icons/Arrows/arrow-left-s-line.svg",
+    "arrow-right-line": "package/icons/Arrows/arrow-right-line.svg",
+    "arrow-right-s-line": "package/icons/Arrows/arrow-right-s-line.svg",
+    "bar-chart-box-line": "package/icons/Business/bar-chart-box-line.svg",
+    "book-open-line": "package/icons/Document/book-open-line.svg",
+    "bookmark-fill": "package/icons/Business/bookmark-fill.svg",
+    "bookmark-line": "package/icons/Business/bookmark-line.svg",
+    "brain-line": "package/icons/Health & Medical/brain-line.svg",
+    "calendar-line": "package/icons/Business/calendar-line.svg",
+    "checkbox-circle-line": "package/icons/System/checkbox-circle-line.svg",
+    "cloud-line": "package/icons/Business/cloud-line.svg",
+    "file-list-3-line": "package/icons/Document/file-list-3-line.svg",
+    "file-text-line": "package/icons/Document/file-text-line.svg",
+    "filter-3-line": "package/icons/System/filter-3-line.svg",
+    "folder-open-line": "package/icons/Document/folder-open-line.svg",
+    "grid-line": "package/icons/Design/grid-line.svg",
+    "history-line": "package/icons/System/history-line.svg",
+    "loader-4-line": "package/icons/System/loader-4-line.svg",
+    "more-2-fill": "package/icons/System/more-2-fill.svg",
+    "star-fill": "package/icons/System/star-fill.svg",
+    "star-line": "package/icons/System/star-line.svg",
+    "upload-cloud-line": "package/icons/System/upload-cloud-line.svg",
+    "user-3-line": "package/icons/User & Faces/user-3-line.svg"
+  }
+}

@@ -1,5 +1,5 @@
 /* Service Worker — offline-first cache for 公考刷题系统 */
-const CACHE = 'sihai-quiz-v26';
+const CACHE = 'sihai-quiz-v30';
 const SHELL = [
   './',
   './index.html',
@@ -792,6 +792,33 @@ const SHELL = [
   './images/questions/fb/598-2.webp',
   './images/questions/fb/599-1.webp',
   './images/questions/fb/600-1.webp',
+  './fenbi-theme.css?v=3',
+  './assets/fenbi-style/app-background.png',
+  './assets/fenbi-style/practice-banner.png',
+  './assets/fenbi-style/icons/arrow-left-line.svg',
+  './assets/fenbi-style/icons/arrow-left-s-line.svg',
+  './assets/fenbi-style/icons/arrow-right-line.svg',
+  './assets/fenbi-style/icons/arrow-right-s-line.svg',
+  './assets/fenbi-style/icons/bar-chart-box-line.svg',
+  './assets/fenbi-style/icons/book-open-line.svg',
+  './assets/fenbi-style/icons/bookmark-fill.svg',
+  './assets/fenbi-style/icons/bookmark-line.svg',
+  './assets/fenbi-style/icons/brain-line.svg',
+  './assets/fenbi-style/icons/calendar-line.svg',
+  './assets/fenbi-style/icons/checkbox-circle-line.svg',
+  './assets/fenbi-style/icons/cloud-line.svg',
+  './assets/fenbi-style/icons/file-list-3-line.svg',
+  './assets/fenbi-style/icons/file-text-line.svg',
+  './assets/fenbi-style/icons/filter-3-line.svg',
+  './assets/fenbi-style/icons/folder-open-line.svg',
+  './assets/fenbi-style/icons/grid-line.svg',
+  './assets/fenbi-style/icons/history-line.svg',
+  './assets/fenbi-style/icons/loader-4-line.svg',
+  './assets/fenbi-style/icons/more-2-fill.svg',
+  './assets/fenbi-style/icons/star-fill.svg',
+  './assets/fenbi-style/icons/star-line.svg',
+  './assets/fenbi-style/icons/upload-cloud-line.svg',
+  './assets/fenbi-style/icons/user-3-line.svg',
 ];
 
 self.addEventListener('install', (e) => {
@@ -833,6 +860,10 @@ self.addEventListener('fetch', (e) => {
           caches.open(CACHE).then((c) => c.put(req, copy));
         }
         return res;
+      }).catch((err) => {
+        // Query-string entry links must still open the cached app when offline.
+        if (req.mode === 'navigate') return caches.open(CACHE).then(c => c.match('./index.html'));
+        throw err;
       }))
     );
   }

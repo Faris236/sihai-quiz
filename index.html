@@ -6,7 +6,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="公考刷题系统">
-<meta name="theme-color" content="#143f5b">
+<meta name="theme-color" content="#e7f3ff">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <link rel="icon" href="icons/icon-192.png" type="image/png">
@@ -687,6 +687,7 @@ button,select{min-height:44px;}
   body.quiz-mode .qbar .sub-btn{height:38px;padding:0 8px;}
 }
 </style>
+<link rel="stylesheet" href="fenbi-theme.css?v=3">
 </head>
 <body>
 <div class="app">
@@ -721,7 +722,7 @@ button,select{min-height:44px;}
 
       <!-- FAVORITES -->
       <section id="page-favs" class="hidden">
-        <div class="page-head"><h1>错题</h1></div>
+        <div class="page-head"><h1>收藏</h1></div>
         <div class="review-tabs"><button onclick="go('wrong')">错题</button><button class="on" onclick="go('favs')">收藏</button></div>
         <div id="favsContent"></div>
       </section>
@@ -739,7 +740,7 @@ button,select{min-height:44px;}
 
       <!-- STATS -->
       <section id="page-stats" class="hidden">
-        <div class="page-head"><h1>记录</h1></div>
+        <div class="page-head"><h1>学习数据</h1></div>
         <div class="filter-row">
           <select id="fCat"><option value="">全部分类</option></select>
           <select id="fPaper"><option value="">全部题册</option></select>
@@ -755,9 +756,10 @@ button,select{min-height:44px;}
           <div class="stat-cell"><div class="v" id="sAttempts">0</div><div class="l">完成试卷</div></div>
           <div class="stat-cell"><div class="v" id="sTime">0m</div><div class="l">累计用时</div></div>
           <div class="stat-cell"><div class="v" id="sBestAcc">—</div><div class="l">最高正确率</div></div>
-          <div class="stat-cell"><div class="v" id="sTotalQ">0</div><div class="l">累计答题</div></div>
+          <div class="stat-cell"><div class="v" id="sTotalQ">0</div><div class="l">累计作答</div></div>
           <div class="stat-cell"><div class="v" id="sCorrect">0</div><div class="l">答对题数</div></div>
         </div>
+        <p class="stats-note">正确率仅统计可判分题册；自由练习只计作答和用时。</p>
         <div class="sec-label">历史记录</div>
         <div id="historyList" class="cards"></div>
       </section>
@@ -944,13 +946,32 @@ function homeCategoryFor(raw){
   const found = HOME_CATEGORY_DEFS.find(x=>x.test.test(cat));
   return found ? found.name : (cat || '其他题库');
 }
+function uiIcon(name,extra=''){
+  return `<span class="ui-icon library-icon ${extra}" aria-hidden="true" style="--icon:url('assets/fenbi-style/icons/${name}.svg')"></span>`;
+}
 function categoryIcon(cat){
   const c = cat || '';
-  if (/判断|定义|逻辑|图形|类比|推理/.test(c)) return '<svg class="ui-icon"><path d="M9 20v-3.2l-3-2.4V9.5a6 6 0 1 1 10.8 3.6L15 15v5"/><circle cx="12" cy="9" r="2.2"/><path d="M5.8 10H3.5"/></svg>';
-  if (/言语|阅读|语文|词语|片段/.test(c)) return '<svg class="ui-icon"><path d="M6 2.5h8l4 4V21H6z"/><path d="M14 2.5V7h4M9 11h6m-6 4h6"/></svg>';
-  if (/资料|数据|分析/.test(c)) return '<svg class="ui-icon"><path d="M4 20V13h4v7m3 0V8h4v12m3 0V4h3v16"/><path d="M2 20h20"/></svg>';
-  if (/课程|套题|模拟|试卷/.test(c)) return '<svg class="ui-icon"><path d="M5 3h11l3 3v15H5z"/><path d="M16 3v4h3M9 11h6m-6 4h6"/><path d="M16 21l-2-2-2 2"/></svg>';
-  return '<svg class="ui-icon"><path d="M4 5.5A3.5 3.5 0 0 1 7.5 2H20v17H7.5A3.5 3.5 0 0 0 4 22z"/><path d="M4 5.5V22M8 6h8m-8 4h7"/></svg>';
+  if (/判断|定义|逻辑|图形|类比|推理/.test(c)) return uiIcon('brain-line');
+  if (/言语|阅读|语文|词语|片段/.test(c)) return uiIcon('file-text-line');
+  if (/资料|数据|分析/.test(c)) return uiIcon('bar-chart-box-line');
+  if (/课程|套题|模拟|试卷/.test(c)) return uiIcon('file-list-3-line');
+  return uiIcon('book-open-line');
+}
+function installThemeIcons(){
+  const icons={home:'book-open-line',wrong:'bookmark-line',stats:'bar-chart-box-line',data:'user-3-line'};
+  const labels={home:'练习',wrong:'复习',stats:'数据',data:'我的'};
+  document.querySelectorAll('.sidebar nav button[data-tab],.tabbar button[data-tab]').forEach(b=>{
+    const icon=b.querySelector('.ico');if(icon)icon.innerHTML=uiIcon(icons[b.dataset.tab]);
+    const label=b.querySelector('.lbl');if(label)label.textContent=labels[b.dataset.tab];
+  });
+  document.querySelectorAll('.sync-cloud').forEach(el=>el.outerHTML=uiIcon('upload-cloud-line','sync-cloud'));
+  document.querySelectorAll('.sync-spinner').forEach(el=>el.outerHTML=uiIcon('loader-4-line','sync-spinner'));
+  $('homeProfileBtn').innerHTML=uiIcon('user-3-line');
+  document.querySelector('.q-header .back').innerHTML=uiIcon('arrow-left-s-line');
+  $('prevBtn').innerHTML=uiIcon('arrow-left-s-line');
+  document.querySelector('.answer-card-btn').innerHTML=uiIcon('grid-line');
+  const settings=['cloud-line','file-text-line','upload-cloud-line','calendar-line','file-list-3-line','checkbox-circle-line'];
+  document.querySelectorAll('.setting-icon').forEach((el,i)=>el.innerHTML=uiIcon(settings[i]||'file-text-line','sm'));
 }
 function loadHistory(){try{return JSON.parse(localStorage.getItem(STORE_HISTORY)||'[]');}catch{return[];}}
 function saveHistory(a){const before=loadHistory();localStorage.setItem(STORE_HISTORY, JSON.stringify(a));QuizSync.captureHistory(before,a);}
@@ -1108,12 +1129,18 @@ function renderDashboard(root){
   const grid = document.createElement('div'); grid.className='category-grid';
   for (const cat of Object.keys(groups)){
     const ps = groups[cat];
-    const item = document.createElement('button'); item.className='category-item'; item.type='button';
+    const item = document.createElement('button'); item.className='category-item'+(ps.length?'':' is-empty'); item.type='button';
     item.innerHTML = `<span class="cat-icon">${categoryIcon(cat)}</span><span class="cat-name">${escapeHtml(cat)}</span>`;
     item.onclick=()=>ps.length ? enterCategory(cat) : toast('该分类还没有题册');
     grid.appendChild(item);
   }
   root.appendChild(grid);
+
+  const completed = hist.length;
+  const saved = Object.values(loadFavs()).reduce((n,qs)=>n+qs.length,0);
+  const study = document.createElement('button');study.className='study-strip';study.type='button';
+  study.innerHTML=`<strong>${uiIcon('history-line','sm')}学习记录 ›</strong><span class="study-meta">完成 ${completed} 次练习 · 收藏 ${saved} 题</span>`;
+  study.onclick=()=>go('stats');root.appendChild(study);
 
   const recentHead = document.createElement('div'); recentHead.className='section-head';
   recentHead.innerHTML = `<h2>最近练习</h2>`;
@@ -1176,7 +1203,9 @@ function renderPaperList(root, cat){
         <button class="menu-btn" title="更多">⋯</button>
       </div>
       <div class="p-stats">${statHtml}</div>
+      <div class="paper-source"><span class="paper-mode">${p.grading==='none'?'自由练习 · 不判分':'有答案 · 可判分'}</span>${escapeHtml(p.source||p.category||'')}</div>
       ${resumeBadge}`;
+    card.querySelector('.menu-btn').innerHTML=uiIcon('more-2-fill','sm');
     card.querySelector('.menu-btn').addEventListener('click', (e)=>{
       e.stopPropagation();
       openPaperMenu(p);
@@ -1768,7 +1797,9 @@ function updateFavBtn(){
   const qNum = state.current.questions[state.currentQ].num;
   const on = isFav(state.current.id, qNum);
   const b = $('favBtn');
-  b.textContent = on ? '★' : '☆';
+  b.innerHTML = uiIcon(on ? 'star-fill' : 'star-line','sm');
+  b.setAttribute('aria-label',on ? '取消收藏' : '收藏当前题目');
+  b.setAttribute('aria-pressed',String(on));
   b.classList.toggle('on', on);
 }
 
@@ -2015,7 +2046,7 @@ function renderStats(){
   });
   const att = filtered.length;
   const scored = filtered.filter(h=>!isPracticeRecord(h));
-  const totalQ = filtered.reduce((s,h)=>s+h.total,0);
+  const totalQ = filtered.reduce((s,h)=>s+(h.answeredCount != null ? h.answeredCount : Object.keys(h.answers||{}).length),0);
   const scoredQ = scored.reduce((s,h)=>s+h.total,0);
   const totalC = scored.reduce((s,h)=>s+(h.correctCount||0),0);
   const totalT = filtered.reduce((s,h)=>s+h.durationSec,0);
@@ -2037,7 +2068,7 @@ function renderStats(){
     const row = document.createElement('div'); row.className = 'history-row';
     row.setAttribute('role','button'); row.tabIndex = 0;
     row.innerHTML = `
-      <div class="history-score ${cls}">${accPct}%</div>
+      <div class="history-score ${cls}">${accPct}%<small>${practice?'完成':'正确'}</small></div>
       <div class="history-main">
         <div class="top"><span class="ttl">${escapeHtml(h.paperTitle)}</span><span class="ts">${fmtDate(h.finishedAt)}</span></div>
         <div class="bot"><span>${practice ? `已答 ${answered}/${h.total}` : `答对 ${h.correctCount}/${h.total}`}</span><span>用时 ${fmtDuration(h.durationSec)}</span><span>${escapeHtml(homeCategoryFor(h.category))}</span></div>
@@ -2146,6 +2177,7 @@ function clearAllData(){
   location.reload();
 }
 
+installThemeIcons();
 init();
 </script>
 </body>
