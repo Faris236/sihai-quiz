@@ -837,7 +837,7 @@ button,select{min-height:44px;}
     <div class="ttl">答题卡</div>
     <div class="legend">
       <span><i style="background:#fff;border-color:var(--border);"></i>未答</span>
-      <span><i style="background:#fff;border-color:var(--primary);"></i>已选</span>
+      <span class="practice-only"><i style="background:#fff;border-color:var(--primary);"></i>已选</span>
       <span class="graded-only"><i style="background:var(--green);border-color:var(--green);"></i>正确</span>
       <span class="graded-only"><i style="background:var(--red);border-color:var(--red);"></i>错误</span>
     </div>
@@ -856,7 +856,7 @@ button,select{min-height:44px;}
   <div class="s-ttl"><span>答题卡</span><span style="font-weight:400;font-size:13px;color:var(--muted);" id="sheetSub"></span></div>
   <div class="legend">
     <span><i style="background:#fff;border-color:var(--border);"></i>未答</span>
-    <span><i style="background:#fff;border-color:var(--primary);"></i>已选</span>
+    <span class="practice-only"><i style="background:#fff;border-color:var(--primary);"></i>已选</span>
     <span class="graded-only"><i style="background:var(--green);border-color:var(--green);"></i>正确</span>
     <span class="graded-only"><i style="background:var(--red);border-color:var(--red);"></i>错误</span>
   </div>
@@ -1752,11 +1752,10 @@ function renderAnswerGrids(){
   const html = [];
   state.current.questions.forEach((q, idx)=>{
     let cls = 'acell';
-    if (state.graded && gradable){
-      if (state.selected[q.num] === q.answer) cls += ' correct';
-      else if (state.selected[q.num]) cls += ' wrong';
-      else cls += ' wrong'; // unanswered also marked wrong
-    } else if (state.selected[q.num]){ cls += ' answered'; }
+    const answer = state.selected[q.num];
+    if (answer){
+      cls += gradable ? (answer === q.answer ? ' correct' : ' wrong') : ' answered';
+    }
     if (idx === state.currentQ) cls += ' cur';
     html.push(`<div class="${cls}" onclick="jumpQ(${idx})">${q.num}</div>`);
   });
@@ -1764,6 +1763,7 @@ function renderAnswerGrids(){
   $('rightGrid').innerHTML = joined;
   $('sheetGrid').innerHTML = joined;
   document.querySelectorAll('.graded-only').forEach(el=>el.classList.toggle('hidden', !gradable));
+  document.querySelectorAll('.practice-only').forEach(el=>el.classList.toggle('hidden', gradable));
   // Submit btn states
   const submitDisabled = state.graded;
   $('rightSubmit').textContent = submitDisabled ? (gradable ? '已判分' : '已提交') : (gradable ? '提交并判分' : '提交练习');
