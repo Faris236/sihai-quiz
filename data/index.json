@@ -1,25 +1,7 @@
 {
-  "version": 6,
-  "updatedAt": "2026-10-11",
+  "version": 7,
+  "updatedAt": "2026-10-13",
   "papers": [
-    {
-      "id": "logic-1-30",
-      "title": "逻辑判断600题",
-      "category": "判断推理",
-      "source": "花生十三逻辑判断600题",
-      "count": 600,
-      "grading": "none",
-      "file": "data/logic-1-30.json"
-    },
-    {
-      "id": "reading-1-30",
-      "title": "片段阅读600题",
-      "category": "言语理解与表达",
-      "source": "花生十三片段阅读600题",
-      "count": 600,
-      "grading": "none",
-      "file": "data/reading-1-30.json"
-    },
     {
       "id": "logic-fb-1-30",
       "title": "粉笔｜逻辑判断600题",
@@ -28,6 +10,15 @@
       "count": 600,
       "grading": "scored",
       "file": "data/logic-fb-1-30.json"
+    },
+    {
+      "id": "yanyu-practical-500",
+      "title": "言语实战500题",
+      "category": "言语理解与表达",
+      "source": "粉笔教育《言语实战500题》",
+      "count": 521,
+      "grading": "scored",
+      "file": "data/yanyu-practical-500.json"
     }
   ]
 }
